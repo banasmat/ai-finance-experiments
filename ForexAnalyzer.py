@@ -10,6 +10,7 @@ class ForexAnalyzer(object):
     res_dir = 'resources/'
 
     news_titles = []
+    scale_map = {}
 
     def __init__(self):
         self.get_data()
@@ -31,6 +32,7 @@ class ForexAnalyzer(object):
                 new_row[1] = get_news_symbol(old_row)
                 new_row[2] = get_news_title(old_row)
                 new_row[3] = get_actual_value(old_row)
+                update_scale_map(new_row)
             except ValueError:
                 return None
 
@@ -62,9 +64,13 @@ class ForexAnalyzer(object):
             elif 'B' in actual_val:
                 actual_val = actual_val.replace('B', '')
                 actual_val = float(actual_val) * 10**9
+            elif 'T' in actual_val:
+                actual_val = actual_val.replace('T', '')
+                actual_val = float(actual_val) * 10**12
             elif '%' in actual_val:
                 actual_val = actual_val.replace('%', '')
-                actual_val = float(actual_val) * 10**9
+                actual_val = actual_val.replace('<', '')
+                actual_val = float(actual_val) / 100
             elif '|' in actual_val:
                 # TODO not sure if mean is the best approach here
                 actual_vals = actual_val.split('|')
@@ -72,10 +78,21 @@ class ForexAnalyzer(object):
             else:
                 actual_val = float(actual_val)
 
-
-            print(actual_val)
-
             return actual_val
+
+        def update_scale_map(new_row):
+            if new_row[2] in self.scale_map.keys():
+                self.scale_map[new_row[2]].append(new_row[3])
+            else:
+                self.scale_map[new_row[2]] = []
+
+        def reduce_to_min_and_max(tuple):
+            return tuple[0], [min(tuple[1]), max(tuple[1])]
+
+        def scale_values(row):
+            row[3] -= self.scale_map[row[2]][0]
+            row[3] /= self.scale_map[row[2]][1]
+            return row
 
         prices = np.array(np.genfromtxt(self.res_dir + 'EURUSD.txt', delimiter=',', dtype=str, usecols=(1, 2, 3, 6)))
         prices = dict((get_price_datetime(p), get_price_mean(p)) for p in prices)
@@ -102,15 +119,14 @@ class ForexAnalyzer(object):
         news = list(map(normalize_news_row, news))
         news = list(filter(lambda n: n is not None, news))
 
-
+        self.scale_map = dict(map(reduce_to_min_and_max, self.scale_map.items()))
+        news = list(map(scale_values, news))
         print(news[10:])
 
         news = np.array(news, dtype=np.float32)
 
-        news = map(lambda n: print(n), news[10:])
+        # news = map(lambda n: print(n), news[10:])
 
-        # x_normed = (news - news.min(0)) / news.ptp(0)
-        # print(x_normed[10:])
 
         # news_names_counts = sorted(news_names_counts.items(), key=operator.itemgetter(1))
         # print(news_names_counts)
