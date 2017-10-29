@@ -1,6 +1,6 @@
 import numpy as np
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
 from collections import Counter
 import operator
 import re
@@ -19,7 +19,7 @@ class ForexAnalyzer(object):
 
         def get_price_datetime(p):
             # TODO time: 'All Day'
-            return datetime.strptime(p[0] + p[1], '%Y%m%d%H%M%S')
+            return datetime.strptime(p[0] + p[1], '%Y%m%d%H%M%S').timestamp()
 
         def get_price_mean(p):
             return (float(p[2]) + float(p[3])) / 2
@@ -39,7 +39,7 @@ class ForexAnalyzer(object):
             return new_row
 
         def get_news_datetime(n):
-            return datetime.strptime(n[0] + n[1], '%Y-%m-%d%H:%M').timestamp()
+            return datetime.strptime(n[0] + n[1], '%Y-%m-%d%H:%M') #.timestamp()
 
         def get_news_symbol(n):
             return 0 if n[2] == 'EUR' else 1
@@ -50,8 +50,6 @@ class ForexAnalyzer(object):
         def get_actual_value(n):
 
             actual_val = n[4]
-
-            #TODO should get min / max range for every news type
 
             if actual_val == '':
                 raise ValueError('News Actual value is empty')
@@ -94,8 +92,9 @@ class ForexAnalyzer(object):
             row[3] /= self.scale_map[row[2]][1]
             return row
 
+        # FIXME Memory Error. We dont' have to load all of these to memory. We should search in csv when its' needed (or use db) https://stackoverflow.com/questions/26082360/python-searching-csv-and-return-entire-row
         prices = np.array(np.genfromtxt(self.res_dir + 'EURUSD.txt', delimiter=',', dtype=str, usecols=(1, 2, 3, 6)))
-        prices = dict((get_price_datetime(p), get_price_mean(p)) for p in prices)
+        prices = dict((get_price_datetime(p), get_price_mean(p)) for p in reversed(prices))
 
         news = []
 
@@ -121,23 +120,57 @@ class ForexAnalyzer(object):
 
         self.scale_map = dict(map(reduce_to_min_and_max, self.scale_map.items()))
         news = list(map(scale_values, news))
-        print(news[10:])
+        print(news[-1:])
 
-        news = np.array(news, dtype=np.float32)
+        # news = np.array(news, dtype=np.float32)
 
-        # news = map(lambda n: print(n), news[10:])
+        # np.set_printoptions(suppress=True, precision=3)
+        # print(news[-1:])
+
+        labels = []
+
+        for k,v in prices.items():
+            print(k)
+            # quit()
+
+        for n in reversed(news):
+            #TODO might check also larger intervals
+            datetime_plus_interval = n[0] + timedelta(hours=1)
+            news_datetime = n[0]
+            price_when_news_happens = None
+
+            print('news_datetime', news_datetime.timestamp())
+
+            while True:
+                try:
+
+                    price_when_news_happens = prices[news_datetime.timestamp()]
+                    break
+                except KeyError:
+                    if (news_datetime - n[0]).days > 3:
+                        break
+                    else:
+                        news_datetime += timedelta(minutes=1)
+            print(news_datetime)
+            if price_when_news_happens is None:
+                break
+
+            while True:
+                try:
+                    # TODO scale ?
+                    labels.append(price_when_news_happens - prices[datetime_plus_interval])
+                    break
+                except KeyError:
+                    if (datetime_plus_interval - n[0]).days > 3:
+                        break
+                    else:
+                        datetime_plus_interval += timedelta(hours=1)
+
+        #TODO remove datetime col
+        #TODO separate to train_x, train_y, test_x, test_y
 
 
-        # news_names_counts = sorted(news_names_counts.items(), key=operator.itemgetter(1))
-        # print(news_names_counts)
-        # for k, v in news_names_counts.items():  # iterating freqa dictionary
-        #     print(k + "\t", v)
-        i = 0
-        # for w in sorted(news_names_counts, key=news_names_counts.get):
-        #     print(w, news_names_counts[w])
 
-        # print(len(news_names_counts))
-
-        #TODO do każdego newsa przypisz label : zmiana ceny po godzinie (potem będzie można to zmieniać)
+        print(labels[:10])
 
 analyzer = ForexAnalyzer()
