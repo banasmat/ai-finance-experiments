@@ -21,13 +21,13 @@ class ForexAnalyzer(object):
     def get_data(self):
 
         def normalize_news_row(row):
-            # try:
-            row['symbol'] = get_news_symbol(row)
-            row['title'] = get_news_title(row)
-            row['actual'] = get_actual_value(row)
-            update_scale_map(row)
-            # except ValueError:
-            #     return None
+            try:
+                row['symbol'] = get_news_symbol(row)
+                row['title'] = get_news_title(row)
+                row['actual'] = get_actual_value(row)
+                update_scale_map(row)
+            except ValueError:
+                return None
 
             return row
 
@@ -41,12 +41,10 @@ class ForexAnalyzer(object):
 
             actual_val = row['actual']
 
-            if actual_val == '':
+            if actual_val == '' or actual_val in ['Pass']:
                 raise ValueError('News Actual value is empty')
-            elif math.isnan(float(actual_val)):
-                raise ValueError('News Actual value is nan')
             elif 'K' in actual_val:
-                actual_val = actual_val.replace('M', '')
+                actual_val = actual_val.replace('K', '')
                 actual_val = float(actual_val) * 10**3
             elif 'M' in actual_val:
                 actual_val = actual_val.replace('M', '')
@@ -76,12 +74,25 @@ class ForexAnalyzer(object):
             else:
                 self.scale_map[row['title']] = []
 
-        def reduce_to_min_and_max(tuple):
-            return tuple[0], [min(tuple[1]), max(tuple[1])]
+        def reduce_to_min_and_max(actual_values):
+            _min = min(actual_values[1])
+            _max = max(actual_values[1])
+            if _min == _max:
+                _min -= 1
+                _max += 1
+
+            return actual_values[0], [_min, _max]
 
         def scale_values(row):
-            row['actual'] -= self.scale_map[row[2]][0]
-            row['actual'] /= self.scale_map[row[2]][1]
+            scaled = row['actual'] - self.scale_map[row['title']][0]
+            scaled /= self.scale_map[row['title']][1] - self.scale_map[row['title']][0]
+
+            if scaled > 1:
+                # TODO check why in two cases row['actual'] is larger than previously counted max
+                scaled = 1
+
+            row['actual'] = scaled
+
             return row
 
         prices = pd.read_csv(self.res_dir + 'EURUSD.txt', sep=',', dtype=str, usecols=('<DTYYYYMMDD>','<TIME>','<HIGH>','<LOW>'))
@@ -89,17 +100,14 @@ class ForexAnalyzer(object):
         # prices.apply(lambda row: (float(row['<HIGH>']) + float(row['<LOW>'])) / 2, axis=1)
 
         news = pd.read_csv(self.res_dir + 'forex-news.csv', sep=';', dtype=str, usecols=('date','time','symbol','title','actual'))
-        news = news.loc[news['symbol'].isin(['EUR','=USD']) & news['time'].str.contains('^\d{2}:')]
-        # news = news.loc[~news['actual'].isnull()]
+        news = news.loc[news['symbol'].isin(['EUR','USD']) & news['time'].str.contains('^\d{2}:')]
+        news = news.loc[~news['actual'].isnull()]
 
         news_title_counts = dict(Counter(news['title'].tolist()))
-        # TODO testuj na mniejszych danych. szkoda czasu
-        print(news_title_counts)
-        quit()
 
         for k, v in news_title_counts.items():
-            if v >= 100:
-                self.news_titles.append(k)
+            # if v >= 100:
+            self.news_titles.append(k)
 
         self.news_symbols = list(set(news['symbol'].tolist()))
 
@@ -108,12 +116,15 @@ class ForexAnalyzer(object):
         news = news.apply(normalize_news_row, axis=1)
         # news = list(filter(lambda n: n is not None, news))
 
+        news = news.loc[~news['actual'].isnull()]
+
+        self.scale_map = dict(map(reduce_to_min_and_max, self.scale_map.items()))
+
+        news = news.apply(scale_values, axis=1)
+
         print(news.head(10))
         quit()
 
-        self.scale_map = dict(map(reduce_to_min_and_max, self.scale_map.items()))
-        news = list(map(scale_values, news))
-        print(news[-1:])
 
         # news = np.array(news, dtype=np.float32)
 
