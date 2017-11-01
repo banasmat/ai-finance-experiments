@@ -1,14 +1,17 @@
 import numpy as np
-import csv
+import pandas as pd
 from datetime import datetime, timedelta
 from collections import Counter
+import math
 import operator
 import re
+
 
 class ForexAnalyzer(object):
 
     res_dir = 'resources/'
 
+    news_symbols = []
     news_titles = []
     scale_map = {}
 
@@ -17,42 +20,31 @@ class ForexAnalyzer(object):
 
     def get_data(self):
 
-        def get_price_datetime(p):
-            # TODO time: 'All Day'
-            return datetime.strptime(p[0] + p[1], '%Y%m%d%H%M%S').timestamp()
+        def normalize_news_row(row):
+            # try:
+            row['symbol'] = get_news_symbol(row)
+            row['title'] = get_news_title(row)
+            row['actual'] = get_actual_value(row)
+            update_scale_map(row)
+            # except ValueError:
+            #     return None
 
-        def get_price_mean(p):
-            return (float(p[2]) + float(p[3])) / 2
+            return row
 
-        def normalize_news_row(old_row):
-            new_row = [0] * 4
+        def get_news_symbol(row):
+            return self.news_symbols.index(row['symbol'])
 
-            try:
-                new_row[0] = get_news_datetime(old_row)
-                new_row[1] = get_news_symbol(old_row)
-                new_row[2] = get_news_title(old_row)
-                new_row[3] = get_actual_value(old_row)
-                update_scale_map(new_row)
-            except ValueError:
-                return None
+        def get_news_title(row):
+            return self.news_titles.index(row['title']) #TODO consider using a one_hot array
 
-            return new_row
+        def get_actual_value(row):
 
-        def get_news_datetime(n):
-            return datetime.strptime(n[0] + n[1], '%Y-%m-%d%H:%M') #.timestamp()
-
-        def get_news_symbol(n):
-            return 0 if n[2] == 'EUR' else 1
-
-        def get_news_title(n):
-            return self.news_titles.index(n[3]) #TODO consider using a one_hot array
-
-        def get_actual_value(n):
-
-            actual_val = n[4]
+            actual_val = row['actual']
 
             if actual_val == '':
                 raise ValueError('News Actual value is empty')
+            elif math.isnan(float(actual_val)):
+                raise ValueError('News Actual value is nan')
             elif 'K' in actual_val:
                 actual_val = actual_val.replace('M', '')
                 actual_val = float(actual_val) * 10**3
@@ -78,45 +70,46 @@ class ForexAnalyzer(object):
 
             return actual_val
 
-        def update_scale_map(new_row):
-            if new_row[2] in self.scale_map.keys():
-                self.scale_map[new_row[2]].append(new_row[3])
+        def update_scale_map(row):
+            if row['title'] in self.scale_map.keys():
+                self.scale_map[row['title']].append(row['actual'])
             else:
-                self.scale_map[new_row[2]] = []
+                self.scale_map[row['title']] = []
 
         def reduce_to_min_and_max(tuple):
             return tuple[0], [min(tuple[1]), max(tuple[1])]
 
         def scale_values(row):
-            row[3] -= self.scale_map[row[2]][0]
-            row[3] /= self.scale_map[row[2]][1]
+            row['actual'] -= self.scale_map[row[2]][0]
+            row['actual'] /= self.scale_map[row[2]][1]
             return row
 
-        # FIXME Memory Error. We dont' have to load all of these to memory. We should search in csv when its' needed (or use db) https://stackoverflow.com/questions/26082360/python-searching-csv-and-return-entire-row
-        prices = np.array(np.genfromtxt(self.res_dir + 'EURUSD.txt', delimiter=',', dtype=str, usecols=(1, 2, 3, 6)))
-        prices = dict((get_price_datetime(p), get_price_mean(p)) for p in reversed(prices))
+        prices = pd.read_csv(self.res_dir + 'EURUSD.txt', sep=',', dtype=str, usecols=('<DTYYYYMMDD>','<TIME>','<HIGH>','<LOW>'))
+        prices.index = pd.to_datetime(prices.pop('<DTYYYYMMDD>') + prices.pop('<TIME>'), format='%Y%m%d%H%M%S')
+        # prices.apply(lambda row: (float(row['<HIGH>']) + float(row['<LOW>'])) / 2, axis=1)
 
-        news = []
+        news = pd.read_csv(self.res_dir + 'forex-news.csv', sep=';', dtype=str, usecols=('date','time','symbol','title','actual'))
+        news = news.loc[news['symbol'].isin(['EUR','=USD']) & news['time'].str.contains('^\d{2}:')]
+        # news = news.loc[~news['actual'].isnull()]
 
-        with open(self.res_dir + 'forex-news.csv') as csvfile:
-            csv_reader = csv.reader(csvfile, delimiter=';')
+        news_title_counts = dict(Counter(news['title'].tolist()))
+        # TODO testuj na mniejszych danych. szkoda czasu
+        print(news_title_counts)
+        quit()
 
-            # time_regex = re.compile('\d+?:\d{2}')
-
-            for row in csv_reader:
-                # row[1] = time, some are strings like 'All Day' #TODO think how to handle All Day
-                # row[4] = 'actual' value
-                if row[2] in ['EUR', 'USD']: # and row[4] != '' and time_regex.match(row[1]):
-                    news.append(row)
-
-        news_names_counts = dict(Counter(list(map(lambda n: n[3], news))))
-
-        for k, v in news_names_counts.items():
+        for k, v in news_title_counts.items():
             if v >= 100:
                 self.news_titles.append(k)
 
-        news = list(map(normalize_news_row, news))
-        news = list(filter(lambda n: n is not None, news))
+        self.news_symbols = list(set(news['symbol'].tolist()))
+
+        news.index = pd.to_datetime(news.pop('date') + news.pop('time'), format='%Y-%m-%d%H:%M')
+
+        news = news.apply(normalize_news_row, axis=1)
+        # news = list(filter(lambda n: n is not None, news))
+
+        print(news.head(10))
+        quit()
 
         self.scale_map = dict(map(reduce_to_min_and_max, self.scale_map.items()))
         news = list(map(scale_values, news))
@@ -158,6 +151,7 @@ class ForexAnalyzer(object):
             while True:
                 try:
                     # TODO scale ?
+                    # TODO pandas resample 'M' mean (?)
                     labels.append(price_when_news_happens - prices[datetime_plus_interval])
                     break
                 except KeyError:
