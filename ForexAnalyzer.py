@@ -112,6 +112,7 @@ class ForexAnalyzer(object):
         self.news_symbols = list(set(news['symbol'].tolist()))
 
         news.index = pd.to_datetime(news.pop('date') + news.pop('time'), format='%Y-%m-%d%H:%M')
+        news = news.loc[news.index >= prices.index[0]]
 
         news = news.apply(normalize_news_row, axis=1)
         # news = list(filter(lambda n: n is not None, news))
@@ -122,33 +123,33 @@ class ForexAnalyzer(object):
 
         news = news.apply(scale_values, axis=1)
 
-        print(news.head(10))
-        quit()
-
-
-        # news = np.array(news, dtype=np.float32)
-
-        # np.set_printoptions(suppress=True, precision=3)
-        # print(news[-1:])
-
         labels = []
 
-        for k,v in prices.items():
-            print(k)
+        # for k,v in prices.items():
+        #     print(k)
             # quit()
 
-        for n in reversed(news):
+        for news_datetime, n in news[::-1].iterrows():
             #TODO might check also larger intervals
-            datetime_plus_interval = n[0] + timedelta(hours=1)
-            news_datetime = n[0]
-            price_when_news_happens = None
+            datetime_plus_interval = news_datetime + timedelta(hours=1)
 
-            print('news_datetime', news_datetime.timestamp())
+            print('news_datetime', news_datetime)
+            print('+interval', datetime_plus_interval)
+
+            prices_biased_by_news = prices.loc[(prices.index >= news_datetime) & (prices.index <= datetime_plus_interval)]
+            price_when_news_happens = prices_biased_by_news.loc[prices_biased_by_news.index[0]]
+
+
+
+            print(prices_biased_by_news)
+            print(price_when_news_happens)
+            quit()
+
 
             while True:
                 try:
 
-                    price_when_news_happens = prices[news_datetime.timestamp()]
+                    price_when_news_happens = prices.loc[news_datetime.timestamp()]
                     break
                 except KeyError:
                     if (news_datetime - n[0]).days > 3:
