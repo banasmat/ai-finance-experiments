@@ -97,7 +97,7 @@ class ForexAnalyzer(object):
 
         prices = pd.read_csv(self.res_dir + 'EURUSD.txt', sep=',', dtype=str, usecols=('<DTYYYYMMDD>','<TIME>','<HIGH>','<LOW>'))
         prices.index = pd.to_datetime(prices.pop('<DTYYYYMMDD>') + prices.pop('<TIME>'), format='%Y%m%d%H%M%S')
-        # prices.apply(lambda row: (float(row['<HIGH>']) + float(row['<LOW>'])) / 2, axis=1)
+        prices['mean'] = (pd.to_numeric(prices.pop('<HIGH>')) + pd.to_numeric(prices.pop('<LOW>'))) / 2
 
         news = pd.read_csv(self.res_dir + 'forex-news.csv', sep=';', dtype=str, usecols=('date','time','symbol','title','actual'))
         news = news.loc[news['symbol'].isin(['EUR','USD']) & news['time'].str.contains('^\d{2}:')]
@@ -129,54 +129,54 @@ class ForexAnalyzer(object):
         #     print(k)
             # quit()
 
+        labels = []
+
+        # news len = 11750
+        # y len = 10181
+
         for news_datetime, n in news[::-1].iterrows():
             #TODO might check also larger intervals
-            datetime_plus_interval = news_datetime + timedelta(hours=1)
+            datetime_plus_interval = news_datetime + timedelta(hours=12)
 
-            print('news_datetime', news_datetime)
-            print('+interval', datetime_plus_interval)
-
-            prices_biased_by_news = prices.loc[(prices.index >= news_datetime) & (prices.index <= datetime_plus_interval)]
-            price_when_news_happens = prices_biased_by_news.loc[prices_biased_by_news.index[0]]
-
-
-
-            print(prices_biased_by_news)
-            print(price_when_news_happens)
-            quit()
-
+            i = 0
 
             while True:
-                try:
-
-                    price_when_news_happens = prices.loc[news_datetime.timestamp()]
+                prices_affected_by_news = prices.loc[(prices.index >= news_datetime) & (prices.index <= datetime_plus_interval)]
+                if i > 10:
                     break
-                except KeyError:
-                    if (news_datetime - n[0]).days > 3:
-                        break
-                    else:
-                        news_datetime += timedelta(minutes=1)
-            print(news_datetime)
-            if price_when_news_happens is None:
+                elif len(prices_affected_by_news) < 100:
+                    print(len(prices_affected_by_news))
+                    datetime_plus_interval += timedelta(hours=12)
+                    i += 1
+                else:
+                    print('last date: ', news_datetime)
+                    break
+
+            if i > 10:
                 break
 
-            while True:
-                try:
-                    # TODO scale ?
-                    # TODO pandas resample 'M' mean (?)
-                    labels.append(price_when_news_happens - prices[datetime_plus_interval])
-                    break
-                except KeyError:
-                    if (datetime_plus_interval - n[0]).days > 3:
-                        break
-                    else:
-                        datetime_plus_interval += timedelta(hours=1)
+            price_when_news_happens = prices_affected_by_news.loc[prices_affected_by_news.index[0]]['mean']
 
-        #TODO remove datetime col
+            # TODO mean might not be the best approach. Try also e.g. highest value
+            price_mean_in_affected_period = prices_affected_by_news['mean'].mean()
+
+            diff = abs(price_mean_in_affected_period - price_when_news_happens)
+
+            # TODO check percent ?
+            # diff_threshold = 1
+            label = 0
+            if diff > 0.01:
+                label = 1
+
+            labels.append(label)
+
+        #TODO parametrize interval
         #TODO separate to train_x, train_y, test_x, test_y
 
+        x = news.as_matrix()[:-len(labels)]
+        y = labels
 
-
-        print(labels[:10])
+        print('x', len(x))
+        print('y', len(y))
 
 analyzer = ForexAnalyzer()
