@@ -2,9 +2,6 @@ import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
 from collections import Counter
-import math
-import operator
-import re
 
 
 class ForexAnalyzer(object):
@@ -145,14 +142,13 @@ class ForexAnalyzer(object):
                 if i > 10:
                     break
                 elif len(prices_affected_by_news) < 100:
-                    print(len(prices_affected_by_news))
                     datetime_plus_interval += timedelta(hours=12)
                     i += 1
                 else:
-                    print('last date: ', news_datetime)
                     break
 
             if i > 10:
+                print('last date: ', news_datetime)
                 break
 
             price_when_news_happens = prices_affected_by_news.loc[prices_affected_by_news.index[0]]['mean']
@@ -176,7 +172,17 @@ class ForexAnalyzer(object):
         x = news.as_matrix()[:-len(labels)]
         y = labels
 
-        print('x', len(x))
-        print('y', len(y))
+        if len(x) != len(y):
+            raise RuntimeError('len(x): ' + str(len(x)) + ' does not equal len(y): ' + str(len(y)))
+
+        length = len(x)
+        breakpoint = int(round(length / 2))
+
+        x_train = x[:-breakpoint]
+        y_train = y[:-breakpoint]
+        x_test = x[-breakpoint:]
+        y_test = y[-breakpoint:]
+
+        return x_train, y_train, x_test, y_test
 
 analyzer = ForexAnalyzer()
