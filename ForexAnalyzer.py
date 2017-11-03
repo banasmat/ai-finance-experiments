@@ -169,7 +169,7 @@ class ForexAnalyzer(object):
         #TODO parametrize interval
         #TODO separate to train_x, train_y, test_x, test_y
 
-        x = news.as_matrix()[:-len(labels)]
+        x = news.as_matrix()[:len(labels)]
         y = labels
 
         if len(x) != len(y):
