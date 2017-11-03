@@ -1,0 +1,1 @@
+<__main__.ForexAnalyzer object at 0x0024B410>

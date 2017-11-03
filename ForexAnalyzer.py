@@ -8,8 +8,6 @@ class ForexAnalyzer(object):
 
     res_dir = 'resources/'
 
-    news_symbols = []
-    news_titles = []
     scale_map = {}
 
     def __init__(self):
@@ -17,59 +15,55 @@ class ForexAnalyzer(object):
 
     def get_data(self):
 
-        def normalize_news_row(row):
-            try:
-                row['symbol'] = get_news_symbol(row)
-                row['title'] = get_news_title(row)
-                row['actual'] = get_actual_value(row)
-                update_scale_map(row)
-            except ValueError:
-                return None
-
-            return row
-
-        def get_news_symbol(row):
-            return self.news_symbols.index(row['symbol'])
-
-        def get_news_title(row):
-            return self.news_titles.index(row['title']) #TODO consider using a one_hot array
-
-        def get_actual_value(row):
+        def normalize_actual_value(row):
 
             actual_val = row['actual']
 
-            if actual_val == '' or actual_val in ['Pass']:
-                raise ValueError('News Actual value is empty')
-            elif 'K' in actual_val:
-                actual_val = actual_val.replace('K', '')
-                actual_val = float(actual_val) * 10**3
-            elif 'M' in actual_val:
-                actual_val = actual_val.replace('M', '')
-                actual_val = float(actual_val) * 10**6
-            elif 'B' in actual_val:
-                actual_val = actual_val.replace('B', '')
-                actual_val = float(actual_val) * 10**9
-            elif 'T' in actual_val:
-                actual_val = actual_val.replace('T', '')
-                actual_val = float(actual_val) * 10**12
-            elif '%' in actual_val:
-                actual_val = actual_val.replace('%', '')
-                actual_val = actual_val.replace('<', '')
-                actual_val = float(actual_val) / 100
-            elif '|' in actual_val:
-                # TODO not sure if mean is the best approach here
-                actual_vals = actual_val.split('|')
-                actual_val = (float(actual_vals[0]) + float(actual_vals[1])) / 2
-            else:
-                actual_val = float(actual_val)
+            try:
 
-            return actual_val
+                if actual_val == '' or actual_val in ['Pass']:
+                    raise ValueError('News Actual value is empty')
+                elif 'K' in actual_val:
+                    actual_val = actual_val.replace('K', '')
+                    actual_val = float(actual_val) * 10**3
+                elif 'M' in actual_val:
+                    actual_val = actual_val.replace('M', '')
+                    actual_val = float(actual_val) * 10**6
+                elif 'B' in actual_val:
+                    actual_val = actual_val.replace('B', '')
+                    actual_val = float(actual_val) * 10**9
+                elif 'T' in actual_val:
+                    actual_val = actual_val.replace('T', '')
+                    actual_val = float(actual_val) * 10**12
+                elif '%' in actual_val:
+                    actual_val = actual_val.replace('%', '')
+                    actual_val = actual_val.replace('<', '')
+                    actual_val = float(actual_val) / 100
+                elif '|' in actual_val:
+                    # TODO not sure if mean is the best approach here
+                    actual_vals = actual_val.split('|')
+                    actual_val = (float(actual_vals[0]) + float(actual_vals[1])) / 2
+                else:
+                    actual_val = float(actual_val)
+
+            except ValueError:
+                return None
+
+            row['actual'] = actual_val
+            update_scale_map(row)
+            return row
 
         def update_scale_map(row):
             if row['title'] in self.scale_map.keys():
                 self.scale_map[row['title']].append(row['actual'])
             else:
                 self.scale_map[row['title']] = []
+
+        def convert_to_one_hot(df, col_name):
+            one_hot = pd.get_dummies(df[col_name])
+            df = df.drop(col_name, axis=1)
+            df = df.join(one_hot)
+            return df
 
         def reduce_to_min_and_max(actual_values):
             _min = min(actual_values[1])
@@ -100,38 +94,22 @@ class ForexAnalyzer(object):
         news = news.loc[news['symbol'].isin(['EUR','USD']) & news['time'].str.contains('^\d{2}:')]
         news = news.loc[~news['actual'].isnull()]
 
-        news_title_counts = dict(Counter(news['title'].tolist()))
-
-        for k, v in news_title_counts.items():
-            # if v >= 100:
-            self.news_titles.append(k)
-
-        self.news_symbols = list(set(news['symbol'].tolist()))
-
         news.index = pd.to_datetime(news.pop('date') + news.pop('time'), format='%Y-%m-%d%H:%M')
         news = news.loc[news.index >= prices.index[0]]
 
-        news = news.apply(normalize_news_row, axis=1)
-        # news = list(filter(lambda n: n is not None, news))
+        news = news.apply(normalize_actual_value, axis=1)
 
         news = news.loc[~news['actual'].isnull()]
-
         self.scale_map = dict(map(reduce_to_min_and_max, self.scale_map.items()))
-
         news = news.apply(scale_values, axis=1)
 
-        labels = []
-
-        # for k,v in prices.items():
-        #     print(k)
-            # quit()
+        news = convert_to_one_hot(news, 'symbol')
+        # TODO consider normalizing titles: treating simmilar as one
+        news = convert_to_one_hot(news, 'title')
 
         labels = []
 
-        # news len = 11750
-        # y len = 10181
-
-        for news_datetime, n in news[::-1].iterrows():
+        for news_datetime, n in news.iterrows():
             #TODO might check also larger intervals
             datetime_plus_interval = news_datetime + timedelta(hours=12)
 
@@ -142,6 +120,7 @@ class ForexAnalyzer(object):
                 if i > 10:
                     break
                 elif len(prices_affected_by_news) < 100:
+                    # FIXME it seems to make a lot of news use the same price diffs as labels
                     datetime_plus_interval += timedelta(hours=12)
                     i += 1
                 else:
@@ -158,10 +137,14 @@ class ForexAnalyzer(object):
 
             diff = abs(price_mean_in_affected_period - price_when_news_happens)
 
+            diff_percent = diff / price_when_news_happens * 100
+
+            print(diff_percent)
+
             # TODO check percent ?
-            # diff_threshold = 1
+            diff_threshold = 0.1
             label = 0
-            if diff > 0.01:
+            if diff > diff_threshold:
                 label = 1
 
             labels.append(label)
@@ -178,6 +161,7 @@ class ForexAnalyzer(object):
         length = len(x)
         breakpoint = int(round(length / 2))
 
+        # FIXME should be random (but one proportion)
         x_train = x[:-breakpoint]
         y_train = y[:-breakpoint]
         x_test = x[-breakpoint:]
@@ -185,4 +169,7 @@ class ForexAnalyzer(object):
 
         return x_train, y_train, x_test, y_test
 
+
 analyzer = ForexAnalyzer()
+with open('out.txt', 'w') as f:
+    print(analyzer, file=f)
