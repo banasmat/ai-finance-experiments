@@ -10,9 +10,6 @@ class ForexAnalyzer(object):
 
     scale_map = {}
 
-    def __init__(self):
-        self.get_data()
-
     def get_data(self):
 
         def normalize_actual_value(row):
@@ -142,7 +139,7 @@ class ForexAnalyzer(object):
             print(diff_percent)
 
             # TODO check percent ?
-            diff_threshold = 0.1
+            diff_threshold = 0.2
             label = 0
             if diff > diff_threshold:
                 label = 1
@@ -153,23 +150,26 @@ class ForexAnalyzer(object):
         #TODO separate to train_x, train_y, test_x, test_y
 
         x = news.as_matrix()[:len(labels)]
-        y = labels
+        y = np.array(labels)
 
         if len(x) != len(y):
             raise RuntimeError('len(x): ' + str(len(x)) + ' does not equal len(y): ' + str(len(y)))
 
-        length = len(x)
-        breakpoint = int(round(length / 2))
+        msk = np.random.rand(len(y)) < 0.8
 
-        # FIXME should be random (but one proportion)
-        x_train = x[:-breakpoint]
-        y_train = y[:-breakpoint]
-        x_test = x[-breakpoint:]
-        y_test = y[-breakpoint:]
+        x_tra = x[msk]
+        y_tra = y[msk]
+        x_tes = x[~msk]
+        y_tes = y[~msk]
 
-        return x_train, y_train, x_test, y_test
+        return x_tra, y_tra, x_tes, y_tes
 
 
 analyzer = ForexAnalyzer()
+
+x_train, y_train, x_test, y_test = analyzer.get_data()
+
+print(x_train, y_train, x_test, y_test)
+
 with open('out.txt', 'w') as f:
-    print(analyzer, file=f)
+    print(x_train, y_train, x_test, y_test, file=f)
