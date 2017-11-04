@@ -9,13 +9,17 @@ class DataVisualizer(object):
 
     prep_data_provider = PreProcessedDataProvider()
 
-    def plot(self, y_train,  y_test):
+    def visualize(self, labels):
 
         prices = self.prep_data_provider.get_price_data()
+        news = self.prep_data_provider.get_news_data(prices.index[0])
 
-        # FIXME we need labels(y) with dates
+        print('labels: ', len(labels))
+        print('news: ', len(news))
 
-        plt.plot(prices)
-        plt.show()
+        # TODO insert labels on price plot
+
+        # plt.plot(prices)
+        # plt.show()
 
         return
