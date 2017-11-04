@@ -1,12 +1,11 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
+from PreProcessedDataProvider import PreProcessedDataProvider
 
+class DataSetProvider(object):
 
-class DataProvider(object):
-
-    res_dir = 'resources/'
-
+    prep_data_provider = PreProcessedDataProvider()
     scale_map = {}
 
     def get_data(self, refresh=True):
@@ -19,12 +18,9 @@ class DataProvider(object):
         if refresh is False:
             return x_tra, y_tra, x_tes, y_tes
 
+        prices = self.prep_data_provider.get_price_data()
 
-        prices = pd.read_csv(self.res_dir + 'EURUSD.txt', sep=',', dtype=str, usecols=('<DTYYYYMMDD>','<TIME>','<HIGH>','<LOW>'))
-        prices.index = pd.to_datetime(prices.pop('<DTYYYYMMDD>') + prices.pop('<TIME>'), format='%Y%m%d%H%M%S')
-        prices['mean'] = (pd.to_numeric(prices.pop('<HIGH>')) + pd.to_numeric(prices.pop('<LOW>'))) / 2
-
-        news = pd.read_csv(self.res_dir + 'forex-news.csv', sep=';', dtype=str, usecols=('date','time','symbol','title','actual'))
+        news = self.prep_data_provider.get_news_data()
         news = news.loc[news['symbol'].isin(['EUR','USD']) & news['time'].str.contains('^\d{2}:')]
         news = news.loc[~news['actual'].isnull()]
 
