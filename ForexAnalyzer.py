@@ -79,7 +79,7 @@ class ForexAnalyzer(object):
                 # TODO check why in two cases row['actual'] is larger than previously counted max
                 scaled = 1
 
-            row['actual'] = scaled
+            row['actual'] = float("{0:.2f}".format(scaled * 100))
 
             return row
 
@@ -106,10 +106,12 @@ class ForexAnalyzer(object):
 
         labels = []
 
+        j = 0
         for news_datetime, n in news.iterrows():
             #TODO might check also larger intervals
             datetime_plus_interval = news_datetime + timedelta(hours=12)
 
+            j += 1
             i = 0
 
             while True:
@@ -136,12 +138,12 @@ class ForexAnalyzer(object):
 
             diff_percent = diff / price_when_news_happens * 100
 
-            print(diff_percent)
+            # print(diff_percent)
 
             # TODO check percent ?
             diff_threshold = 0.2
             label = 0
-            if diff > diff_threshold:
+            if diff_percent > diff_threshold:
                 label = 1
 
             labels.append(label)
@@ -171,5 +173,12 @@ x_train, y_train, x_test, y_test = analyzer.get_data()
 
 print(x_train, y_train, x_test, y_test)
 
-with open('out.txt', 'w') as f:
-    print(x_train, y_train, x_test, y_test, file=f)
+np.save('output/x_train.npy', x_train)
+np.save('output/y_train.npy', y_train)
+np.save('output/x_test.npy', x_test)
+np.save('output/y_test.npy', y_test)
+
+np.savetxt('output/x_train.txt', x_train)
+np.savetxt('output/y_train.txt', y_train)
+np.savetxt('output/x_test.txt', x_test)
+np.savetxt('output/y_test.txt', y_test)
