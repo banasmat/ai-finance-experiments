@@ -27,15 +27,15 @@ class DataSetProvider(object):
 
         labels = []
 
-        # FIXME more labels are outputted than news ...
-        for news_datetime, n in news.iterrows():
+        for index, n in news.iterrows():
+
             #TODO might check also larger intervals
-            datetime_plus_interval = news_datetime + timedelta(hours=12)
+            datetime_plus_interval = n['datetime'] + timedelta(hours=12)
 
             i = 0
 
             while True:
-                prices_affected_by_news = prices.loc[(prices.index >= news_datetime) & (prices.index <= datetime_plus_interval)]
+                prices_affected_by_news = prices.loc[(prices.index >= n['datetime']) & (prices.index <= datetime_plus_interval)]
                 if i > 10:
                     break
                 elif len(prices_affected_by_news) < 100:
@@ -45,7 +45,7 @@ class DataSetProvider(object):
                     break
 
             if i > 10:
-                print('last date: ', news_datetime)
+                print('last date: ', n['datetime'])
                 break
 
             price_when_news_happens = prices_affected_by_news.loc[prices_affected_by_news.index[0]]['mean']
@@ -56,8 +56,6 @@ class DataSetProvider(object):
             diff = abs(price_mean_in_affected_period - price_when_news_happens)
 
             diff_percent = diff / price_when_news_happens * 100
-
-            # print(diff_percent)
 
             # TODO check percent ?
             diff_threshold = 0.2
@@ -70,6 +68,8 @@ class DataSetProvider(object):
         #TODO parametrize interval
         #TODO separate to train_x, train_y, test_x, test_y
 
+        news = news.drop('datetime', 1)
+        print(news.head())
         x = news.as_matrix()[:len(labels)]
         y = np.array(labels)
 

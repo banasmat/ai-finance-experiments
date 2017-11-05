@@ -18,14 +18,15 @@ class PreProcessedDataProvider(object):
         news = news.loc[news['symbol'].isin(['EUR','USD']) & news['time'].str.contains('^\d{2}:')]
         news = news.loc[~news['actual'].isnull()]
 
-        news.index = pd.to_datetime(news.pop('date') + news.pop('time'), format='%Y-%m-%d%H:%M')
+        news['datetime'] = pd.to_datetime(news.pop('date') + news.pop('time'), format='%Y-%m-%d%H:%M')
 
-        news = news.loc[news.index >= from_datetime]
+        news = news.loc[news['datetime'] >= from_datetime]
         news = news.apply(self.__normalize_actual_value, axis=1)
         news = news.loc[~news['actual'].isnull()]
 
         self.scale_map = dict(map(self.__reduce_to_min_and_max, self.scale_map.items()))
         news = news.apply(self.__scale_values, axis=1)
+        news = news.iloc[::-1]
 
         return news
 

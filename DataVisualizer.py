@@ -14,6 +14,9 @@ class DataVisualizer(object):
         prices = self.prep_data_provider.get_price_data()
         news = self.prep_data_provider.get_news_data(prices.index[0])
 
+        x = news.as_matrix()[:len(labels)]
+        y = np.array(labels)
+
         print('labels: ', len(labels))
         print('news: ', len(news))
 
