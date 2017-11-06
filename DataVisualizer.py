@@ -15,6 +15,8 @@ class DataVisualizer(object):
         news = self.prep_data_provider.get_news_data(prices.index[0])
 
         news = news.iloc[:len(labels)]
+        news_labels = pd.DataFrame(labels)
+        news_labels.index = news['datetime']
 
         prices = prices['mean'].resample('1H').mean()
 
@@ -23,14 +25,15 @@ class DataVisualizer(object):
 
         price_xs = list(map(self.__timestamp_to_datetime_string, price_xs))
 
-        news_up_xs, news_up_ys = self.__prepare_news_lists(prices, news, labels, 1)
-        news_down_xs, news_down_ys = self.__prepare_news_lists(prices, news, labels, -1)
+        news_up_xs, news_up_ys = self.__prepare_news_lists(prices, news_labels, 1)
+        news_down_xs, news_down_ys = self.__prepare_news_lists(prices, news_labels, -1)
 
-        plt.plot(price_xs[:1000], price_ys[:1000], color='blue')
-        plt.scatter(news_up_xs[:100], news_up_ys[:100], color='green')
-        plt.scatter(news_down_xs[:100], news_down_ys[:100], color='red')
+        plt.plot(price_xs, price_ys, color='blue')
+        plt.scatter(news_up_xs, news_up_ys, color='green')
+        plt.scatter(news_down_xs, news_down_ys, color='red')
 
-        plt.xlim(price_xs[0], price_xs[100])
+        plt.ylim(0.9, 1.0)
+        plt.xlim(price_xs[100], price_xs[500])
         plt.setp(plt.gca().xaxis.get_majorticklabels(),
                  'rotation', 90)
 
@@ -44,9 +47,9 @@ class DataVisualizer(object):
     def __timestamp_to_datetime_string(timestamp):
         return timestamp.strftime('%Y-%m-%d %H')
     
-    def __prepare_news_lists(self, prices, news, labels, label_val):
-        news_labels = pd.DataFrame(list(map(lambda lab: lab == label_val, labels)))
-        news_labels.index = news['datetime']
+    def __prepare_news_lists(self, prices, news_labels, label_val):
+        news_labels = news_labels.loc[news_labels[0] == label_val]
+
         news_xs = []
         news_ys = []
 
