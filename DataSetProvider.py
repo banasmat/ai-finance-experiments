@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import timedelta
 from PreProcessedDataProvider import PreProcessedDataProvider
+
 
 class DataSetProvider(object):
 
@@ -53,23 +54,24 @@ class DataSetProvider(object):
             # TODO mean might not be the best approach. Try also e.g. highest value
             price_mean_in_affected_period = prices_affected_by_news['mean'].mean()
 
-            diff = abs(price_mean_in_affected_period - price_when_news_happens)
+            diff = price_mean_in_affected_period - price_when_news_happens
 
-            diff_percent = diff / price_when_news_happens * 100
+            diff_percent = abs(diff / price_when_news_happens * 100)
 
             # TODO check percent ?
-            diff_threshold = 0.2
+            diff_threshold = 0.5
             label = 0
-            if diff_percent > diff_threshold:
-                label = 1
+            if abs(diff_percent) > diff_threshold:
+                if diff > 0:
+                    label = 1
+                else:
+                    label = -1
 
             labels.append(label)
 
         #TODO parametrize interval
-        #TODO separate to train_x, train_y, test_x, test_y
 
         news = news.drop('datetime', 1)
-        print(news.head())
         x = news.as_matrix()[:len(labels)]
         y = np.array(labels)
 

@@ -1,6 +1,6 @@
 import pandas as pd
 
-# TODO rename to PreProcessedDataProvider (?)
+
 class PreProcessedDataProvider(object):
 
     res_dir = 'resources/'
