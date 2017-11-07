@@ -1,18 +1,12 @@
 import matplotlib.pyplot as plt
-from PreProcessedDataProvider import PreProcessedDataProvider
 import pandas as pd
 
 
 class DataVisualizer(object):
 
-    prep_data_provider = PreProcessedDataProvider()
-
-    def visualize(self, labels):
+    def visualize(self, prices, news, labels):
 
         plt.style.use('ggplot')
-
-        prices = self.prep_data_provider.get_price_data()
-        news = self.prep_data_provider.get_news_data(prices.index[0])
 
         news = news.iloc[:len(labels)]
         news_labels = pd.DataFrame(labels)
