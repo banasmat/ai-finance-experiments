@@ -26,19 +26,26 @@ class DataVisualizer(object):
             x=np.array(price_xs),
             y=np.array(price_ys),
             mode='lines',
-            fillcolor='blue'
+            fillcolor='blue',
+            name='prices'
         )
         trace1 = go.Scattergl(
             x=np.array(news_up_xs),
             y=np.array(news_up_ys),
             mode='markers',
-            fillcolor='green'
+            marker=dict(
+                color='rgb(0,255,0)',
+            ),
+            name='news - buy signals'
         )
         trace2 = go.Scattergl(
             x=np.array(news_down_xs),
             y=np.array(news_down_ys),
             mode='markers',
-            fillcolor='red'
+            marker=dict(
+                color='rgb(255,0,0)',
+            ),
+            name='news - sell signals'
         )
 
         py.plot([trace0, trace1, trace2], filename='eurusd')
