@@ -18,4 +18,4 @@ labels = labels_provider.get_labels(prices, news, refresh=False)
 # data_visualizer.visualize(prices, news, labels)
 
 x_train, y_train, x_test, y_test = data_set_provider.get_dataset(news, labels)
-neural_network.classify(x_train, y_train, x_test, y_test)
+neural_network.train(x_train, y_train, x_test, y_test)

@@ -12,7 +12,11 @@ class DataSetProvider(object):
 
         news = news.drop('datetime', 1)
         x = news.as_matrix()[:len(labels)]
-        y = np.array(labels)
+
+        labels = self.__convert_to_one_hot(pd.DataFrame(labels), 0)
+
+        y = labels.as_matrix()
+        # y = np.array(labels)
 
         msk = np.random.rand(len(y)) < 0.8
 
