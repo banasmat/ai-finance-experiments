@@ -1,12 +1,12 @@
-import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
+import plotly.plotly as py
+import plotly.graph_objs as go
 
 
 class DataVisualizer(object):
 
     def visualize(self, prices, news, labels):
-
-        plt.style.use('ggplot')
 
         news = news.iloc[:len(labels)]
         news_labels = pd.DataFrame(labels)
@@ -22,18 +22,26 @@ class DataVisualizer(object):
         news_up_xs, news_up_ys = self.__prepare_news_lists(prices, news_labels, 1)
         news_down_xs, news_down_ys = self.__prepare_news_lists(prices, news_labels, -1)
 
-        plt.plot(price_xs, price_ys, color='blue')
-        plt.scatter(news_up_xs, news_up_ys, color='green')
-        plt.scatter(news_down_xs, news_down_ys, color='red')
+        trace0 = go.Scattergl(
+            x=np.array(price_xs),
+            y=np.array(price_ys),
+            mode='lines',
+            fillcolor='blue'
+        )
+        trace1 = go.Scattergl(
+            x=np.array(news_up_xs),
+            y=np.array(news_up_ys),
+            mode='markers',
+            fillcolor='green'
+        )
+        trace2 = go.Scattergl(
+            x=np.array(news_down_xs),
+            y=np.array(news_down_ys),
+            mode='markers',
+            fillcolor='red'
+        )
 
-        plt.ylim(0.9, 1.0)
-        plt.xlim(price_xs[100], price_xs[500])
-        plt.setp(plt.gca().xaxis.get_majorticklabels(),
-                 'rotation', 90)
-
-        # TODO scroll graph (use plotly ? )
-
-        plt.show()
+        py.plot([trace0, trace1, trace2], filename='eurusd')
 
         return
 
