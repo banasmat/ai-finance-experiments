@@ -8,12 +8,14 @@ class DataVisualizer(object):
 
     def visualize(self, prices, news, labels):
 
+        print('len 1',len(news))
         news = news.iloc[:len(labels)]
+        print('len 2', len(news))
         news_labels = pd.DataFrame(labels)
         news_labels.index = news['datetime']
 
         prices = prices['mean'].resample('1H').mean()
-
+        print(prices[:10])
         price_xs = prices.index.tolist()
         price_ys = prices.values.tolist()
 
@@ -21,7 +23,7 @@ class DataVisualizer(object):
 
         news_up_xs, news_up_ys = self.__prepare_news_lists(prices, news_labels, 1)
         news_down_xs, news_down_ys = self.__prepare_news_lists(prices, news_labels, -1)
-
+        quit()
         trace0 = go.Scattergl(
             x=np.array(price_xs),
             y=np.array(price_ys),
@@ -61,9 +63,16 @@ class DataVisualizer(object):
 
         news_xs = []
         news_ys = []
-
+        i = 0;
         for label_datetime, label in news_labels.iterrows():
             news_xs.append(self.__timestamp_to_datetime_string(label_datetime))
             news_ys.append(prices.loc[label_datetime.round('h')])
 
+            print(label_datetime)
+            print(label_datetime.round('h'))
+            print(prices.loc[label_datetime.round('h')])
+            print('')
+            i += 1
+            if i > 100:
+                break
         return news_xs, news_ys
