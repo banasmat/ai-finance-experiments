@@ -22,7 +22,7 @@ class LabelsProvider(object):
 
                 while True:
                     prices_affected_by_news = prices.loc[(prices.index >= n['datetime']) & (prices.index <= datetime_plus_interval)]
-                    if i > 10:
+                    if i > 100:
                         break
                     elif len(prices_affected_by_news) < 100:
                         datetime_plus_interval += timedelta(hours=12)
@@ -30,7 +30,7 @@ class LabelsProvider(object):
                     else:
                         break
 
-                if i > 10:
+                if i > 100:
                     print('last date: ', n['datetime'])
                     break
 
