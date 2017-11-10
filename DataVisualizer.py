@@ -12,15 +12,16 @@ class DataVisualizer(object):
         news_labels = pd.DataFrame(labels)
         news_labels.index = news['datetime']
 
-        prices = prices['mean'].resample('1H').mean()
+        news_chart_prices = prices['mean'].resample('1H').mean()
+        price_chart_prices = prices['mean'].resample('1D').mean()
 
-        price_xs = prices.index.tolist()
-        price_ys = prices.values.tolist()
+        price_xs = price_chart_prices.index.tolist()
+        price_ys = price_chart_prices.values.tolist()
 
         price_xs = list(map(self.__timestamp_to_datetime_string, price_xs))
 
-        news_up_xs, news_up_ys = self.__prepare_news_lists(prices, news_labels, 1)
-        news_down_xs, news_down_ys = self.__prepare_news_lists(prices, news_labels, -1)
+        news_up_xs, news_up_ys = self.__prepare_news_lists(news_chart_prices, news_labels, 1)
+        news_down_xs, news_down_ys = self.__prepare_news_lists(news_chart_prices, news_labels, -1)
 
         trace0 = go.Scattergl(
             x=np.array(price_xs),
