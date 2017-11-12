@@ -1,17 +1,21 @@
 from PreProcessedDataProvider import PreProcessedDataProvider
+from FeatureProvider import FeatureProvider
 from LabelsProvider import LabelsProvider
 from DataSetProvider import DataSetProvider
 from DataVisualizer import DataVisualizer
 # from NeuralNetwork import NeuralNetwork
 
 prep_data_provider = PreProcessedDataProvider()
+feature_provider = FeatureProvider()
 labels_provider = LabelsProvider()
 data_set_provider = DataSetProvider()
 data_visualizer = DataVisualizer()
 # neural_network = NeuralNetwork()
 
-prices = prep_data_provider.get_price_data()
-news = prep_data_provider.get_news_data(prices.index[0])
+prices = prep_data_provider.get_price_data(refresh=False)
+news = prep_data_provider.get_news_data(prices.index[0], refresh=False)
+
+news = feature_provider.add_preceding_price_feature(prices, news, refresh=False)
 
 labels = labels_provider.get_labels(prices, news, refresh=False)
 
