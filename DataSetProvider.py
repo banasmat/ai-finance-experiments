@@ -6,6 +6,7 @@ class DataSetProvider(object):
 
     def get_dataset(self, news, labels):
 
+        news = self.__convert_to_one_hot(news, 'preceding_price')
         news = self.__convert_to_one_hot(news, 'symbol')
         # TODO consider normalizing titles: treating simmilar as one
         news = self.__convert_to_one_hot(news, 'title')

@@ -12,8 +12,8 @@ data_set_provider = DataSetProvider()
 data_visualizer = DataVisualizer()
 # neural_network = NeuralNetwork()
 
-prices = prep_data_provider.get_price_data(refresh=False)
-news = prep_data_provider.get_news_data(prices.index[0], refresh=False)
+prices = prep_data_provider.get_price_data()
+news = prep_data_provider.get_news_data(prices.index[0])
 
 news = feature_provider.add_preceding_price_feature(prices, news, refresh=False)
 

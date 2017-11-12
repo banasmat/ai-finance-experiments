@@ -40,15 +40,7 @@ class LabelsProvider(object):
 
                 diff = price_mean_in_affected_period - price_when_news_happens
 
-                diff_percent = abs((diff / price_when_news_happens) * 100)
-
-                diff_threshold = 0.5
-                label = 0
-                if diff_percent > diff_threshold:
-                    if diff > 0:
-                        label = 1
-                    else:
-                        label = -1
+                label = self.get_diff_label(diff, price_when_news_happens)
 
                 notes_file.write('news datetime: ' + n['datetime'].strftime('%Y-%m-%d %H%M') + "\n")
                 notes_file.write('price when news happens: ' + str(price_when_news_happens) + "\n")
@@ -56,7 +48,7 @@ class LabelsProvider(object):
                 notes_file.write('datetime plus interval: ' + datetime_plus_interval.strftime('%Y-%m-%d %H%M') + "\n")
                 notes_file.write('price mean in affected period: ' + str(price_mean_in_affected_period) + "\n")
                 notes_file.write('diff: ' + str(diff) + "\n")
-                notes_file.write('diff percent: ' + str(diff_percent) + "\n")
+                # notes_file.write('diff percent: ' + str(diff_percent) + "\n")
                 notes_file.write("\n")
 
                 labels.append(label)
@@ -64,3 +56,21 @@ class LabelsProvider(object):
         np.save('output/labels.npy', np.array(labels))
 
         return labels
+
+    @staticmethod
+    def get_diff_label(diff, price_when_news_happens):
+
+        diff_percent = (diff / price_when_news_happens) * 100
+
+        if diff_percent > 1.:
+            label = 2
+        elif diff_percent > 0.5:
+            label = 1
+        elif diff_percent > -0.5:
+            label = 0
+        elif diff_percent > -1:
+            label = -1
+        else:
+            label = -2
+
+        return label

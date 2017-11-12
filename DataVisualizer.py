@@ -24,6 +24,8 @@ class DataVisualizer(object):
 
         news_up_ys = self.__get_news_ys(prices, news_labels, 1)
         news_down_ys = self.__get_news_ys(prices, news_labels, -1)
+        news_up_ys_lg = self.__get_news_ys(prices, news_labels, 2)
+        news_down_ys_lg = self.__get_news_ys(prices, news_labels, -2)
 
         trace0 = go.Scattergl(
             x=np.array(price_xs),
@@ -38,6 +40,7 @@ class DataVisualizer(object):
             mode='markers',
             marker=dict(
                 color='rgb(0,255,0)',
+                size=5
             ),
             name='news - buy signals'
         )
@@ -47,6 +50,27 @@ class DataVisualizer(object):
             mode='markers',
             marker=dict(
                 color='rgb(255,0,0)',
+                size=5
+            ),
+            name='news - sell signals'
+        )
+        trace3 = go.Scattergl(
+            x=np.array(price_xs),
+            y=np.array(news_up_ys_lg),
+            mode='markers',
+            marker=dict(
+                color='rgb(0,255,0)',
+                size=10
+            ),
+            name='news - buy signals'
+        )
+        trace4 = go.Scattergl(
+            x=np.array(price_xs),
+            y=np.array(news_down_ys_lg),
+            mode='markers',
+            marker=dict(
+                color='rgb(255,0,0)',
+                size=10
             ),
             name='news - sell signals'
         )

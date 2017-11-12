@@ -1,14 +1,14 @@
 from datetime import timedelta
 import pandas as pd
+from LabelsProvider import LabelsProvider
 
 
 class FeatureProvider:
 
-    @staticmethod
-    def add_preceding_price_feature(prices, news, refresh=True):
+    def add_preceding_price_feature(self, prices, news, refresh=True):
 
         if refresh is not True:
-            return pd.DataFrame.from_csv('output/feat_news.csv')
+            return pd.read_csv('output/feat_news.csv', parse_dates=['datetime'])
 
         news['preceding_price'] = pd.Series()
 
@@ -40,18 +40,11 @@ class FeatureProvider:
 
             diff = price_mean_in_affected_period - price_when_news_happens
 
-            diff_percent = abs((diff / price_when_news_happens) * 100)
-
-            diff_threshold = 0.5
-            feature = 0
-            if diff_percent > diff_threshold:
-                if diff > 0:
-                    feature = 1
-                else:
-                    feature = -1
+            feature = LabelsProvider.get_diff_label(diff, price_when_news_happens)
 
             news.loc[news['datetime'] == n['datetime'], 'preceding_price'] = feature
 
         news.to_csv('output/feat_news.csv')
 
         return news
+
