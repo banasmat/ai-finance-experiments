@@ -4,10 +4,12 @@ import tensorflow as tf
 class NeuralNetwork:
 
     features_n = 0
+    classes_n = 0
 
     def train(self, x_train, y_train, x_test, y_test):
 
         self.features_n = len(x_train[0])
+        self.classes_n = y_train.shape[1]
 
         x = tf.placeholder('float', [None, self.features_n])
         y = tf.placeholder('float')
@@ -49,7 +51,6 @@ class NeuralNetwork:
         n_nodes_layer_1 = 500
         n_nodes_layer_2 = 500
         n_nodes_layer_3 = 500
-        n_classes = 3
 
         hidden_1_layer = {'weights': tf.Variable(tf.random_normal([self.features_n, n_nodes_layer_1])),
                           'biases': tf.Variable(tf.random_normal([n_nodes_layer_1]))}
@@ -60,19 +61,19 @@ class NeuralNetwork:
         hidden_3_layer = {'weights': tf.Variable(tf.random_normal([n_nodes_layer_2, n_nodes_layer_3])),
                           'biases': tf.Variable(tf.random_normal([n_nodes_layer_3]))}
 
-        output_layer = {'weights': tf.Variable(tf.random_normal([n_nodes_layer_3, n_classes])),
-                        'biases': tf.Variable(tf.random_normal([n_classes]))}
+        output_layer = {'weights': tf.Variable(tf.random_normal([n_nodes_layer_3, self.classes_n])),
+                        'biases': tf.Variable(tf.random_normal([self.classes_n]))}
 
         # (input_data * weights) + biases
 
         layer_1 = tf.add(tf.matmul(data, hidden_1_layer['weights']), hidden_1_layer['biases'])
-        layer_1 = tf.nn.tanh(layer_1)
+        layer_1 = tf.nn.relu(layer_1)
 
         layer_2 = tf.add(tf.matmul(layer_1, hidden_2_layer['weights']), hidden_2_layer['biases'])
-        layer_2 = tf.nn.tanh(layer_2)
+        layer_2 = tf.nn.relu(layer_2)
 
         layer_3 = tf.add(tf.matmul(layer_2, hidden_3_layer['weights']), hidden_3_layer['biases'])
-        layer_3 = tf.nn.tanh(layer_3)
+        layer_3 = tf.nn.relu(layer_3)
 
         output = tf.add(tf.matmul(layer_3, output_layer['weights']), output_layer['biases'])
 
