@@ -2,91 +2,101 @@ import pandas as pd
 
 
 class PreProcessedDataProvider(object):
-
     res_dir = 'resources/'
     scale_map = {}
 
     def get_price_data(self):
-        prices = pd.read_csv(self.res_dir + 'EURUSD.txt', sep=',', dtype=str, usecols=('<DTYYYYMMDD>','<TIME>','<HIGH>','<LOW>'))
+        prices = pd.read_csv(self.res_dir + 'EURUSD.txt', sep=',', dtype=str,
+                             usecols=('<DTYYYYMMDD>', '<TIME>', '<HIGH>', '<LOW>'))
         prices.index = pd.to_datetime(prices.pop('<DTYYYYMMDD>') + prices.pop('<TIME>'), format='%Y%m%d%H%M%S')
         prices['mean'] = (pd.to_numeric(prices.pop('<HIGH>')) + pd.to_numeric(prices.pop('<LOW>'))) / 2
         return prices
 
     def get_news_data(self, from_datetime):
-        news = pd.read_csv(self.res_dir + 'forex-news.csv', sep=';', dtype=str, usecols=('date','time','symbol','title','actual'))
+        news = pd.read_csv(self.res_dir + 'forex-news.csv', sep=';', dtype=str,
+                           usecols=('date', 'time', 'symbol', 'title', 'actual', 'forecast', 'previous'))
 
-        news = news.loc[news['symbol'].isin(['EUR','USD']) & news['time'].str.contains('^\d{2}:')]
+        news = news.loc[news['symbol'].isin(['EUR', 'USD']) & news['time'].str.contains('^\d{2}:')]
         news = news.loc[~news['actual'].isnull()]
 
         news['datetime'] = pd.to_datetime(news.pop('date') + news.pop('time'), format='%Y-%m-%d%H:%M')
 
         news = news.loc[news['datetime'] >= from_datetime]
-        news = news.apply(self.__normalize_actual_value, axis=1)
+
+        for key in ['actual', 'forecast', 'previous']:
+            news[key] = news[key].apply(self.__normalize_numeric_string_value)
+            news.apply(lambda row: self.__update_scale_map(row, key), axis=1)
+
         news = news.loc[~news['actual'].isnull()]
 
-        self.scale_map = dict(map(self.__reduce_to_min_and_max, self.scale_map.items()))
-        news = news.apply(self.__scale_values, axis=1)
+        for key in ['actual', 'forecast', 'previous']:
+            self.scale_map[key] = dict(map(self.__reduce_to_min_and_max, self.scale_map[key].items()))
+            news = news.apply(lambda row: self.__scale_values(row, key), axis=1)
+
+        # reversing order
         news = news.iloc[::-1]
 
         return news
 
+    @staticmethod
+    def __normalize_numeric_string_value(val):
 
-    def __normalize_actual_value(self, row):
-
-        actual_val = row['actual']
+        val = str(val)
 
         try:
 
-            if actual_val == '' or actual_val in ['Pass']:
-                raise ValueError('News Actual value is empty')
-            elif 'K' in actual_val:
-                actual_val = actual_val.replace('K', '')
-                actual_val = float(actual_val) * 10**3
-            elif 'M' in actual_val:
-                actual_val = actual_val.replace('M', '')
-                actual_val = float(actual_val) * 10**6
-            elif 'B' in actual_val:
-                actual_val = actual_val.replace('B', '')
-                actual_val = float(actual_val) * 10**9
-            elif 'T' in actual_val:
-                actual_val = actual_val.replace('T', '')
-                actual_val = float(actual_val) * 10**12
-            elif '%' in actual_val:
-                actual_val = actual_val.replace('%', '')
-                actual_val = actual_val.replace('<', '')
-                actual_val = float(actual_val) / 100
-            elif '|' in actual_val:
+            if val == '' or val in ['Pass']:
+                raise ValueError('Value is empty')
+            elif 'K' in val:
+                val = val.replace('K', '')
+                val = float(val) * 10 ** 3
+            elif 'M' in val:
+                val = val.replace('M', '')
+                val = float(val) * 10 ** 6
+            elif 'B' in val:
+                val = val.replace('B', '')
+                val = float(val) * 10 ** 9
+            elif 'T' in val:
+                val = val.replace('T', '')
+                val = float(val) * 10 ** 12
+            elif '%' in val:
+                val = val.replace('%', '')
+                val = val.replace('<', '')
+                val = float(val) / 100
+            elif '|' in val:
                 # TODO not sure if mean is the best approach here
-                actual_vals = actual_val.split('|')
-                actual_val = (float(actual_vals[0]) + float(actual_vals[1])) / 2
+                actual_vals = val.split('|')
+                val = (float(actual_vals[0]) + float(actual_vals[1])) / 2
             else:
-                actual_val = float(actual_val)
+                val = float(val)
 
         except ValueError:
             return None
 
-        row['actual'] = actual_val
-        self.__update_scale_map(row)
-        return row
+        return val
 
-    def __update_scale_map(self, row):
-        if row['title'] in self.scale_map.keys():
-            self.scale_map[row['title']].append(row['actual'])
-        else:
-            self.scale_map[row['title']] = []
+    def __update_scale_map(self, row, key):
+        if key not in self.scale_map.keys():
+            self.scale_map[key] = {}
 
-    def __reduce_to_min_and_max(self, actual_values):
-        _min = min(actual_values[1])
-        _max = max(actual_values[1])
+        if row['title'] not in self.scale_map[key].keys():
+            self.scale_map[key][row['title']] = []
+
+        self.scale_map[key][row['title']].append(row[key])
+
+    @staticmethod
+    def __reduce_to_min_and_max(values):
+        _min = min(values[1])
+        _max = max(values[1])
         if _min == _max:
             _min -= 1
             _max += 1
 
-        return actual_values[0], [_min, _max]
+        return values[0], [_min, _max]
 
-    def __scale_values(self, row):
-        scaled = row['actual'] - self.scale_map[row['title']][0]
-        scaled /= self.scale_map[row['title']][1] - self.scale_map[row['title']][0]
+    def __scale_values(self, row, key):
+        scaled = row[key] - self.scale_map[key][row['title']][0]
+        scaled /= self.scale_map[key][row['title']][1] - self.scale_map[key][row['title']][0]
 
         if scaled > 1:
             # TODO check why in two cases row['actual'] is larger than previously counted max
