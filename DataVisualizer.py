@@ -75,7 +75,7 @@ class DataVisualizer(object):
             name='news - sell signals'
         )
 
-        py.plot([trace0, trace1, trace2], filename='eurusd')
+        py.plot([trace0, trace1, trace2, trace3, trace4], filename='eurusd')
 
         return
 
