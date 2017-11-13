@@ -1,29 +1,46 @@
 import pandas as pd
+import os
+import numpy as np
 
 
 class PreProcessedDataProvider(object):
     res_dir = 'resources/'
+    price_res_dir = 'resources/prices/'
     scale_map = {}
 
-    def get_price_data(self):
+    def get_price_value_pairs(self):
 
-        prices = pd.read_csv(self.res_dir + 'EURUSD.txt', sep=',', dtype=str,
+        pairs_len = len([filename for filename in os.listdir(self.price_res_dir) if filename.endswith('.txt')])
+        pairs = np.chararray((pairs_len, 2), itemsize=3, unicode=True)
+        i = 0
+
+        for filename in os.listdir(self.price_res_dir):
+            if filename.endswith('.txt'):
+                fname = filename[:-4]
+                pairs[i][0] = fname[:-3]
+                pairs[i][1] = fname[3:]
+                i += 1
+
+        return pairs
+
+    def get_price_data(self, symbol_1, symbol_2):
+
+        prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.txt', sep=',', dtype=str,
                              usecols=('<DTYYYYMMDD>', '<TIME>', '<HIGH>', '<LOW>'))
         prices.index = pd.to_datetime(prices.pop('<DTYYYYMMDD>') + prices.pop('<TIME>'), format='%Y%m%d%H%M%S')
         prices['mean'] = (pd.to_numeric(prices.pop('<HIGH>')) + pd.to_numeric(prices.pop('<LOW>'))) / 2
 
         return prices
 
-    def get_news_data(self, from_datetime):
+    def get_news_data(self, from_datetime, symbol_1, symbol_2):
 
         news = pd.read_csv(self.res_dir + 'forex-news.csv', sep=';', dtype=str,
                            usecols=('date', 'time', 'symbol', 'title', 'actual', 'forecast', 'previous'))
 
-        news = news.loc[news['symbol'].isin(['EUR', 'USD']) & news['time'].str.contains('^\d{2}:')]
+        news = news.loc[news['symbol'].isin([symbol_1, symbol_2]) & news['time'].str.contains('^\d{2}:')]
         # news = news.loc[~news['actual'].isnull()]
 
         news['datetime'] = pd.to_datetime(news.pop('date') + news.pop('time'), format='%Y-%m-%d%H:%M')
-
 
         news = news.loc[news['datetime'] >= from_datetime]
 

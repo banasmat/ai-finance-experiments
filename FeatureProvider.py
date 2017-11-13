@@ -1,14 +1,20 @@
 from datetime import timedelta
 import pandas as pd
 from LabelsProvider import LabelsProvider
-
+import os
 
 class FeatureProvider:
 
-    def add_preceding_price_feature(self, prices, news, refresh=True):
+    def add_preceding_price_feature(self, prices, news, pair, refresh=True):
+
+        filename = 'output/feat_news_' + pair + '.csv'
+
+        # TODO delete
+        if os.path.isfile(filename):
+            refresh = False
 
         if refresh is not True:
-            return pd.read_csv('output/feat_news.csv', parse_dates=['datetime'])
+            return pd.read_csv(filename, parse_dates=['datetime'])
 
         news['preceding_price'] = pd.Series()
 
@@ -31,6 +37,7 @@ class FeatureProvider:
                     break
 
             if i > 100:
+                print('pair', pair)
                 print('last date: ', n['datetime'])
                 break
 
@@ -44,7 +51,7 @@ class FeatureProvider:
 
             news.loc[news['datetime'] == n['datetime'], 'preceding_price'] = feature
 
-        news.to_csv('output/feat_news.csv')
+        news.to_csv(filename)
 
         return news
 
