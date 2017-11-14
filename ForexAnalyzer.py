@@ -3,43 +3,67 @@ from FeatureProvider import FeatureProvider
 from LabelsProvider import LabelsProvider
 from DataSetProvider import DataSetProvider
 from DataVisualizer import DataVisualizer
-# from NeuralNetwork import NeuralNetwork
-
+from NeuralNetwork import NeuralNetwork
+import numpy as np
 
 prep_data_provider = PreProcessedDataProvider()
 feature_provider = FeatureProvider()
 labels_provider = LabelsProvider()
 data_set_provider = DataSetProvider()
 data_visualizer = DataVisualizer()
-# neural_network = NeuralNetwork()
+neural_network = NeuralNetwork()
 
-# TODO get prices separately for all symbols
-# for every symbol get news with features
-# for every symbol get labels
-# glue labels into one array
+currency_pairs = prep_data_provider.get_currency_pairs()
+all_currencies = list(set(currency_pairs.flatten().tolist()))
 
-value_pairs = prep_data_provider.get_price_value_pairs()
+x_train_all = []
+y_train_all = []
+x_test_all = []
+y_test_all = []
 
-x_train_all, y_train_all, x_test_all, y_test_all = [], [], [], []
+price_news_map = {}
 
-for value_pair in value_pairs:
-    prices = prep_data_provider.get_price_data(value_pair[0], value_pair[1])
-    news = prep_data_provider.get_news_data(prices.index[0], value_pair[0], value_pair[1])
-    news = feature_provider.add_preceding_price_feature(prices, news, value_pair[0] + value_pair[1], refresh=False)
+for currency_pair in currency_pairs[:2]:
 
-    labels = labels_provider.get_labels(prices, news, value_pair[0] + value_pair[1], refresh=False)
+    currency_pair_str = currency_pair[0] + currency_pair[1]
+
+    if currency_pair_str not in price_news_map.keys():
+        price_news_map[currency_pair_str] = {}
+
+    price_news_map[currency_pair_str]['prices'] = prep_data_provider.get_price_data(currency_pair[0], currency_pair[1])
+    price_news_map[currency_pair_str]['news'] = prep_data_provider.get_news_data(price_news_map[currency_pair_str]['prices'].index[0], currency_pair[0], currency_pair[1])
+
+for currency_pair in currency_pairs[:2]:
+
+    print(currency_pair)
+
+    currency_pair_str = currency_pair[0] + currency_pair[1]
+
+    prices = price_news_map[currency_pair_str]['prices']
+    news = price_news_map[currency_pair_str]['news']
+    news = prep_data_provider.scale_news_data(news)
+    news = feature_provider.add_preceding_price_feature(prices, news, currency_pair[0] + currency_pair[1], refresh=True)
+
+    labels = labels_provider.get_labels(prices, news, currency_pair[0] + currency_pair[1], refresh=True)
 
     # data_visualizer.visualize(prices, news, labels)
 
-    x_train, y_train, x_test, y_test = data_set_provider.get_dataset(news, labels)
+    x_train, y_train, x_test, y_test = data_set_provider.get_dataset(news, labels, prep_data_provider.get_all_titles(), all_currencies)
 
-    x_train_all.append(x_train)
-    y_train_all.append(y_train)
-    x_test_all.append(x_test)
-    y_test_all.append(y_test)
+    if len(x_train_all) is 0:
+        x_train_all = x_train
+        y_train_all = y_train
+        x_test_all = x_test
+        y_test_all = y_test
+    else:
+        x_train_all = np.append(x_train_all, x_train, axis=0)
+        y_train_all = np.append(y_train_all, y_train, axis=0)
+        x_test_all = np.append(x_test_all, x_test, axis=0)
+        y_test_all = np.append(y_test_all, y_test, axis=0)
 
-quit()
+np.save('output/x_train_all.npy', x_train_all)
+np.save('output/y_train_all.npy', y_train_all)
+np.save('output/x_test_all.npy', x_test_all)
+np.save('output/y_test_all.npy', y_test_all)
 
-
-
-# neural_network.train(x_train_all, y_train_all, x_test_all, y_test_all)
+neural_network.train(x_train_all, y_train_all, x_test_all, y_test_all)

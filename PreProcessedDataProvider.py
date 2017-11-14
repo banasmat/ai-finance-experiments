@@ -8,7 +8,7 @@ class PreProcessedDataProvider(object):
     price_res_dir = 'resources/prices/'
     scale_map = {}
 
-    def get_price_value_pairs(self):
+    def get_currency_pairs(self):
 
         pairs_len = len([filename for filename in os.listdir(self.price_res_dir) if filename.endswith('.txt')])
         pairs = np.chararray((pairs_len, 2), itemsize=3, unicode=True)
@@ -50,14 +50,20 @@ class PreProcessedDataProvider(object):
 
         news = news.loc[~news['actual'].isnull()]
 
-        for key in ['actual', 'forecast', 'previous']:
-            self.scale_map[key] = dict(map(self.__reduce_to_min_and_max, self.scale_map[key].items()))
-            news = news.apply(lambda row: self.__scale_values(row, key), axis=1)
-
         # reversing order
         news = news.iloc[::-1]
 
         return news
+
+    def scale_news_data(self, news):
+        for key in ['actual', 'forecast', 'previous']:
+            self.scale_map[key] = dict(map(self.__reduce_to_min_and_max, self.scale_map[key].items()))
+            news = news.apply(lambda row: self.__scale_values(row, key), axis=1)
+
+        return news
+
+    def get_all_titles(self):
+        return list(self.scale_map['actual'].keys())
 
     @staticmethod
     def __normalize_numeric_string_value(val):

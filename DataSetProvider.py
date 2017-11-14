@@ -3,13 +3,10 @@ import pandas as pd
 
 
 class DataSetProvider(object):
-
-    def get_dataset(self, news, labels):
-
+    def get_dataset(self, news, labels, all_titles, all_currencies):
         news = self.__convert_to_one_hot(news, 'preceding_price')
-        news = self.__convert_to_one_hot(news, 'symbol')
-        # TODO consider normalizing titles: treating simmilar as one
-        news = self.__convert_to_one_hot(news, 'title')
+        news = self.__one_hot_from_all_items(news, 'symbol', all_currencies)
+        news = self.__one_hot_from_all_items(news, 'title', all_titles)
 
         news = news.drop('datetime', 1)
         x = news.as_matrix()[:len(labels)]
@@ -32,5 +29,25 @@ class DataSetProvider(object):
     def __convert_to_one_hot(df, col_name):
         one_hot = pd.get_dummies(df[col_name])
         df = df.drop(col_name, axis=1)
+
         df = df.join(one_hot)
+        return df
+
+    @staticmethod
+    def __one_hot_from_all_items(df, column, all_items):
+        # TODO consider normalizing titles further: treating simmilar as one
+
+        one_hot = np.zeros((len(df[column]), len(all_items)))
+
+        one_hot = pd.DataFrame(one_hot, columns=all_items, dtype=np.int)
+
+        i = 0
+        for news_title in df[column]:
+            title_index = all_items.index(news_title)
+            one_hot.iloc[i, title_index] = 1
+            i += 1
+
+        df = df.drop(column, axis=1)
+        df = df.join(one_hot)
+
         return df
