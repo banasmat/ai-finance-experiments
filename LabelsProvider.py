@@ -1,16 +1,12 @@
 import numpy as np
 from datetime import timedelta
-import os
+
 
 class LabelsProvider(object):
 
     def get_labels(self, prices, news, pair, refresh=True):
 
         filename = 'output/labels_' + pair + '.npy'
-
-        # TODO delete
-        if os.path.isfile(filename):
-            refresh = False
 
         if refresh is False:
             labels = np.load(filename)

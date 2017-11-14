@@ -1,17 +1,13 @@
 from datetime import timedelta
 import pandas as pd
 from LabelsProvider import LabelsProvider
-import os
+
 
 class FeatureProvider:
 
     def add_preceding_price_feature(self, prices, news, pair, refresh=True):
 
         filename = 'output/feat_news_' + pair + '.csv'
-
-        # TODO delete
-        if os.path.isfile(filename):
-            refresh = False
 
         if refresh is not True:
             return pd.read_csv(filename, parse_dates=['datetime'])

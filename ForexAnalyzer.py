@@ -25,9 +25,9 @@ x_train_all, y_train_all, x_test_all, y_test_all = [], [], [], []
 for value_pair in value_pairs:
     prices = prep_data_provider.get_price_data(value_pair[0], value_pair[1])
     news = prep_data_provider.get_news_data(prices.index[0], value_pair[0], value_pair[1])
-    news = feature_provider.add_preceding_price_feature(prices, news, value_pair[0] + value_pair[1], refresh=True)
+    news = feature_provider.add_preceding_price_feature(prices, news, value_pair[0] + value_pair[1], refresh=False)
 
-    labels = labels_provider.get_labels(prices, news, value_pair[0] + value_pair[1], refresh=True)
+    labels = labels_provider.get_labels(prices, news, value_pair[0] + value_pair[1], refresh=False)
 
     # data_visualizer.visualize(prices, news, labels)
 
