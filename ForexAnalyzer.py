@@ -23,7 +23,7 @@ y_test_all = []
 
 price_news_map = {}
 
-for currency_pair in currency_pairs[:2]:
+for currency_pair in currency_pairs:
 
     currency_pair_str = currency_pair[0] + currency_pair[1]
 
@@ -33,7 +33,7 @@ for currency_pair in currency_pairs[:2]:
     price_news_map[currency_pair_str]['prices'] = prep_data_provider.get_price_data(currency_pair[0], currency_pair[1])
     price_news_map[currency_pair_str]['news'] = prep_data_provider.get_news_data(price_news_map[currency_pair_str]['prices'].index[0], currency_pair[0], currency_pair[1])
 
-for currency_pair in currency_pairs[:2]:
+for currency_pair in currency_pairs:
 
     print(currency_pair)
 
