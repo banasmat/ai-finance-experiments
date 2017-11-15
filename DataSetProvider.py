@@ -1,9 +1,10 @@
 import numpy as np
 import pandas as pd
+from typing import List, Tuple
 
 
 class DataSetProvider(object):
-    def get_dataset(self, news, labels, all_titles, all_currencies):
+    def get_dataset(self, news: pd.DataFrame, labels: np.ndarray, all_titles: List, all_currencies: List, all_pairs: List) -> Tuple:
         news = self.__convert_to_one_hot(news, 'preceding_price')
         news = self.__one_hot_from_all_items(news, 'symbol', all_currencies)
         news = self.__one_hot_from_all_items(news, 'title', all_titles)

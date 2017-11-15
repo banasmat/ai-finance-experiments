@@ -1,10 +1,11 @@
 import numpy as np
 from datetime import timedelta
+import pandas as pd
 
 
 class LabelsProvider(object):
 
-    def get_labels(self, prices, news, pair, refresh=True):
+    def get_labels(self, prices: pd.DataFrame, news: pd.DataFrame, pair: str, refresh=True) -> np.ndarray:
 
         filename = 'output/labels_' + pair + '.npy'
 

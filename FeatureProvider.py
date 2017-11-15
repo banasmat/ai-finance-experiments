@@ -5,7 +5,7 @@ from LabelsProvider import LabelsProvider
 
 class FeatureProvider:
 
-    def add_preceding_price_feature(self, prices, news, pair, refresh=True):
+    def add_preceding_price_feature(self, prices, news: pd.DataFrame, pair: str, refresh=True) -> pd.DataFrame:
 
         filename = 'output/feat_news_' + pair + '.csv'
 

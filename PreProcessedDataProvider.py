@@ -1,3 +1,4 @@
+from typing import List
 import pandas as pd
 import os
 import numpy as np
@@ -8,7 +9,15 @@ class PreProcessedDataProvider(object):
     price_res_dir = 'resources/prices/'
     scale_map = {}
 
-    def get_currency_pairs(self):
+    def get_currency_pair_strings(self) -> List:
+        pairs = []
+        for filename in os.listdir(self.price_res_dir):
+            if filename.endswith('.txt'):
+                pairs.append(filename[:-4])
+
+        return pairs
+
+    def get_currency_pairs(self) -> np.chararray:
 
         pairs_len = len([filename for filename in os.listdir(self.price_res_dir) if filename.endswith('.txt')])
         pairs = np.chararray((pairs_len, 2), itemsize=3, unicode=True)
@@ -23,7 +32,7 @@ class PreProcessedDataProvider(object):
 
         return pairs
 
-    def get_price_data(self, symbol_1, symbol_2):
+    def get_price_data(self, symbol_1: str, symbol_2: str) -> pd.DataFrame:
 
         prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.txt', sep=',', dtype=str,
                              usecols=('<DTYYYYMMDD>', '<TIME>', '<HIGH>', '<LOW>'))
@@ -32,7 +41,7 @@ class PreProcessedDataProvider(object):
 
         return prices
 
-    def get_news_data(self, from_datetime, symbol_1, symbol_2):
+    def get_news_data(self, from_datetime: pd.Timestamp, symbol_1: str, symbol_2: str) -> pd.DataFrame:
 
         news = pd.read_csv(self.res_dir + 'forex-news.csv', sep=';', dtype=str,
                            usecols=('date', 'time', 'symbol', 'title', 'actual', 'forecast', 'previous'))
@@ -55,14 +64,15 @@ class PreProcessedDataProvider(object):
 
         return news
 
-    def scale_news_data(self, news):
+    def scale_news_data(self, news: pd.DataFrame) -> pd.DataFrame:
+
         for key in ['actual', 'forecast', 'previous']:
             self.scale_map[key] = dict(map(self.__reduce_to_min_and_max, self.scale_map[key].items()))
             news = news.apply(lambda row: self.__scale_values(row, key), axis=1)
 
         return news
 
-    def get_all_titles(self):
+    def get_all_titles(self) -> List:
         return list(self.scale_map['actual'].keys())
 
     @staticmethod
