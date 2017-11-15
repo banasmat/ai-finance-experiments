@@ -1,5 +1,5 @@
 .idea
 __pycache__
 
-resources/prices/*
+resources/prices/*.txt
 ubuntu-xenial-*
