@@ -9,7 +9,7 @@ class PreProcessedDataProvider(object):
     price_res_dir = 'resources/prices/'
     scale_map = {}
 
-    def get_currency_pair_strings(self) -> List:
+    def get_symbol_pair_strings(self) -> List:
         pairs = []
         for filename in os.listdir(self.price_res_dir):
             if filename.endswith('.txt'):
@@ -17,7 +17,7 @@ class PreProcessedDataProvider(object):
 
         return pairs
 
-    def get_currency_pairs(self) -> np.chararray:
+    def get_symbol_pairs(self) -> np.chararray:
 
         pairs_len = len([filename for filename in os.listdir(self.price_res_dir) if filename.endswith('.txt')])
         pairs = np.chararray((pairs_len, 2), itemsize=3, unicode=True)
@@ -50,8 +50,9 @@ class PreProcessedDataProvider(object):
         # news = news.loc[~news['actual'].isnull()]
 
         news['datetime'] = pd.to_datetime(news.pop('date') + news.pop('time'), format='%Y-%m-%d%H:%M')
-
         news = news.loc[news['datetime'] >= from_datetime]
+
+        news['symbol_pair'] = symbol_1 + symbol_2
 
         for key in ['actual', 'forecast', 'previous']:
             news[key] = news[key].apply(self.__normalize_numeric_string_value)
