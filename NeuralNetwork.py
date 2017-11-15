@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 
 
 class NeuralNetwork:
@@ -6,7 +7,7 @@ class NeuralNetwork:
     features_n = 0
     classes_n = 0
 
-    def train(self, x_train, y_train, x_test, y_test):
+    def train(self, x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray, y_test: np.ndarray):
 
         self.features_n = len(x_train[0])
         self.classes_n = y_train.shape[1]

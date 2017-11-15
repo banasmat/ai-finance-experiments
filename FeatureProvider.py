@@ -33,8 +33,6 @@ class FeatureProvider:
                     break
 
             if i > 100:
-                print('pair', pair)
-                print('last date: ', n['datetime'])
                 break
 
             price_when_news_happens = prices_preceding_news.loc[prices_preceding_news.index[-1]]['mean']

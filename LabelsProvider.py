@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 from datetime import timedelta
 import pandas as pd
@@ -34,7 +36,6 @@ class LabelsProvider(object):
                     break
 
             if i > 100:
-                print('last date: ', n['datetime'])
                 break
 
             price_when_news_happens = prices_affected_by_news.loc[prices_affected_by_news.index[0]]['mean']
@@ -56,12 +57,14 @@ class LabelsProvider(object):
 
             labels.append(label)
 
-        np.save(filename, np.array(labels))
+        labels = np.array(labels)
+
+        np.save(filename, labels)
 
         return labels
 
     @staticmethod
-    def get_diff_label(diff, price_when_news_happens):
+    def get_diff_label(diff, price_when_news_happens) -> int:
 
         diff_percent = (diff / price_when_news_happens) * 100
 
@@ -77,3 +80,7 @@ class LabelsProvider(object):
             label = -2
 
         return label
+
+    @staticmethod
+    def get_all_labels() -> List:
+        return list(range(-2, 3, 1))
