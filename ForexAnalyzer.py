@@ -24,7 +24,11 @@ y_test_all = []
 
 price_news_map = {}
 
+# symbol_pairs = symbol_pairs[3:5]
+
 for symbol_pair in symbol_pairs:
+
+    print('first run', symbol_pair)
 
     symbol_pair_str = symbol_pair[0] + symbol_pair[1]
 

@@ -29,7 +29,7 @@ class LabelsProvider(object):
                 prices_affected_by_news = prices.loc[(prices.index >= n['datetime']) & (prices.index <= datetime_plus_interval)]
                 if i > 100:
                     break
-                elif len(prices_affected_by_news) < 100:
+                elif len(prices_affected_by_news) < 2:
                     datetime_plus_interval += timedelta(hours=12)
                     i += 1
                 else:
@@ -38,9 +38,9 @@ class LabelsProvider(object):
             if i > 100:
                 break
 
-            price_when_news_happens = prices_affected_by_news.loc[prices_affected_by_news.index[0]]['mean']
+            price_when_news_happens = prices_affected_by_news[0]
 
-            price_mean_in_affected_period = prices_affected_by_news['mean'].mean()
+            price_mean_in_affected_period = prices_affected_by_news.mean()
 
             diff = price_mean_in_affected_period - price_when_news_happens
 

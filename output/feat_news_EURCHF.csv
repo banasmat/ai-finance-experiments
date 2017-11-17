@@ -1,119 +1,119 @@
-,symbol,title,actual,forecast,previous,datetime,preceding_price
-71082,EUR,Belgian NBB Business Climate,91.18,2.6,2.5,2007-01-24 10:00:00,0.0
-68274,EUR,Belgian NBB Business Climate,93.85,2.9,3.5,2007-03-22 10:00:00,0.0
-65914,EUR,Belgian NBB Business Climate,88.5,1.3,1.5,2007-10-24 10:00:00,0.0
-65575,EUR,Belgian NBB Business Climate,84.22,-1.0,-0.1,2007-11-22 10:00:00,0.0
-65233,EUR,Belgian NBB Business Climate,88.24,0.7,1.4,2007-12-20 10:00:00,0.0
-64869,EUR,Belgian NBB Business Climate,79.41,-2.5,-1.9,2008-01-24 10:00:00,0.0
-61938,EUR,Belgian NBB Business Climate,85.03,-0.8,0.2,2008-03-26 10:00:00,0.0
-59024,EUR,Belgian NBB Business Climate,44.92,-17.5,-14.8,2008-11-24 10:00:00,0.0
-58648,EUR,Belgian NBB Business Climate,21.12,-26.5,-23.7,2008-12-22 10:00:00,0.0
-58290,EUR,Belgian NBB Business Climate,0.8,-33.0,-31.3,2009-01-23 10:00:00,0.0
-55415,EUR,Belgian NBB Business Climate,0.0,-31.9,-31.6,2009-03-24 10:00:00,0.0
-52408,EUR,Belgian NBB Business Climate,46.52,-11.3,-14.2,2009-11-24 10:00:00,0.0
-52040,EUR,Belgian NBB Business Climate,60.96,-5.5,-8.8,2009-12-22 10:00:00,0.0
-51724,EUR,Consumer Confidence,42.31,-15.0,-16.0,2010-01-21 11:00:00,0.0
-51705,EUR,Belgian NBB Business Climate,63.37,-7.0,-7.9,2010-01-22 10:00:00,0.0
-48851,EUR,Consumer Confidence,38.46,-17.0,-17.0,2010-03-22 11:00:00,0.0
-48843,EUR,Belgian NBB Business Climate,65.78,-4.1,-7.0,2010-03-23 10:00:00,0.0
-48470,EUR,Consumer Confidence,38.46,-17.0,-17.0,2010-04-22 10:00:00,0.0
-48079,EUR,Consumer Confidence,46.15,-15.0,-15.0,2010-05-20 10:00:00,0.0
-47671,EUR,Consumer Confidence,34.62,-19.0,-18.0,2010-06-22 10:00:00,0.0
-47329,EUR,Consumer Confidence,38.46,-17.0,-17.0,2010-07-22 10:00:00,0.0
-46990,EUR,Consumer Confidence,50.0,-13.0,-14.0,2010-08-23 10:03:00,0.0
-46617,EUR,Consumer Confidence,61.54,-10.0,-11.0,2010-09-22 10:00:00,0.0
-46238,EUR,Consumer Confidence,61.54,-10.0,-11.0,2010-10-21 10:00:00,0.0
-45835,EUR,Consumer Confidence,61.54,-10.0,-11.0,2010-11-22 11:00:00,0.0
-45801,EUR,Belgian NBB Business Climate,77.01,-2.7,-2.8,2010-11-24 10:00:00,0.0
-45465,EUR,Consumer Confidence,65.38,-9.0,-10.0,2010-12-20 11:00:00,0.0
-45440,EUR,Belgian NBB Business Climate,86.63,1.2,0.8,2010-12-22 10:00:00,0.0
-45136,EUR,Consumer Confidence,61.54,-12.0,-11.0,2011-01-20 11:00:00,0.0
-45126,EUR,Belgian NBB Business Climate,92.78,3.3,3.1,2011-01-21 10:00:00,0.0
-42255,EUR,Consumer Confidence,65.38,-11.0,-10.0,2011-03-23 11:00:00,0.0
-42252,EUR,Belgian NBB Business Climate,100.0,5.1,5.8,2011-03-23 10:00:00,0.0
-41087,EUR,Consumer Confidence,65.38,-10.0,-10.0,2011-06-22 10:00:00,0.0
-40753,EUR,Consumer Confidence,65.38,-10.0,-10.0,2011-07-20 10:00:00,0.0
-40390,EUR,Consumer Confidence,61.54,-12.0,-11.0,2011-08-23 10:00:00,-1.0
-40010,EUR,Consumer Confidence,38.46,-18.0,-17.0,2011-09-22 10:00:00,-1.0
-39664,EUR,Consumer Confidence,30.77,-20.0,-19.0,2011-10-20 10:00:00,0.0
-39249,EUR,Consumer Confidence,26.92,-20.0,-20.0,2011-11-22 11:00:00,0.0
-39215,EUR,Belgian NBB Business Climate,56.68,-11.3,-10.4,2011-11-24 10:00:00,0.0
-38862,EUR,Consumer Confidence,26.92,-21.0,-20.0,2011-12-21 11:00:00,0.0
-38861,EUR,Belgian NBB Business Climate,51.87,-11.8,-12.2,2011-12-21 10:00:00,0.0
-38525,EUR,Consumer Confidence,23.08,-20.0,-21.0,2012-01-23 11:00:00,0.0
-38511,EUR,Belgian NBB Business Climate,56.15,-10.1,-10.6,2012-01-24 10:00:00,0.0
-35567,EUR,Consumer Confidence,26.92,-20.0,-20.0,2012-03-22 11:00:00,0.0
-35562,EUR,Belgian NBB Business Climate,63.9,-6.6,-7.7,2012-03-22 10:00:00,0.0
-35196,EUR,Consumer Confidence,30.77,-19.0,-19.0,2012-04-19 10:00:00,0.0
-34798,EUR,Consumer Confidence,26.92,-20.0,-20.0,2012-05-22 10:00:00,0.0
-34394,EUR,Consumer Confidence,30.77,-20.0,-19.0,2012-06-21 10:00:00,0.0
-34044,EUR,Consumer Confidence,26.92,-20.0,-20.0,2012-07-23 10:00:00,0.0
-33699,EUR,Consumer Confidence,19.23,-22.0,-22.0,2012-08-23 10:00:00,0.0
-33355,EUR,Consumer Confidence,7.69,-24.0,-25.0,2012-09-20 10:00:00,0.0
-32973,EUR,Consumer Confidence,3.85,-26.0,-26.0,2012-10-23 10:00:00,0.0
-32592,EUR,Consumer Confidence,3.85,-26.0,-26.0,2012-11-22 11:00:00,0.0
-32579,EUR,Belgian NBB Business Climate,48.4,-13.2,-13.5,2012-11-23 10:00:00,0.0
-32210,EUR,Consumer Confidence,0.0,-26.0,-27.0,2012-12-20 11:00:00,0.0
-32209,EUR,Belgian NBB Business Climate,48.66,-13.1,-13.4,2012-12-20 10:00:00,0.0
-31875,EUR,Consumer Confidence,3.85,-26.0,-26.0,2013-01-23 11:15:00,0.0
-31855,EUR,Belgian NBB Business Climate,52.94,-10.9,-11.8,2013-01-24 10:00:00,0.0
-29043,EUR,Consumer Confidence,11.54,-23.0,-24.0,2013-03-20 11:00:00,0.0
-29002,EUR,Belgian NBB Business Climate,55.08,-10.3,-11.0,2013-03-22 10:00:00,0.0
-28629,EUR,Consumer Confidence,11.54,-24.0,-24.0,2013-04-22 10:00:00,0.0
-28233,EUR,Consumer Confidence,19.23,-22.0,-22.0,2013-05-23 10:00:00,1.0
-27878,EUR,Consumer Confidence,19.23,-22.0,-22.0,2013-06-20 10:00:00,0.0
-27501,EUR,Consumer Confidence,30.77,-18.0,-19.0,2013-07-23 10:00:00,0.0
-27151,EUR,Consumer Confidence,38.46,-17.0,-17.0,2013-08-23 10:00:00,0.0
-26802,EUR,Consumer Confidence,42.31,-14.0,-16.0,2013-09-20 10:00:00,0.0
-26428,EUR,Consumer Confidence,46.15,-14.0,-15.0,2013-10-23 10:00:00,0.0
-26036,EUR,Consumer Confidence,46.15,-14.0,-15.0,2013-11-21 11:00:00,0.0
-26016,EUR,Belgian NBB Business Climate,63.9,-6.9,-7.7,2013-11-22 10:00:00,0.0
-25631,EUR,Consumer Confidence,46.15,-15.0,-15.0,2013-12-20 11:00:00,0.0
-25630,EUR,Belgian NBB Business Climate,72.99,-3.9,-4.3,2013-12-20 10:00:00,0.0
-25292,EUR,Consumer Confidence,50.0,-13.0,-14.0,2014-01-23 11:00:00,0.0
-25272,EUR,Belgian NBB Business Climate,67.38,-4.4,-6.4,2014-01-24 10:00:00,0.0
-22437,EUR,Consumer Confidence,53.85,-12.0,-13.0,2014-03-21 11:00:00,0.0
-22424,EUR,Belgian NBB Business Climate,73.8,-5.1,-4.0,2014-03-24 10:00:00,0.0
-22060,EUR,Consumer Confidence,69.23,-9.0,-9.0,2014-04-22 10:00:00,0.0
-21689,EUR,Consumer Confidence,69.23,-8.0,-9.0,2014-05-21 10:00:00,0.0
-21303,EUR,Consumer Confidence,76.92,-6.0,-7.0,2014-06-20 10:00:00,0.0
-20942,EUR,Consumer Confidence,73.08,-6.0,-8.0,2014-07-23 10:00:00,0.0
-20621,EUR,Consumer Confidence,73.08,-9.0,-8.0,2014-08-21 10:00:00,0.0
-20246,EUR,Consumer Confidence,65.38,-11.0,-10.0,2014-09-22 10:00:00,0.0
-19868,EUR,Consumer Confidence,61.54,-12.0,-11.0,2014-10-23 10:00:00,0.0
-19501,EUR,Consumer Confidence,61.54,-11.0,-11.0,2014-11-20 11:00:00,0.0
-19469,EUR,Belgian NBB Business Climate,66.31,-5.3,-6.8,2014-11-24 10:00:00,0.0
-19086,EUR,Consumer Confidence,57.69,-11.0,-12.0,2014-12-22 11:00:00,0.0
-19073,EUR,Belgian NBB Business Climate,68.18,-5.8,-6.1,2014-12-23 10:00:00,0.0
-18762,EUR,Consumer Confidence,61.54,-11.0,-11.0,2015-01-22 11:00:00,0.0
-18749,EUR,Belgian NBB Business Climate,66.04,-6.1,-6.9,2015-01-23 10:00:00,1.0
-15898,EUR,Consumer Confidence,76.92,-6.0,-7.0,2015-03-23 11:00:00,0.0
-15889,EUR,Belgian NBB Business Climate,62.3,-7.5,-8.3,2015-03-24 10:00:00,0.0
-15152,EUR,Consumer Confidence,84.62,-5.0,-5.0,2015-05-21 10:00:00,0.0
-14750,EUR,Consumer Confidence,80.77,-6.0,-6.0,2015-06-22 10:00:00,0.0
-14376,EUR,Consumer Confidence,80.77,-6.0,-6.0,2015-07-23 10:00:00,0.0
-14045,EUR,Consumer Confidence,76.92,-7.0,-7.0,2015-08-21 10:00:00,0.0
-13665,EUR,Consumer Confidence,76.92,-7.0,-7.0,2015-09-22 10:00:00,0.0
-13282,EUR,Consumer Confidence,76.92,-7.0,-7.0,2015-10-22 10:00:00,0.0
-12887,EUR,Consumer Confidence,73.08,-7.0,-8.0,2015-11-20 11:00:00,0.0
-12857,EUR,Belgian NBB Business Climate,73.8,-3.2,-4.0,2015-11-24 10:00:00,0.0
-12486,EUR,Consumer Confidence,80.77,-6.0,-6.0,2015-12-21 11:00:00,0.0
-12162,EUR,Consumer Confidence,80.77,-6.0,-6.0,2016-01-21 11:00:00,0.0
-12130,EUR,Belgian NBB Business Climate,80.75,-1.9,-1.4,2016-01-25 10:00:00,0.0
-9242,EUR,Consumer Confidence,69.23,-8.0,-9.0,2016-03-21 11:00:00,0.0
-8863,EUR,Consumer Confidence,65.38,-9.0,-10.0,2016-04-21 10:00:00,0.0
-8468,EUR,Consumer Confidence,69.23,-9.0,-9.0,2016-05-23 10:00:00,0.0
-8071,EUR,Consumer Confidence,76.92,-7.0,-7.0,2016-06-22 10:00:00,0.0
-7743,EUR,Consumer Confidence,76.92,-8.0,-7.0,2016-07-20 10:00:00,0.0
-7371,EUR,Consumer Confidence,73.08,-8.0,-8.0,2016-08-23 10:00:00,0.0
-7001,EUR,Consumer Confidence,69.23,-8.0,-9.0,2016-09-22 10:00:00,0.0
-6624,EUR,Consumer Confidence,73.08,-8.0,-8.0,2016-10-21 10:00:00,0.0
-6222,EUR,Consumer Confidence,73.08,-8.0,-8.0,2016-11-22 11:00:00,0.0
-5832,EUR,Consumer Confidence,80.77,-6.0,-6.0,2016-12-21 10:58:00,0.0
-5499,EUR,Consumer Confidence,84.62,-5.0,-5.0,2017-01-23 11:00:00,0.0
-2606,EUR,Consumer Confidence,80.77,-6.0,-6.0,2017-03-23 11:00:00,0.0
-2602,EUR,Belgian NBB Business Climate,81.55,-0.6,-1.1,2017-03-23 10:00:00,0.0
-2254,EUR,Consumer Confidence,84.62,-5.0,-5.0,2017-04-20 10:00:00,0.0
-1866,EUR,Consumer Confidence,88.46,-3.0,-4.0,2017-05-19 10:00:00,0.0
-1447,EUR,Consumer Confidence,92.31,-3.0,-3.0,2017-06-22 10:00:00,0.0
-1106,EUR,Consumer Confidence,100.0,-1.0,-1.0,2017-07-20 10:00:00,0.0
+,symbol,title,actual,forecast,previous,datetime,symbol_pair,preceding_price
+71082,EUR,Belgian NBB Business Climate,91.18,2.6,2.5,2007-01-24 10:00:00,EURCHF,0.0
+68274,EUR,Belgian NBB Business Climate,93.85,2.9,3.5,2007-03-22 10:00:00,EURCHF,0.0
+65914,EUR,Belgian NBB Business Climate,88.5,1.3,1.5,2007-10-24 10:00:00,EURCHF,0.0
+65575,EUR,Belgian NBB Business Climate,84.22,-1.0,-0.1,2007-11-22 10:00:00,EURCHF,0.0
+65233,EUR,Belgian NBB Business Climate,88.24,0.7,1.4,2007-12-20 10:00:00,EURCHF,0.0
+64869,EUR,Belgian NBB Business Climate,79.41,-2.5,-1.9,2008-01-24 10:00:00,EURCHF,0.0
+61938,EUR,Belgian NBB Business Climate,85.03,-0.8,0.2,2008-03-26 10:00:00,EURCHF,0.0
+59024,EUR,Belgian NBB Business Climate,44.92,-17.5,-14.8,2008-11-24 10:00:00,EURCHF,0.0
+58648,EUR,Belgian NBB Business Climate,21.12,-26.5,-23.7,2008-12-22 10:00:00,EURCHF,0.0
+58290,EUR,Belgian NBB Business Climate,0.8,-33.0,-31.3,2009-01-23 10:00:00,EURCHF,0.0
+55415,EUR,Belgian NBB Business Climate,0.0,-31.9,-31.6,2009-03-24 10:00:00,EURCHF,0.0
+52408,EUR,Belgian NBB Business Climate,46.52,-11.3,-14.2,2009-11-24 10:00:00,EURCHF,0.0
+52040,EUR,Belgian NBB Business Climate,60.96,-5.5,-8.8,2009-12-22 10:00:00,EURCHF,0.0
+51724,EUR,Consumer Confidence,42.31,-15.0,-16.0,2010-01-21 11:00:00,EURCHF,0.0
+51705,EUR,Belgian NBB Business Climate,63.37,-7.0,-7.9,2010-01-22 10:00:00,EURCHF,0.0
+48851,EUR,Consumer Confidence,38.46,-17.0,-17.0,2010-03-22 11:00:00,EURCHF,0.0
+48843,EUR,Belgian NBB Business Climate,65.78,-4.1,-7.0,2010-03-23 10:00:00,EURCHF,0.0
+48470,EUR,Consumer Confidence,38.46,-17.0,-17.0,2010-04-22 10:00:00,EURCHF,0.0
+48079,EUR,Consumer Confidence,46.15,-15.0,-15.0,2010-05-20 10:00:00,EURCHF,0.0
+47671,EUR,Consumer Confidence,34.62,-19.0,-18.0,2010-06-22 10:00:00,EURCHF,0.0
+47329,EUR,Consumer Confidence,38.46,-17.0,-17.0,2010-07-22 10:00:00,EURCHF,0.0
+46990,EUR,Consumer Confidence,50.0,-13.0,-14.0,2010-08-23 10:03:00,EURCHF,0.0
+46617,EUR,Consumer Confidence,61.54,-10.0,-11.0,2010-09-22 10:00:00,EURCHF,0.0
+46238,EUR,Consumer Confidence,61.54,-10.0,-11.0,2010-10-21 10:00:00,EURCHF,0.0
+45835,EUR,Consumer Confidence,61.54,-10.0,-11.0,2010-11-22 11:00:00,EURCHF,0.0
+45801,EUR,Belgian NBB Business Climate,77.01,-2.7,-2.8,2010-11-24 10:00:00,EURCHF,0.0
+45465,EUR,Consumer Confidence,65.38,-9.0,-10.0,2010-12-20 11:00:00,EURCHF,0.0
+45440,EUR,Belgian NBB Business Climate,86.63,1.2,0.8,2010-12-22 10:00:00,EURCHF,0.0
+45136,EUR,Consumer Confidence,61.54,-12.0,-11.0,2011-01-20 11:00:00,EURCHF,0.0
+45126,EUR,Belgian NBB Business Climate,92.78,3.3,3.1,2011-01-21 10:00:00,EURCHF,0.0
+42255,EUR,Consumer Confidence,65.38,-11.0,-10.0,2011-03-23 11:00:00,EURCHF,0.0
+42252,EUR,Belgian NBB Business Climate,100.0,5.1,5.8,2011-03-23 10:00:00,EURCHF,0.0
+41087,EUR,Consumer Confidence,65.38,-10.0,-10.0,2011-06-22 10:00:00,EURCHF,0.0
+40753,EUR,Consumer Confidence,65.38,-10.0,-10.0,2011-07-20 10:00:00,EURCHF,0.0
+40390,EUR,Consumer Confidence,61.54,-12.0,-11.0,2011-08-23 10:00:00,EURCHF,0.0
+40010,EUR,Consumer Confidence,38.46,-18.0,-17.0,2011-09-22 10:00:00,EURCHF,-1.0
+39664,EUR,Consumer Confidence,30.77,-20.0,-19.0,2011-10-20 10:00:00,EURCHF,0.0
+39249,EUR,Consumer Confidence,26.92,-20.0,-20.0,2011-11-22 11:00:00,EURCHF,0.0
+39215,EUR,Belgian NBB Business Climate,56.68,-11.3,-10.4,2011-11-24 10:00:00,EURCHF,0.0
+38862,EUR,Consumer Confidence,26.92,-21.0,-20.0,2011-12-21 11:00:00,EURCHF,0.0
+38861,EUR,Belgian NBB Business Climate,51.87,-11.8,-12.2,2011-12-21 10:00:00,EURCHF,0.0
+38525,EUR,Consumer Confidence,23.08,-20.0,-21.0,2012-01-23 11:00:00,EURCHF,0.0
+38511,EUR,Belgian NBB Business Climate,56.15,-10.1,-10.6,2012-01-24 10:00:00,EURCHF,0.0
+35567,EUR,Consumer Confidence,26.92,-20.0,-20.0,2012-03-22 11:00:00,EURCHF,0.0
+35562,EUR,Belgian NBB Business Climate,63.9,-6.6,-7.7,2012-03-22 10:00:00,EURCHF,0.0
+35196,EUR,Consumer Confidence,30.77,-19.0,-19.0,2012-04-19 10:00:00,EURCHF,0.0
+34798,EUR,Consumer Confidence,26.92,-20.0,-20.0,2012-05-22 10:00:00,EURCHF,0.0
+34394,EUR,Consumer Confidence,30.77,-20.0,-19.0,2012-06-21 10:00:00,EURCHF,0.0
+34044,EUR,Consumer Confidence,26.92,-20.0,-20.0,2012-07-23 10:00:00,EURCHF,0.0
+33699,EUR,Consumer Confidence,19.23,-22.0,-22.0,2012-08-23 10:00:00,EURCHF,0.0
+33355,EUR,Consumer Confidence,7.69,-24.0,-25.0,2012-09-20 10:00:00,EURCHF,0.0
+32973,EUR,Consumer Confidence,3.85,-26.0,-26.0,2012-10-23 10:00:00,EURCHF,0.0
+32592,EUR,Consumer Confidence,3.85,-26.0,-26.0,2012-11-22 11:00:00,EURCHF,0.0
+32579,EUR,Belgian NBB Business Climate,48.4,-13.2,-13.5,2012-11-23 10:00:00,EURCHF,0.0
+32210,EUR,Consumer Confidence,0.0,-26.0,-27.0,2012-12-20 11:00:00,EURCHF,0.0
+32209,EUR,Belgian NBB Business Climate,48.66,-13.1,-13.4,2012-12-20 10:00:00,EURCHF,0.0
+31875,EUR,Consumer Confidence,3.85,-26.0,-26.0,2013-01-23 11:15:00,EURCHF,0.0
+31855,EUR,Belgian NBB Business Climate,52.94,-10.9,-11.8,2013-01-24 10:00:00,EURCHF,0.0
+29043,EUR,Consumer Confidence,11.54,-23.0,-24.0,2013-03-20 11:00:00,EURCHF,0.0
+29002,EUR,Belgian NBB Business Climate,55.08,-10.3,-11.0,2013-03-22 10:00:00,EURCHF,0.0
+28629,EUR,Consumer Confidence,11.54,-24.0,-24.0,2013-04-22 10:00:00,EURCHF,0.0
+28233,EUR,Consumer Confidence,19.23,-22.0,-22.0,2013-05-23 10:00:00,EURCHF,1.0
+27878,EUR,Consumer Confidence,19.23,-22.0,-22.0,2013-06-20 10:00:00,EURCHF,0.0
+27501,EUR,Consumer Confidence,30.77,-18.0,-19.0,2013-07-23 10:00:00,EURCHF,0.0
+27151,EUR,Consumer Confidence,38.46,-17.0,-17.0,2013-08-23 10:00:00,EURCHF,0.0
+26802,EUR,Consumer Confidence,42.31,-14.0,-16.0,2013-09-20 10:00:00,EURCHF,0.0
+26428,EUR,Consumer Confidence,46.15,-14.0,-15.0,2013-10-23 10:00:00,EURCHF,0.0
+26036,EUR,Consumer Confidence,46.15,-14.0,-15.0,2013-11-21 11:00:00,EURCHF,0.0
+26016,EUR,Belgian NBB Business Climate,63.9,-6.9,-7.7,2013-11-22 10:00:00,EURCHF,0.0
+25631,EUR,Consumer Confidence,46.15,-15.0,-15.0,2013-12-20 11:00:00,EURCHF,0.0
+25630,EUR,Belgian NBB Business Climate,72.99,-3.9,-4.3,2013-12-20 10:00:00,EURCHF,0.0
+25292,EUR,Consumer Confidence,50.0,-13.0,-14.0,2014-01-23 11:00:00,EURCHF,0.0
+25272,EUR,Belgian NBB Business Climate,67.38,-4.4,-6.4,2014-01-24 10:00:00,EURCHF,0.0
+22437,EUR,Consumer Confidence,53.85,-12.0,-13.0,2014-03-21 11:00:00,EURCHF,0.0
+22424,EUR,Belgian NBB Business Climate,73.8,-5.1,-4.0,2014-03-24 10:00:00,EURCHF,0.0
+22060,EUR,Consumer Confidence,69.23,-9.0,-9.0,2014-04-22 10:00:00,EURCHF,0.0
+21689,EUR,Consumer Confidence,69.23,-8.0,-9.0,2014-05-21 10:00:00,EURCHF,0.0
+21303,EUR,Consumer Confidence,76.92,-6.0,-7.0,2014-06-20 10:00:00,EURCHF,0.0
+20942,EUR,Consumer Confidence,73.08,-6.0,-8.0,2014-07-23 10:00:00,EURCHF,0.0
+20621,EUR,Consumer Confidence,73.08,-9.0,-8.0,2014-08-21 10:00:00,EURCHF,0.0
+20246,EUR,Consumer Confidence,65.38,-11.0,-10.0,2014-09-22 10:00:00,EURCHF,-2.0
+19868,EUR,Consumer Confidence,61.54,-12.0,-11.0,2014-10-23 10:00:00,EURCHF,0.0
+19501,EUR,Consumer Confidence,61.54,-11.0,-11.0,2014-11-20 11:00:00,EURCHF,0.0
+19469,EUR,Belgian NBB Business Climate,66.31,-5.3,-6.8,2014-11-24 10:00:00,EURCHF,0.0
+19086,EUR,Consumer Confidence,57.69,-11.0,-12.0,2014-12-22 11:00:00,EURCHF,0.0
+19073,EUR,Belgian NBB Business Climate,68.18,-5.8,-6.1,2014-12-23 10:00:00,EURCHF,0.0
+18762,EUR,Consumer Confidence,61.54,-11.0,-11.0,2015-01-22 11:00:00,EURCHF,0.0
+18749,EUR,Belgian NBB Business Climate,66.04,-6.1,-6.9,2015-01-23 10:00:00,EURCHF,1.0
+15898,EUR,Consumer Confidence,76.92,-6.0,-7.0,2015-03-23 11:00:00,EURCHF,0.0
+15889,EUR,Belgian NBB Business Climate,62.3,-7.5,-8.3,2015-03-24 10:00:00,EURCHF,0.0
+15152,EUR,Consumer Confidence,84.62,-5.0,-5.0,2015-05-21 10:00:00,EURCHF,0.0
+14750,EUR,Consumer Confidence,80.77,-6.0,-6.0,2015-06-22 10:00:00,EURCHF,0.0
+14376,EUR,Consumer Confidence,80.77,-6.0,-6.0,2015-07-23 10:00:00,EURCHF,0.0
+14045,EUR,Consumer Confidence,76.92,-7.0,-7.0,2015-08-21 10:00:00,EURCHF,0.0
+13665,EUR,Consumer Confidence,76.92,-7.0,-7.0,2015-09-22 10:00:00,EURCHF,0.0
+13282,EUR,Consumer Confidence,76.92,-7.0,-7.0,2015-10-22 10:00:00,EURCHF,0.0
+12887,EUR,Consumer Confidence,73.08,-7.0,-8.0,2015-11-20 11:00:00,EURCHF,0.0
+12857,EUR,Belgian NBB Business Climate,73.8,-3.2,-4.0,2015-11-24 10:00:00,EURCHF,0.0
+12486,EUR,Consumer Confidence,80.77,-6.0,-6.0,2015-12-21 11:00:00,EURCHF,0.0
+12162,EUR,Consumer Confidence,80.77,-6.0,-6.0,2016-01-21 11:00:00,EURCHF,0.0
+12130,EUR,Belgian NBB Business Climate,80.75,-1.9,-1.4,2016-01-25 10:00:00,EURCHF,0.0
+9242,EUR,Consumer Confidence,69.23,-8.0,-9.0,2016-03-21 11:00:00,EURCHF,0.0
+8863,EUR,Consumer Confidence,65.38,-9.0,-10.0,2016-04-21 10:00:00,EURCHF,0.0
+8468,EUR,Consumer Confidence,69.23,-9.0,-9.0,2016-05-23 10:00:00,EURCHF,0.0
+8071,EUR,Consumer Confidence,76.92,-7.0,-7.0,2016-06-22 10:00:00,EURCHF,0.0
+7743,EUR,Consumer Confidence,76.92,-8.0,-7.0,2016-07-20 10:00:00,EURCHF,0.0
+7371,EUR,Consumer Confidence,73.08,-8.0,-8.0,2016-08-23 10:00:00,EURCHF,0.0
+7001,EUR,Consumer Confidence,69.23,-8.0,-9.0,2016-09-22 10:00:00,EURCHF,0.0
+6624,EUR,Consumer Confidence,73.08,-8.0,-8.0,2016-10-21 10:00:00,EURCHF,0.0
+6222,EUR,Consumer Confidence,73.08,-8.0,-8.0,2016-11-22 11:00:00,EURCHF,0.0
+5832,EUR,Consumer Confidence,80.77,-6.0,-6.0,2016-12-21 10:58:00,EURCHF,0.0
+5499,EUR,Consumer Confidence,84.62,-5.0,-5.0,2017-01-23 11:00:00,EURCHF,0.0
+2606,EUR,Consumer Confidence,80.77,-6.0,-6.0,2017-03-23 11:00:00,EURCHF,0.0
+2602,EUR,Belgian NBB Business Climate,81.55,-0.6,-1.1,2017-03-23 10:00:00,EURCHF,0.0
+2254,EUR,Consumer Confidence,84.62,-5.0,-5.0,2017-04-20 10:00:00,EURCHF,0.0
+1866,EUR,Consumer Confidence,88.46,-3.0,-4.0,2017-05-19 10:00:00,EURCHF,0.0
+1447,EUR,Consumer Confidence,92.31,-3.0,-3.0,2017-06-22 10:00:00,EURCHF,0.0
+1106,EUR,Consumer Confidence,100.0,-1.0,-1.0,2017-07-20 10:00:00,EURCHF,0.0

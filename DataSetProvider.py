@@ -20,7 +20,6 @@ class DataSetProvider(object):
         labels = self.__one_hot_from_all_items(pd.DataFrame(labels), 0, all_labels)
 
         y = labels.as_matrix()
-        # y = np.array(labels)
 
         msk = np.random.rand(len(y)) < 0.8
 

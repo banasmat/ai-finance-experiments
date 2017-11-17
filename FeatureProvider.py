@@ -26,7 +26,7 @@ class FeatureProvider:
                     (prices.index < n['datetime']) & (prices.index >= datetime_minus_interval)]
                 if i > 100:
                     break
-                elif len(prices_preceding_news) < 100:
+                elif len(prices_preceding_news) < 6:
                     datetime_minus_interval -= timedelta(hours=12)
                     i += 1
                 else:
@@ -35,9 +35,9 @@ class FeatureProvider:
             if i > 100:
                 break
 
-            price_when_news_happens = prices_preceding_news.loc[prices_preceding_news.index[-1]]['mean']
+            price_when_news_happens = prices_preceding_news[-1]
 
-            price_mean_in_affected_period = prices_preceding_news['mean'].mean()
+            price_mean_in_affected_period = prices_preceding_news.mean()
 
             diff = price_mean_in_affected_period - price_when_news_happens
 

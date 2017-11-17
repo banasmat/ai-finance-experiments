@@ -36,8 +36,9 @@ class PreProcessedDataProvider(object):
 
         prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.txt', sep=',', dtype=str,
                              usecols=('<DTYYYYMMDD>', '<TIME>', '<HIGH>', '<LOW>'))
-        prices.index = pd.to_datetime(prices.pop('<DTYYYYMMDD>') + prices.pop('<TIME>'), format='%Y%m%d%H%M%S')
+        prices.index = pd.to_datetime(prices.pop('<DTYYYYMMDD>').astype(str) + prices.pop('<TIME>').astype(str), format='%Y%m%d%H%M%S')
         prices['mean'] = (pd.to_numeric(prices.pop('<HIGH>')) + pd.to_numeric(prices.pop('<LOW>'))) / 2
+        prices = prices['mean'].resample('1H').mean()
 
         return prices
 
