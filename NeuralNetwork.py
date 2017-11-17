@@ -49,9 +49,9 @@ class NeuralNetwork:
 
     def build_model(self, data):
 
-        n_nodes_layer_1 = 500
-        n_nodes_layer_2 = 500
-        n_nodes_layer_3 = 500
+        n_nodes_layer_1 = 100
+        n_nodes_layer_2 = 100
+        n_nodes_layer_3 = 100
 
         hidden_1_layer = {'weights': tf.Variable(tf.random_normal([self.features_n, n_nodes_layer_1])),
                           'biases': tf.Variable(tf.random_normal([n_nodes_layer_1]))}
