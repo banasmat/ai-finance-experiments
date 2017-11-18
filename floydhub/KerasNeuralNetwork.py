@@ -9,8 +9,16 @@ class KerasNeuralNetwork:
     def train(x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray, y_test: np.ndarray):
         model = Sequential()
 
-        model.add(Dense(units=64, activation='relu', input_dim=100))
-        model.add(Dense(units=10, activation='softmax'))
+        print('x_train', x_train.shape)
+        print('y_train', y_train.shape)
+        print('x_test', x_test.shape)
+        print('y_test', y_test.shape)
+
+        x_input_len = x_train.shape[1]
+        y_input_len = y_train.shape[1]
+
+        model.add(Dense(units=64, activation='relu', input_dim=x_input_len))
+        model.add(Dense(units=y_input_len, activation='softmax'))
 
         model.compile(loss='categorical_crossentropy',
                       optimizer='sgd',
