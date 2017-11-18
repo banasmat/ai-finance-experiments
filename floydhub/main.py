@@ -1,9 +1,15 @@
 from KerasNeuralNetwork import KerasNeuralNetwork
 import pickle
+from keras.datasets import fashion_mnist
+import numpy as np
 
-# /dataset/data.pickle
+(x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
 
+# with open('/dataset/data.pickle', 'rb') as f:
 with open('../output/data.pickle', 'rb') as f:
-    x_train_all, y_train_all, x_test_all, y_test_all = pickle.load(f)
+    x_train, y_train, x_test, y_test = pickle.load(f)
 
-KerasNeuralNetwork.train(x_train_all, y_train_all, x_test_all, y_test_all)
+x_train = np.nan_to_num(x_train.round(4))
+x_test = np.nan_to_num(x_test.round(4))
+
+KerasNeuralNetwork.train(x_train, y_train.astype(float), x_test.round(0), y_test.astype(float))
