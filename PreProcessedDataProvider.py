@@ -68,9 +68,12 @@ class PreProcessedDataProvider(object):
 
     def scale_news_data(self, news: pd.DataFrame) -> pd.DataFrame:
 
-        for key in ['actual', 'forecast', 'previous']:
+        for key in ['forecast', 'previous']:
             self.scale_map[key] = dict(map(self.__reduce_to_min_and_max, self.scale_map[key].items()))
             news = news.apply(lambda row: self.__scale_values(row, key), axis=1)
+
+        self.scale_map['actual'] = dict(map(self.__reduce_to_min_and_max, self.scale_map['actual'].items()))
+        news = news.apply(lambda row: self.__scale_values(row, 'actual', 10), axis=1)
 
         return news
 
@@ -133,14 +136,15 @@ class PreProcessedDataProvider(object):
 
         return values[0], [_min, _max]
 
-    def __scale_values(self, row, key):
+    def __scale_values(self, row, key, max_value=1):
         scaled = row[key] - self.scale_map[key][row['title']][0]
         scaled /= self.scale_map[key][row['title']][1] - self.scale_map[key][row['title']][0]
+        scaled *= max_value
 
-        if scaled > 1:
+        if scaled > max_value:
             # TODO check why in two cases row['actual'] is larger than previously counted max
-            scaled = 1
+            scaled = max_value
 
-        row['actual'] = float("{0:.2f}".format(scaled * 100))
+        row[key] = float("{0:.2f}".format(scaled * 100))
 
         return row

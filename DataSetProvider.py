@@ -27,7 +27,7 @@ class DataSetProvider(object):
 
         price_news_map = {}
 
-        # symbol_pairs = symbol_pairs[3:5]
+        symbol_pairs = symbol_pairs[3:4]
 
         for symbol_pair in symbol_pairs:
 
@@ -53,9 +53,16 @@ class DataSetProvider(object):
             news = self.feature_provider.add_preceding_price_feature(prices, news, symbol_pair[0] + symbol_pair[1],
                                                                 refresh=True)
 
+            # TODO features:
+            # - rolling mean instead of price mean(?)
+            # - volume (we don't have the data)
+            # - rolling mean in last 24, 12, 6, now ?
+            # OR recurrent neural network
+            # + news as additional feature
+
             labels = self.labels_provider.get_labels(prices, news, symbol_pair[0] + symbol_pair[1], refresh=True)
 
-            # data_visualizer.visualize(prices, news, labels)
+            # self.data_visualizer.visualize(prices, news, labels)
 
             x_train, y_train, x_test, y_test = self.__get_data_set(news, labels,
                                                                    self.prep_data_provider.get_all_titles(),
@@ -80,6 +87,7 @@ class DataSetProvider(object):
                 y_test_all = np.append(y_test_all, y_test, axis=0)
 
             print(len(x_train_all))
+        return x_train_all, y_train_all, x_test_all, y_test_all
 
     def __get_data_set(self, news: pd.DataFrame, labels: np.ndarray, all_titles: List, all_currencies: List, all_pairs: List) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
 

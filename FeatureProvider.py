@@ -45,7 +45,7 @@ class FeatureProvider:
 
             news.loc[news['datetime'] == n['datetime'], 'preceding_price'] = feature
 
-        news.to_csv(filename)
+        # news.to_csv(filename)
 
         return news
 

@@ -3,10 +3,15 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import plotly.plotly as py
+import plotly as plotly
 import plotly.graph_objs as go
 
 
 class DataVisualizer(object):
+
+    def __init__(self):
+        plotly.tools.set_credentials_file(username='banasmat', api_key='La513i6uVpqf7qAHQnCD')
+
 
     def visualize(self, prices, news, labels):
 
@@ -15,7 +20,7 @@ class DataVisualizer(object):
 
         news_labels.index = news['datetime'].dt.round('h')
 
-        prices = prices['mean'].resample('1H').mean()
+        prices = prices.resample('1H').mean()
 
         price_xs = prices.index.tolist()
         price_ys = prices.values.tolist()
@@ -75,7 +80,7 @@ class DataVisualizer(object):
             name='news - sell signals'
         )
 
-        py.plot([trace0, trace1, trace2, trace3, trace4], filename='eurusd')
+        py.plot([trace0, trace1, trace2, trace3, trace4], filename='eurcad')
 
         return
 
