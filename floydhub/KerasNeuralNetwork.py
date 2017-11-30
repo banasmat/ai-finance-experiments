@@ -1,7 +1,6 @@
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, TimeDistributed, Dropout, Activation
-from keras.optimizers import SGD, Adadelta, Adam
 
 
 class KerasNeuralNetwork:
@@ -9,34 +8,39 @@ class KerasNeuralNetwork:
     @staticmethod
     def train(x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray, y_test: np.ndarray):
 
-        batch_size = 32
-        epochs = 100
-
         x_input_len = x_train.shape[1]
         y_input_len = y_train.shape[1]
 
+        x_y_input_len_avg = int((x_input_len + y_input_len)/2)
+
         model = Sequential()
 
-        model.add(Dense(512, input_shape=(x_input_len,)))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.5))
+        model.add(Dense(units=x_y_input_len_avg,
+                        activation='relu',
+                        kernel_initializer='uniform',
+                        input_shape=(x_input_len,)
+                        ))
 
-        model.add(Dense(512, input_shape=(x_input_len,)))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.5))
+        model.add(Dense(units=x_y_input_len_avg,
+                        activation='relu',
+                        kernel_initializer='uniform',
+                        ))
 
-        model.add(Dense(y_input_len))
-        model.add(Activation('softmax'))
+        model.add(Dense(units=y_input_len,
+                        activation='softmax',
+                        kernel_initializer='uniform',
+                        ))
 
         model.compile(loss='categorical_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'])
 
-        history = model.fit(x_train, y_train,
-                            batch_size=batch_size,
-                            epochs=epochs,
-                            verbose=1,
-                            validation_split=0.1)
+        model.fit(x_train, y_train,
+                  batch_size=10,
+                  epochs=100,
+                  # verbose=1,
+                  # validation_split=0.1
+                  )
 
         print(model.summary())
 

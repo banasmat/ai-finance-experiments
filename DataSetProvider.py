@@ -27,7 +27,7 @@ class DataSetProvider(object):
 
         price_news_map = {}
 
-        symbol_pairs = symbol_pairs[3:4]
+        # symbol_pairs = symbol_pairs[3:4]
 
         for symbol_pair in symbol_pairs:
 
