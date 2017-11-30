@@ -48,7 +48,6 @@ class PreProcessedDataProvider(object):
                            usecols=('date', 'time', 'symbol', 'title', 'actual', 'forecast', 'previous'))
 
         news = news.loc[news['symbol'].isin([symbol_1, symbol_2]) & news['time'].str.contains('^\d{2}:')]
-        # news = news.loc[~news['actual'].isnull()]
 
         news['datetime'] = pd.to_datetime(news.pop('date') + news.pop('time'), format='%Y-%m-%d%H:%M')
         news = news.loc[news['datetime'] >= from_datetime]

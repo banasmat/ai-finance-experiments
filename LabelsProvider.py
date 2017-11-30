@@ -59,7 +59,7 @@ class LabelsProvider(object):
 
         labels = np.array(labels)
 
-        # np.save(filename, labels)
+        np.save(filename, labels)
 
         return labels
 

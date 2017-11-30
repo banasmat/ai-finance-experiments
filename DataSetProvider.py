@@ -127,6 +127,8 @@ class DataSetProvider(object):
             one_hot.iloc[i, title_index] = 1
             i += 1
 
+        one_hot = one_hot.drop(one_hot.columns[0], axis=1)
+
         df = df.drop(column, axis=1)
         df = df.join(one_hot)
 
