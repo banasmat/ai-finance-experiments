@@ -69,15 +69,15 @@ class LabelsProvider(object):
         diff_percent = (diff / price_when_news_happens) * 100
 
         if diff_percent > 1.:
-            label = 2
-        elif diff_percent > 0.5:
             label = 1
+        elif diff_percent > 0.5:
+            label = 0.5
         elif diff_percent > -0.5:
             label = 0
-        elif diff_percent > -1:
-            label = -1
+        elif diff_percent > -1.:
+            label = -0.5
         else:
-            label = -2
+            label = -1
 
         return label
 

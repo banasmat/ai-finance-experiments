@@ -27,17 +27,17 @@ class KerasNeuralNetwork:
                         ))
 
         model.add(Dense(units=y_input_len,
-                        activation='softmax',
+                        activation='tahn',
                         kernel_initializer='uniform',
                         ))
 
-        model.compile(loss='categorical_crossentropy',
+        model.compile(loss='mean_squared_error',
                       optimizer='adam',
                       metrics=['accuracy'])
 
         model.fit(x_train, y_train,
                   batch_size=10,
-                  epochs=100,
+                  epochs=10,
                   # verbose=1,
                   # validation_split=0.1
                   )

@@ -27,7 +27,7 @@ class DataSetProvider(object):
 
         price_news_map = {}
 
-        # symbol_pairs = symbol_pairs[3:4]
+        # symbol_pairs = symbol_pairs[3:5]
 
         for symbol_pair in symbol_pairs:
 
@@ -91,9 +91,12 @@ class DataSetProvider(object):
 
     def __get_data_set(self, news: pd.DataFrame, labels: np.ndarray, all_titles: List, all_currencies: List, all_pairs: List) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
 
-        all_labels = LabelsProvider.get_all_labels()
+        # all_labels = LabelsProvider.get_all_labels()
 
-        news = self.__one_hot_from_all_items(news, 'preceding_price', all_labels)
+        news = news.reset_index(drop=True)
+
+        # news = self.__one_hot_from_all_items(news, 'preceding_price', all_labels)
+        news['preceding_price'].apply(lambda x: x*10)
         news = self.__one_hot_from_all_items(news, 'symbol', all_currencies)
         news = self.__one_hot_from_all_items(news, 'symbol_pair', all_pairs)
         news = self.__one_hot_from_all_items(news, 'title', all_titles)
@@ -101,9 +104,9 @@ class DataSetProvider(object):
         news = news.drop('datetime', 1)
         x = news.as_matrix()[:len(labels)]
 
-        labels = self.__one_hot_from_all_items(pd.DataFrame(labels), 0, all_labels)
-
-        y = labels.as_matrix()
+        # labels = self.__one_hot_from_all_items(pd.DataFrame(labels), 0, all_labels)
+        # y = labels.as_matrix()
+        y = labels
 
         msk = np.random.rand(len(y)) < 0.8
 
@@ -115,9 +118,9 @@ class DataSetProvider(object):
         return x_tra, y_tra, x_tes, y_tes
 
     @staticmethod
-    def __one_hot_from_all_items(df: pd.DataFrame, column, all_items):
+    def __one_hot_from_all_items(df: pd.DataFrame, column, all_items) -> pd.DataFrame:
         # TODO consider normalizing titles further: treating simmilar as one
-        one_hot = np.zeros((len(df[column]), len(all_items)))
+        one_hot = np.zeros((len(df[column]), len(all_items)), dtype=np.int)
 
         one_hot = pd.DataFrame(one_hot, columns=all_items, dtype=np.int)
 

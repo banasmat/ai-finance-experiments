@@ -117,10 +117,15 @@ class PreProcessedDataProvider(object):
         return val
 
     def __update_scale_map(self, row, key):
+
+        if np.math.isnan(row['actual']):
+            return
+
         if key not in self.scale_map.keys():
             self.scale_map[key] = {}
 
         if row['title'] not in self.scale_map[key].keys():
+
             self.scale_map[key][row['title']] = []
 
         self.scale_map[key][row['title']].append(row[key])
