@@ -9,7 +9,7 @@ class KerasNeuralNetwork:
     def train(x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray, y_test: np.ndarray):
 
         x_input_len = x_train.shape[1]
-        y_input_len = y_train.shape[1]
+        y_input_len = 1
 
         x_y_input_len_avg = int((x_input_len + y_input_len)/2)
 
@@ -30,7 +30,7 @@ class KerasNeuralNetwork:
         #model.add(Dropout(p=0.1))
 
         model.add(Dense(units=y_input_len,
-                        activation='tahn',
+                        activation='tanh',
                         kernel_initializer='uniform',
                         ))
 
@@ -40,7 +40,7 @@ class KerasNeuralNetwork:
 
         model.fit(x_train, y_train,
                   batch_size=10,
-                  epochs=10,
+                  epochs=100,
                   # verbose=1,
                   # validation_split=0.1
                   )
