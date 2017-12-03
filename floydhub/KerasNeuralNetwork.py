@@ -20,11 +20,14 @@ class KerasNeuralNetwork:
                         kernel_initializer='uniform',
                         input_shape=(x_input_len,)
                         ))
+        #TODO activate dropout in case of overfitting (big difference between training and testing accuracy)
+        #model.add(Dropout(p=0.1))
 
         model.add(Dense(units=x_y_input_len_avg,
                         activation='relu',
                         kernel_initializer='uniform',
                         ))
+        #model.add(Dropout(p=0.1))
 
         model.add(Dense(units=y_input_len,
                         activation='tahn',
