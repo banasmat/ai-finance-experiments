@@ -1,3 +1,6 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
+
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense
@@ -12,6 +15,14 @@ class KerasNeuralNetwork:
     x_input_len = 0
     y_input_len = 1
 
+    def predict(self, X):
+        self.x_input_len = X.shape[0]
+
+        model = self.build_model()
+        model.load_weights('forex_analyzer_model.h5')
+        prediction = model.predict(np.array([X]), 10)
+
+        return np.round(prediction * 2) / 2
 
     def train(self, x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray, y_test: np.ndarray):
 

@@ -13,3 +13,4 @@ nn = KerasNeuralNetwork()
 
 if __name__ == "__main__":
     nn.train(x_train, y_train.astype(float), x_test.round(0), y_test.astype(float))
+    # print(nn.predict(x_test[0]))
