@@ -1,9 +1,11 @@
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense
-from sklearn.model_selection import KFold, cross_val_score
+from sklearn.model_selection import KFold, StratifiedKFold, cross_val_score
 from keras.wrappers.scikit_learn import KerasRegressor
 from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 
 class KerasNeuralNetwork:
 
@@ -15,11 +17,19 @@ class KerasNeuralNetwork:
 
         self.x_input_len = x_train.shape[1]
 
-        model = KerasRegressor(build_fn=self.build_model, batch_size=10, nb_epoch=10)
-        kfold = KFold(n_splits=10, random_state=1)
-        results = cross_val_score(estimator=model, X=x_train, y=y_train, cv=kfold, n_jobs=-1)
+        X = np.append(x_train, x_test, axis=0)
+        Y = np.append(y_train, y_test, axis=0)
 
-        print("Results: %.2f (%.2f) MSE" % (results.mean(), results.std()))
+        seed = 7
+        np.random.seed(seed)
+
+        estimators = []
+        estimators.append(('standardize', StandardScaler()))
+        estimators.append(('mlp', KerasRegressor(build_fn=self.build_model, epochs=10, batch_size=5, verbose=1)))
+        pipeline = Pipeline(estimators)
+        kfold = KFold(n_splits=10, random_state=seed)
+        results = cross_val_score(pipeline, X, Y, cv=kfold, n_jobs=-1)
+        print("Larger: %.2f (%.2f) MSE" % (results.mean(), results.std()))
 
         # model = self.build_model()
         # model.fit(x_train, y_train,
