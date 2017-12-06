@@ -5,12 +5,7 @@ from LabelsProvider import LabelsProvider
 
 class FeatureProvider:
 
-    def add_preceding_price_feature(self, prices, news: pd.DataFrame, pair: str, refresh=True) -> pd.DataFrame:
-
-        filename = 'output/feat_news_' + pair + '.csv'
-
-        if refresh is not True:
-            return pd.read_csv(filename, parse_dates=['datetime'])
+    def add_preceding_price_feature(self, prices, news: pd.DataFrame) -> pd.DataFrame:
 
         news['preceding_price'] = pd.Series()
 
@@ -44,8 +39,6 @@ class FeatureProvider:
             feature = LabelsProvider.get_diff_label(diff, price_when_news_happens)
 
             news.loc[news['datetime'] == n['datetime'], 'preceding_price'] = feature
-
-        # news.to_csv(filename)
 
         return news
 

@@ -50,8 +50,7 @@ class DataSetProvider(object):
             prices = price_news_map[symbol_pair_str]['prices']
             news = price_news_map[symbol_pair_str]['news']
             news = self.prep_data_provider.scale_news_data(news)
-            news = self.feature_provider.add_preceding_price_feature(prices, news, symbol_pair[0] + symbol_pair[1],
-                                                                refresh=True)
+            news = self.feature_provider.add_preceding_price_feature(prices, news)
 
             # TODO features:
             # - rolling mean instead of price mean(?)
@@ -60,7 +59,7 @@ class DataSetProvider(object):
             # OR recurrent neural network
             # + news as additional feature
 
-            labels = self.labels_provider.get_labels(prices, news, symbol_pair[0] + symbol_pair[1], refresh=True)
+            labels = self.labels_provider.get_labels(prices, news)
 
             # self.data_visualizer.visualize(prices, news, labels)
 

@@ -7,13 +7,7 @@ import pandas as pd
 
 class LabelsProvider(object):
 
-    def get_labels(self, prices: pd.DataFrame, news: pd.DataFrame, pair: str, refresh=True) -> np.ndarray:
-
-        filename = 'output/labels_' + pair + '.npy'
-
-        if refresh is False:
-            labels = np.load(filename)
-            return labels
+    def get_labels(self, prices: pd.DataFrame, news: pd.DataFrame) -> np.ndarray:
 
         labels = []
 
@@ -58,8 +52,6 @@ class LabelsProvider(object):
             labels.append(label)
 
         labels = np.array(labels)
-
-        np.save(filename, labels)
 
         return labels
 
