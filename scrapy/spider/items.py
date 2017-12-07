@@ -8,7 +8,9 @@
 import scrapy
 
 
-class SpiderItem(scrapy.Item):
+class CurrencyPair(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
+    name = scrapy.Field()
+    file_urls = scrapy.Field()
+    files = scrapy.Field()
     pass
