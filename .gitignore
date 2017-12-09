@@ -2,3 +2,6 @@
 __pycache__
 
 ubuntu-xenial-*
+
+database/*.db
+*.db
