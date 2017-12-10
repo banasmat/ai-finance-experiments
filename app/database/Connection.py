@@ -7,7 +7,7 @@ class Connection:
 
     __instance = None
 
-    __engine_url = 'sqlite:///forex_analyzer.db'
+    __engine_url = 'sqlite:///storage/forex_analyzer.db'
 
     @staticmethod
     def get_instance():
