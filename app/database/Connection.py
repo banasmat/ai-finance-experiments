@@ -1,5 +1,4 @@
 from sqlalchemy import create_engine
-from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -7,6 +6,8 @@ Base = declarative_base()
 class Connection:
 
     __instance = None
+
+    __engine_url = 'sqlite:///forex_analyzer.db'
 
     @staticmethod
     def get_instance():
@@ -24,11 +25,10 @@ class Connection:
             self.__init_db()
 
     def __init_db(self):
-        self.engine = create_engine('sqlite:///forex_analyzer.db', echo=True)
-        if not database_exists(self.engine.url):
-            create_database(self.engine.url)
+        self.engine = create_engine(self.__engine_url, echo=True)
 
-        print(database_exists(self.engine.url))
+    def get_engine_url(self):
+        return self.__engine_url
 
     def get_engine(self):
         return self.engine

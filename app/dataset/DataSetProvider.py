@@ -1,11 +1,12 @@
-import numpy as np
-import pandas as pd
 from typing import List, Tuple
 
-from PreProcessedDataProvider import PreProcessedDataProvider
-from FeatureProvider import FeatureProvider
-from LabelsProvider import LabelsProvider
-from DataVisualizer import DataVisualizer
+import numpy as np
+import pandas as pd
+
+from .DataVisualizer import DataVisualizer
+from .FeatureProvider import FeatureProvider
+from .LabelsProvider import LabelsProvider
+from .PreProcessedDataProvider import PreProcessedDataProvider
 
 
 class DataSetProvider(object):
