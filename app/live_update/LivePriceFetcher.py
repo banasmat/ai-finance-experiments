@@ -24,6 +24,7 @@ class LivePriceFetcher:
             symbol = rate.get('@Symbol')
             #TODO get from saved list of trained symbols
             if len(symbol) == 6:
+                #FIXME timezone
                 dt = datetime.datetime.now()
                 time = datetime.datetime.strptime(rate.get('Last'), '%H:%M:%S')
                 dt = dt.replace(hour=time.hour, minute=time.minute, second=time.second)
