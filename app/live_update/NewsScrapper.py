@@ -21,8 +21,8 @@ class NewsScrapper(object):
 
         path_base = 'calendar.php?week='
         # Dec11.2017
-        format = '%b%D.%Y'
-        self.setLogger()
+        format = '%b%d.%Y'
+        # self.setLogger()
         self.getEconomicCalendar(path_base + start_date.strftime(format), path_base + end_date.strftime(format))
 
     def setLogger(self):
@@ -36,8 +36,7 @@ class NewsScrapper(object):
         console.setFormatter(formatter)
         logging.getLogger('').addHandler(console)
 
-    def getEconomicCalendar(self, startlink,endlink):
-
+    def getEconomicCalendar(self, startlink ,endlink):
         session = Connection.get_instance().get_session()
 
         # write to console current status
@@ -93,14 +92,19 @@ class NewsScrapper(object):
 
                 dt = datetime.datetime.strptime(",".join([curr_year,curr_date,curr_time]),
                                                 "%Y,%a%b %d,%I:%M%p")
-                calendar_entry = CalendarEntry(currency, dt, event, actual, forecast, previous)
 
-                #FIXME update if already exists
-                #TODO if 'actual' is updated: populate event
-                session.add(calendar_entry)
-            except:
+                calendar_entry = session.query(CalendarEntry).filter_by(symbol=currency, datetime=dt, title=event).first()
+
+                if calendar_entry is None:
+                    calendar_entry = CalendarEntry(currency, dt, event, actual, forecast, previous)
+                    session.add(calendar_entry)
+                elif calendar_entry.actual == '' and actual != '':
+                    calendar_entry.actual = actual
+                    # TODO if 'actual' is updated: populate event
+
+            except Exception as e:
                 with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'news-scrapper-errors.csv'),"a") as f:
-                    csv.writer(f).writerow([curr_year,curr_date,curr_time])
+                    csv.writer(f).writerow([curr_year,curr_date,curr_time, str(e)])
 
         session.commit()
 
