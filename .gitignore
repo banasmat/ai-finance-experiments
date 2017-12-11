@@ -5,3 +5,5 @@ ubuntu-xenial-*
 
 database/*.db
 *.db
+
+output/news*
