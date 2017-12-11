@@ -4,6 +4,7 @@ from collections import OrderedDict
 from app.model.PriceQuote import PriceQuote
 from app.database.Connection import Connection
 import datetime
+from dateutil import tz
 
 
 class LivePriceFetcher:
@@ -24,12 +25,19 @@ class LivePriceFetcher:
             symbol = rate.get('@Symbol')
             #TODO get from saved list of trained symbols
             if len(symbol) == 6:
-                #FIXME timezone
                 dt = datetime.datetime.now()
                 time = datetime.datetime.strptime(rate.get('Last'), '%H:%M:%S')
+
+                # For now we're saving in local timezone TODO does it make a difference?
+                # timezone = tz.gettz('America/New_York')
+                # dt.replace(tzinfo=timezone)
+                # time = time.replace(tzinfo=timezone)
+
                 dt = dt.replace(hour=time.hour, minute=time.minute, second=time.second)
                 quote = PriceQuote(symbol, dt, rate.get('High'), rate.get('Low'))
 
                 session.add(quote)
+
+        print(tz.tzlocal())
 
         session.commit()

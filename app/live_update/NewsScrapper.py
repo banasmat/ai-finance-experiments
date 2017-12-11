@@ -1,181 +1,94 @@
-#!/usr/bin/env python
+# https://gist.github.com/pohzipohzi/ad7942fc5545675022c1f31123e64c0c
 
-# Source https://futures.io/matlab-r-project-python/30227-forexfactory-calendar-downloader.html
-
-from __future__ import unicode_literals
-import sys
+from bs4 import BeautifulSoup
+import requests
 import datetime
-import getopt
-# import codecs
-import pprint
-import lxml.html
-import mechanize
-import cookielib
+import logging
+import csv
 
-# some utils
-pp = pprint.PrettyPrinter()
-debug = 0
+def setLogger():
+    logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    filename='logs_file',
+                    filemode='w')
+    console = logging.StreamHandler()
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    console.setFormatter(formatter)
+    logging.getLogger('').addHandler(console)
 
+def getEconomicCalendar(startlink,endlink):
 
-#########################
-# variables
-#########################
-START_YEAR = datetime.datetime.now().year
-END_YEAR = START_YEAR
-WEEKURL = r"http://www.forexfactory.com/calendar.php?week="
-MONTHURL = r"http://www.forexfactory.com/calendar.php?month="
-OUTFILE = r"events.csv"
-USAGE = "ffcal.py <-h> <-f {filename}> <-w {this|next|mmmdd.yyyy}> <-m {this|next|mmm.yyyy}>\n"
-#########################
+    # write to console current status
+    logging.info("Scraping data for link: {}".format(startlink))
 
+    # get the page and make the soup
+    baseURL = "https://www.forexfactory.com/"
+    r = requests.get(baseURL + startlink)
+    data = r.text
+    soup = BeautifulSoup(data, "lxml")
 
-# our month list for the URL
-monthslist = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+    # get and parse table data, ignoring details and graph
+    table = soup.find("table", class_="calendar__table")
 
-# sets up the browser
-br = mechanize.Browser()
-cj = cookielib.LWPCookieJar()
-br.set_cookiejar(cj)
-br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
+    # do not use the ".calendar__row--grey" css selector (reserved for historical data)
+    trs = table.select("tr.calendar__row.calendar_row")
+    fields = ["date","time","currency","impact","event","actual","forecast","previous"]
 
-# set correct timezone
-br.open("http://www.forexfactory.com/timezone.php")
-formindex = 0
-for form in br.forms():
-    if "timezone.php" in form.action:
-        form["timezoneoffset"] = ["0"]
-        break
-    formindex += 1
+    # some rows do not have a date (cells merged)
+    curr_year = startlink[-4:]
+    curr_date = ""
+    curr_time = ""
+    for tr in trs:
 
-br.select_form(nr=formindex)
-# br.submit()
+        # fields may mess up sometimes, see Tue Sep 25 2:45AM French Consumer Spending
+        # in that case we append to errors.csv the date time where the error is
+        try:
+            for field in fields:
+                data = tr.select("td.calendar__cell.calendar__{}.{}".format(field,field))[0]
+                # print(data)
+                if field=="date" and data.text.strip()!="":
+                    curr_date = data.text.strip()
+                elif field=="time" and data.text.strip()!="":
+                    # time is sometimes "All Day" or "Day X" (eg. WEF Annual Meetings)
+                    if data.text.strip().find("Day")!=-1:
+                        curr_time = "12:00am"
+                    else:
+                        curr_time = data.text.strip()
+                elif field=="currency":
+                    currency = data.text.strip()
+                elif field=="impact":
+                    # when impact says "Non-Economic" on mouseover, the relevant
+                    # class name is "Holiday", thus we do not use the classname
+                    impact = data.find("span")["title"]
+                elif field=="event":
+                    event = data.text.strip()
+                elif field=="actual":
+                    actual = data.text.strip()
+                elif field=="forecast":
+                    forecast = data.text.strip()
+                elif field=="previous":
+                    previous = data.text.strip()
 
+            dt = datetime.datetime.strptime(",".join([curr_year,curr_date,curr_time]),
+                                            "%Y,%a%b %d,%I:%M%p")
+            print(",".join([str(dt),currency,impact,event,actual,forecast,previous]))
+        except:
+            with open("errors.csv","a") as f:
+                csv.writer(f).writerow([curr_year,curr_date,curr_time])
 
-def getData(html, outfile):
+    # exit recursion when last available link has reached
+    if startlink==endlink:
+        logging.info("Successfully retrieved data")
+        return
+
+    # get the link for the next week and follow
+    follow = soup.select("a.calendar__pagination.calendar__pagination--next.next")
+    follow = follow[0]["href"]
+    getEconomicCalendar(follow,endlink)
+
+if __name__ == "__main__":
     """
-    Gets data from one page of events
+    Run this using the command "python `script_name`.py >> `output_name`.csv"
     """
-    root = lxml.html.fromstring(html)
-    #lines = root.find_class("calendar__row calendar_row calendar__row--grey")
-    #if not lines:
-    lines = root.find_class("calendar__row calendar_row")
-
-    # curWeekDay = None
-    curMonthDay = None
-    time = curTime = ""
-    # pp.pprint(lines)
-    for event in lines:
-        # pp.pprint(event)
-        if len(event.xpath("td[@class='calendar__cell calendar__date date']")) > 0:
-            date = event.xpath("td[@class='calendar__cell calendar__date date']")[0]
-        else:
-            sys.exit("BOOM")
-
-        # get the day of the month
-        weekDay = date.xpath("span")
-        monthDay = date.xpath("span/span")
-        if len(weekDay) > 0:
-            # curWeekDay = weekDay[0].text
-            # print "curWeekDay=[" + curWeekDay + "]"
-            curMonthDay = monthDay[0].text
-            if debug:
-                print "curMonthDay=[" + curMonthDay + "]"
-
-        # get the time
-        curTime = time
-        time = event.xpath("td[contains(@class, 'calendar__time')]")[0].text if len(event.xpath("td[contains(@class, 'calendar__time')]")) else ""
-        if time == '' or time == None:
-            time = curTime
-        if debug:
-            print "time=[" + str(time) + "]"
-
-        # get currency
-        currency = event.xpath("td[contains(@class, 'calendar__currency')]")[0].text if len(event.xpath("td[contains(@class, 'calendar__currency')]")) else ""
-        if currency == None:
-            continue
-        if debug:
-            print "currency=[" + currency + "]"
-
-        # get impact
-        impact = event.xpath("td[contains(@class, 'calendar__impact')]/div/span/@title")[0] if len(event.xpath("td[contains(@class, 'calendar__impact')]/div/span/@title")) else ""
-        if debug:
-            print "impact=[" + impact + "]"
-
-        # get name of event
-        nevent = event.xpath("td[contains(@class, 'calendar__event')]/div/span")[0].text if len(event.xpath("td[contains(@class, 'calendar__event')]/div/span")) else ""
-        if debug:
-            print "nevent=[" + nevent + "]"
-
-        # get actual
-        actual = event.xpath("td[contains(@class, 'calendar__actual')]/span")[0].text if len(event.xpath("td[contains(@class, 'calendar__actual')]/span")) else ""
-
-        # retry if actual is in a span (can happen if they colorize it)
-        # if actual is None or len(actual.strip()) == 0:
-        #     actual = event.xpath("td[@class='actual']/span")[0].text if len(event.xpath("td[@class='actual']/span")) else ""
-        actual = actual.strip().replace("\n", " ") if actual is not None else ""
-        if debug:
-            print "actual=[" + actual + "]"
-
-        # get forecast
-        forecast = event.xpath("td[contains(@class, 'calendar__forecast')]")[0].text if len(event.xpath("td[contains(@class, 'calendar__forecast')]")) else ""
-        # retry if forecast is in a span (can happen if they colorize it)
-        # if forecast is None or len(forecast.strip()) == 0:
-        #    forecast = event.xpath("td[@class='forecast']/span")[0].text if len(event.xpath("td[@class='forecast']/span")) else ""
-        forecast = forecast.strip().replace("\n", " ") if forecast is not None else ""
-        if debug:
-            print "forecast=[" + forecast + "]"
-
-        # get previous
-        previous = event.xpath("td[contains(@class, 'calendar__previous')]")[0].text if len(event.xpath("td[contains(@class, 'calendar__previous')]")) else ""
-        # retry if previous is in a span (can happen if they colorize it)
-        if previous is None or len(previous.strip()) == 0:
-            previous = event.xpath("td[contains(@class, 'calendar__previous')]/span")[0].text if len(event.xpath("td[contains(@class, 'calendar__previous')]/span")) else ""
-        previous = previous.strip().replace("\n", " ") if previous is not None else ""
-        if debug:
-            print "previous=[" + previous + "]\n"
-
-        outfile.write("{};{};{};{};{};{};{};{}\n".format(curMonthDay, time, currency, impact, nevent, actual, forecast, previous))
-
-
-OUTFILE = ""
-
-try:
-    opts, args = getopt.getopt(sys.argv[1:], "f:hm:w:")
-except getopt.GetoptError:
-    sys.stderr.write(USAGE)
-    sys.exit(2)
-
-for opt, arg in opts:
-
-    if opt == "-h":
-        sys.stderr.write(USAGE)
-        sys.exit()
-
-    if opt == "-f":
-        OUTFILE = arg
-    elif opt == "-w" or opt == "-m":
-        outfile = open(OUTFILE, "w") if OUTFILE != "" else sys.stdout
-        if opt == "-w":
-            url = "{}{}".format(WEEKURL, arg)
-        else:
-            url = "{}{}".format(MONTHURL, arg)
-        sys.stderr.write("Getting {} from {}\n".format(arg, url))
-        br.open(url)
-        html = br.response().read()
-        getData(html, outfile)
-        if outfile is not sys.stdout:
-            outfile.close()
-        sys.exit()
-
-year = START_YEAR
-outfile = open(OUTFILE, "w") if OUTFILE != "" else sys.stdout
-while year <= END_YEAR:
-    for month in monthslist:
-        url = "{}{}.{}".format(MONTHURL, month, year)
-        sys.stderr.write("Getting {} {} from {}\n".format(month.title(), year, url))
-        br.open(url)
-        html = br.response().read()
-        getData(html, outfile)
-    year += 1
-if outfile is not sys.stdout:
-    outfile.close()
+    setLogger()
+    getEconomicCalendar("calendar.php?week=jan7.2007","calendar.php?week=dec24.2017")

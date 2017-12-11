@@ -4,6 +4,7 @@ from datetime import datetime as dtm
 
 Base = declarative_base()
 
+
 class PriceQuote(Base):
     __tablename__ = 'price_quote'
 
