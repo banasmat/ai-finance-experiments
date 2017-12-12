@@ -1,8 +1,6 @@
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, Float, String, DateTime
 from datetime import datetime as dtm
-
-Base = declarative_base()
+from app.model.Base import Base
 
 
 class PriceQuote(Base):

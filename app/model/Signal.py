@@ -1,12 +1,11 @@
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, Float, DateTime, String, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime as dtm
-
-Base = declarative_base()
+from app.model.Base import Base
 
 
 class Signal(Base):
+    __tablename__ = 'signal'
 
     id = Column(Integer, primary_key=True)
     value = Column(Float, nullable=False)
