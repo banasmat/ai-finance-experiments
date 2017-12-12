@@ -2,6 +2,7 @@ from typing import List
 import pandas as pd
 import os
 import numpy as np
+import pickle
 
 
 class PreProcessedDataProvider(object):
@@ -9,9 +10,10 @@ class PreProcessedDataProvider(object):
     price_res_dir = 'resources/prices/'
     scale_map = {}
 
-    def get_symbol_pair_strings(self) -> List:
+    @staticmethod
+    def get_symbol_pair_strings() -> List:
         pairs = []
-        for filename in os.listdir(self.price_res_dir):
+        for filename in os.listdir(PreProcessedDataProvider.price_res_dir):
             if filename.endswith('.txt'):
                 pairs.append(filename[:-4])
 
@@ -78,6 +80,14 @@ class PreProcessedDataProvider(object):
 
     def get_all_titles(self) -> List:
         return list(self.scale_map['actual'].keys())
+
+    def save_scale_map(self):
+        with open('output/scale_map.pkl', 'wb') as f:
+            pickle.dump(self.scale_map, f)
+
+    def load_scale_map(self):
+        with open('output/scale_map.pkl', 'rb') as f:
+            self.scale_map = pickle.load(f)
 
     @staticmethod
     def __normalize_numeric_string_value(val):

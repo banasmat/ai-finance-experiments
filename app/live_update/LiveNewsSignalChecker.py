@@ -1,10 +1,15 @@
 from app.model.CalendarEntry import CalendarEntry
 from app.model.PriceQuote import PriceQuote
 from app.database.Connection import Connection
+from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
+import datetime
+
 
 class LiveNewsSignalChecker(object):
 
     __instance = None
+
+    __all_symbols = None
 
     @staticmethod
     def get_instance():
@@ -24,7 +29,23 @@ class LiveNewsSignalChecker(object):
 
         session = Connection.get_instance().get_session()
 
-        #TODO we have to predict separately for every currency pair separately
-        # quotes = session.query(PriceQuote).filter_by(symbol=currency, datetime=dt, title=event).first()
+        #TODO what if quotes are missing ? like event occured monday morning
+        quotes_since = calendar_entry.datetime - datetime.timedelta(hours=12)
+
+        if self.__all_symbols is None:
+            self.__all_symbols = PreProcessedDataProvider.get_symbol_pair_strings()
+
+        symbols = list(filter(lambda symbol: calendar_entry.currency in symbol, self.__all_symbols))
+
+        quotes_map = {}
+
+        for symbol in symbols:
+            quotes_map[symbol] = session.query(PriceQuote)\
+                .filter_by(symbol=symbol)\
+                .filter(PriceQuote.datetime >= quotes_since)
+
+        print(calendar_entry.currency)
+        print(quotes_map)
+        quit()
 
         pass
