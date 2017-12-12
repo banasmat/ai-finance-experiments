@@ -1,6 +1,7 @@
 import zope.event
 import zope.event.classhandler
 from app.event.CalendarEntryUpdatedEvent import CalendarEntryUpdatedEvent
+from app.live_update.LiveNewsSignalChecker import LiveNewsSignalChecker
 
 
 class CalendarEventSubscriber(object):

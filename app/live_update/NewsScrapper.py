@@ -95,7 +95,7 @@ class NewsScrapper(object):
                 dt = datetime.datetime.strptime(",".join([curr_year,curr_date,curr_time]),
                                                 "%Y,%a%b %d,%I:%M%p")
 
-                calendar_entry = session.query(CalendarEntry).filter_by(symbol=currency, datetime=dt, title=event).first()
+                calendar_entry = session.query(CalendarEntry).filter_by(currency=currency, datetime=dt, title=event).first()
 
                 if calendar_entry is None:
                     calendar_entry = CalendarEntry(currency, dt, event, actual, forecast, previous)
