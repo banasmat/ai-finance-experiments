@@ -42,7 +42,7 @@ class LiveNewsSignalChecker(object):
         for symbol in symbols:
             quotes_map[symbol] = session.query(PriceQuote)\
                 .filter_by(symbol=symbol)\
-                .filter(PriceQuote.datetime >= quotes_since)
+                .filter(PriceQuote.datetime >= quotes_since).all()
 
 
 
