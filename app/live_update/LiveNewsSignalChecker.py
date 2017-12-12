@@ -44,6 +44,8 @@ class LiveNewsSignalChecker(object):
                 .filter_by(symbol=symbol)\
                 .filter(PriceQuote.datetime >= quotes_since)
 
+
+
         print(calendar_entry.currency)
         print(quotes_map)
         quit()

@@ -95,6 +95,10 @@ class NewsScrapper(object):
                 dt = datetime.datetime.strptime(",".join([curr_year,curr_date,curr_time]),
                                                 "%Y,%a%b %d,%I:%M%p")
 
+                #TODO save only news that have titles konwn by nn
+
+                #TODO give option to save to csv (if dumping ALL news for training)
+
                 calendar_entry = session.query(CalendarEntry).filter_by(currency=currency, datetime=dt, title=event).first()
 
                 if calendar_entry is None:
