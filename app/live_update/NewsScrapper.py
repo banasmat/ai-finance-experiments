@@ -8,6 +8,8 @@ import csv
 import os
 from app.model.CalendarEntry import CalendarEntry
 from app.database.Connection import Connection
+from app.event.CalendarEntryUpdatedEvent import CalendarEntryUpdatedEvent
+import zope.event
 
 
 class NewsScrapper(object):
@@ -100,7 +102,8 @@ class NewsScrapper(object):
                     session.add(calendar_entry)
                 elif calendar_entry.actual == '' and actual != '':
                     calendar_entry.actual = actual
-                    # TODO if 'actual' is updated: populate event
+                    calendar_event = CalendarEntryUpdatedEvent(calendar_entry)
+                    zope.event.notify(calendar_event)
 
             except Exception as e:
                 with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'news-scrapper-errors.csv'),"a") as f:
