@@ -9,10 +9,10 @@ class CalendarEntry(Base):
     id = Column(Integer, primary_key=True)
     currency = Column(String(3), nullable=False)
     datetime = Column(DateTime, nullable=False)
-    title = Column(String, nullable=False)
-    actual = Column(String, nullable=True)
-    forecast = Column(String, nullable=True)
-    previous = Column(String, nullable=True)
+    title = Column(String(255), nullable=False)
+    actual = Column(String(32), nullable=True)
+    forecast = Column(String(32), nullable=True)
+    previous = Column(String(32), nullable=True)
     created_at = Column(DateTime, nullable=False)
 
     def __init__(self, currency, dt, title, actual=None, forecast=None, previous=None):

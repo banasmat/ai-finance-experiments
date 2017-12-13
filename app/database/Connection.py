@@ -10,7 +10,8 @@ class Connection:
 
     __instance = None
 
-    __engine_url = 'sqlite:///' + os.path.join(os.path.abspath(os.getcwd()), 'storage', 'forex_analyzer.db')
+    __engine_url = "mysql://root:root@localhost/forex_analyzer"
+    # __engine_url = 'sqlite:///' + os.path.join(os.path.abspath(os.getcwd()), 'storage', 'forex_analyzer.db')
 
     @staticmethod
     def get_instance():
