@@ -16,11 +16,8 @@ data_set_provider = DataSetProvider()
 # but how do we get fresh prices?
 
 # if Path('output/x_train_all.npy').is_file():
-x_train_all = np.load('output/x_train_all.npy')
-print(x_train_all[:10])
-quit()
 
-
+# x_train_all = np.load('output/x_train_all.npy')
 # y_train_all = np.load('output/y_train_all.npy')
 # x_test_all = np.load('output/x_test_all.npy')
 # y_test_all = np.load('output/y_test_all.npy')

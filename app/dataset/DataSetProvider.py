@@ -99,6 +99,9 @@ class DataSetProvider(object):
                 y_test_all = np.append(y_test_all, y_test, axis=0)
 
             print(len(x_train_all))
+
+        self.prep_data_provider.save_scale_map()
+
         return x_train_all, y_train_all, x_test_all, y_test_all
 
     def __get_full_data_set(self, news: pd.DataFrame, labels: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
