@@ -22,10 +22,12 @@ class DataSetProvider(object):
         self.prep_data_provider.load_scale_map()
 
         news_dict = calendar_entry.to_dict()
-        news_dict['symbol_pair'] = currency_pair
 
+        news_dict['symbol_pair'] = currency_pair
         news = pd.DataFrame.from_records([news_dict])
-        prices = pd.DataFrame.from_records(list(map(lambda quote: quote.to_dict, price_quotes)))
+
+        price_dicts = list(map(lambda quote: quote.to_dict(), price_quotes))
+        prices = pd.DataFrame.from_records(price_dicts)
 
         news = self.prep_data_provider.scale_news_data(news)
         news = self.feature_provider.add_preceding_price_feature(prices, news)

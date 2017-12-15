@@ -4,7 +4,7 @@ from app.model.Signal import Signal
 from app.database.Connection import Connection
 from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
 from app.dataset.DataSetProvider import DataSetProvider
-from app.floydhub.KerasNeuralNetwork import KerasNeuralNetwork
+from app.keras.KerasNeuralNetwork import KerasNeuralNetwork
 import datetime
 
 

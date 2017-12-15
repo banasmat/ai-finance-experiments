@@ -10,7 +10,7 @@ class Connection:
 
     __instance = None
 
-    __engine_url = "mysql://root:root@localhost/forex_analyzer"
+    __engine_url = "mysql://root:root@localhost/forex_analyzer_python"
     # __engine_url = 'sqlite:///' + os.path.join(os.path.abspath(os.getcwd()), 'storage', 'forex_analyzer.db')
 
     @staticmethod
@@ -29,7 +29,7 @@ class Connection:
             self.__init_db()
 
     def __init_db(self):
-        self.engine = create_engine(self.__engine_url, echo=True)
+        self.engine = create_engine(self.__engine_url, echo=False)
 
         Session = sessionmaker(bind=self.engine)
         self.session = Session()

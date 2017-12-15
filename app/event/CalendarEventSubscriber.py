@@ -2,11 +2,14 @@ import zope.event
 import zope.event.classhandler
 from app.event.CalendarEntryUpdatedEvent import CalendarEntryUpdatedEvent
 from app.live_update.LiveNewsSignalChecker import LiveNewsSignalChecker
+from app.live_update.LiveNewsSignalChecker import LiveNewsSignalChecker
 
 
 class CalendarEventSubscriber(object):
 
     __instance = None
+
+    signal_checker = LiveNewsSignalChecker()
 
     @staticmethod
     def get_instance():
@@ -27,6 +30,5 @@ class CalendarEventSubscriber(object):
         zope.event.classhandler.handler(CalendarEntryUpdatedEvent, self.on_calendar_entry_updated)
 
     def on_calendar_entry_updated(self, event):
-        #TODO fetch prices from last 12 hours, prepare dataset, pass to nn
-        pass
+        self.signal_checker.check(event.calendar_entry)
 
