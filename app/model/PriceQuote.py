@@ -19,3 +19,10 @@ class PriceQuote(Base):
         self.high = high
         self.low = low
         self.created_at = dtm.now()
+
+    def to_dict(self):
+        return {
+            'datetime': self.datetime,
+            'high': self.high,
+            'low': self.low
+        }

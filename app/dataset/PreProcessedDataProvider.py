@@ -11,7 +11,7 @@ class PreProcessedDataProvider(object):
     scale_map = {}
 
     @staticmethod
-    def get_symbol_pair_strings() -> List:
+    def get_currency_pair_strings() -> List:
         pairs = []
         for filename in os.listdir(PreProcessedDataProvider.price_res_dir):
             if filename.endswith('.txt'):
@@ -19,7 +19,7 @@ class PreProcessedDataProvider(object):
 
         return pairs
 
-    def get_symbol_pairs(self) -> np.chararray:
+    def get_currency_pairs(self) -> np.chararray:
 
         pairs_len = len([filename for filename in os.listdir(self.price_res_dir) if filename.endswith('.txt')])
         pairs = np.chararray((pairs_len, 2), itemsize=3, unicode=True)
@@ -33,6 +33,9 @@ class PreProcessedDataProvider(object):
                 i += 1
 
         return pairs
+
+    def get_all_currencies(self):
+        return list(set(self.get_currency_pairs().flatten().tolist()))
 
     def get_price_data(self, symbol_1: str, symbol_2: str) -> pd.DataFrame:
 

@@ -23,3 +23,13 @@ class CalendarEntry(Base):
         self.forecast = forecast
         self.previous = previous
         self.created_at = dtm.now()
+
+    def to_dict(self):
+        return {
+            'symbol': self.currency,
+            'title': self.title,
+            'actual': self.actual,
+            'forecast': self.forecast,
+            'previous': self.previous,
+            'datetime': self.datetime
+        }
