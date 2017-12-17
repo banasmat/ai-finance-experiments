@@ -32,6 +32,7 @@ class FeatureProvider:
             if i > 100:
                 break
 
+
             price_when_news_happens = prices_preceding_news[-1]
 
             price_mean_in_affected_period = prices_preceding_news.mean()

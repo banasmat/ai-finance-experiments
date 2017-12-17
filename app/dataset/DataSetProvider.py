@@ -27,7 +27,15 @@ class DataSetProvider(object):
         news = pd.DataFrame.from_records([news_dict])
 
         price_dicts = list(map(lambda quote: quote.to_dict(), price_quotes))
+
         prices = pd.DataFrame.from_records(price_dicts)
+        prices.index = prices.pop('datetime')
+
+        prices['mean'] = (prices.pop('high') + prices.pop('low')) / 2
+        prices = prices['mean'].resample('1H').mean()
+
+        for key in ['actual', 'forecast', 'previous']:
+            news[key] = news[key].apply(self.prep_data_provider.normalize_numeric_string_value)
 
         news = self.prep_data_provider.scale_news_data(news)
         news = self.feature_provider.add_preceding_price_feature(prices, news)

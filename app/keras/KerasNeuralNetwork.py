@@ -19,7 +19,7 @@ class KerasNeuralNetwork:
         self.x_input_len = X.shape[0]
 
         model = self.build_model()
-        model.load_weights('forex_analyzer_model.h5')
+        model.load_weights(os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'forex_analyzer_model.h5'))
         prediction = model.predict(np.array([X]), 10)
 
         return np.round(prediction * 2) / 2

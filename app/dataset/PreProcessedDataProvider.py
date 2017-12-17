@@ -60,7 +60,7 @@ class PreProcessedDataProvider(object):
         news['symbol_pair'] = symbol_1 + symbol_2
 
         for key in ['actual', 'forecast', 'previous']:
-            news[key] = news[key].apply(self.__normalize_numeric_string_value)
+            news[key] = news[key].apply(self.normalize_numeric_string_value)
             news.apply(lambda row: self.__update_scale_map(row, key), axis=1)
 
         news = news.loc[~news['actual'].isnull()]
@@ -93,7 +93,7 @@ class PreProcessedDataProvider(object):
             self.scale_map = pickle.load(f)
 
     @staticmethod
-    def __normalize_numeric_string_value(val):
+    def normalize_numeric_string_value(val):
 
         val = str(val)
 
