@@ -3,3 +3,7 @@
 
 ## Merge scraped csvs
 `cd scrapy && python HistDataNormalizer.py`
+
+## Conda environment
+save: `conda list --explicit > spec-file.txt`
+install: `conda install --name nn --file spec-file.txt`
