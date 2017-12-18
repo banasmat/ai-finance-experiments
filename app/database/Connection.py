@@ -31,7 +31,7 @@ class Connection:
     def __init_db(self):
         self.engine = create_engine(self.__engine_url, echo=False)
 
-        Session = sessionmaker(bind=self.engine)
+        Session = sessionmaker(bind=self.engine, autoflush=False)
         self.session = Session()
 
     def get_engine_url(self):
