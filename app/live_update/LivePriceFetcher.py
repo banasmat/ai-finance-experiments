@@ -38,6 +38,4 @@ class LivePriceFetcher:
 
                 session.add(quote)
 
-        print(tz.tzlocal())
-
         session.commit()
