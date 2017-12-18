@@ -1,0 +1,6 @@
+database:
+  engine: mysql
+  user: root
+  password: root
+  host: localhost
+  name: forex_analyzer_python

@@ -1,3 +1,4 @@
+import yaml
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -29,6 +30,12 @@ class Connection:
             self.__init_db()
 
     def __init_db(self):
+
+        config_path = os.path.join(os.path.abspath(os.getcwd()), 'config.yml')
+        config = yaml.load(open(config_path))['database']
+
+        self.__engine_url = config['engine'] + '://' + config['user'] + ':' + config['password'] + '@' + config['host'] + '/' + config['name']
+
         self.engine = create_engine(self.__engine_url, echo=False)
 
         Session = sessionmaker(bind=self.engine, autoflush=False)
