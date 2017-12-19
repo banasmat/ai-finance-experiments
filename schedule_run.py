@@ -1,7 +1,7 @@
 import schedule
 import time
 
-import news_fetch
+# import news_fetch
 import prices_fetch
 
 

@@ -7,4 +7,5 @@ database/*.db
 *.db
 
 output/news*
+output/price-fetcher-errors.txt
 config.yml
