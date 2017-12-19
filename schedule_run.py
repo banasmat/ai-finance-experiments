@@ -1,12 +1,12 @@
 import schedule
 import time
 
-# import news_fetch
+import news_fetch
 import prices_fetch
 
 
 schedule.every(1).minutes.do(prices_fetch.run)
-# schedule.every(5).minutes.do(news_fetch.run)
+schedule.every(5).minutes.do(news_fetch.run)
 
 # TODO consider fetching prices only during trading hours (for sure do not fetch on weekends)
 # schedule.every().hour.do(job)

@@ -101,7 +101,7 @@ class NewsScrapper(object):
 
                 calendar_entry = session.query(CalendarEntry).filter_by(currency=currency, datetime=dt, title=event).first()
 
-                if calendar_entry is None:
+                if calendar_entry is None and previous != '':
                     calendar_entry = CalendarEntry(currency, dt, event, actual, forecast, previous)
                     session.add(calendar_entry)
                 elif calendar_entry.actual == '' and actual != '':

@@ -4,7 +4,7 @@ import datetime
 from app.event.CalendarEventSubscriber import CalendarEventSubscriber
 from app.model.CalendarEntry import CalendarEntry
 from app.database.Connection import Connection
-
+import pytz
 
 def run():
     #TODO event subscriber should be auto initialized with every command (use framework?)
@@ -16,13 +16,17 @@ def run():
         .filter_by(actual='').all()
 
     # Run only if any news can be updated
-    if len(entries_to_update) is 0 or entries_to_update[0].datetime <= datetime.datetime.now():
+    if len(entries_to_update) is 0 or est_to_utc(entries_to_update[0].datetime) <= datetime.datetime.utcnow().replace(tzinfo=pytz.utc):
         scrapper = NewsScrapper()
         scrapper.run()
         # scrapper.run(datetime.datetime.today() - datetime.timedelta(days=1))
 
 
-    # test_entry = session.query(CalendarEntry).filter(CalendarEntry.title != '').first()
+    # test_entry = session.query(CalendarEntry).filter(CalendarEntry.id == 104).first()
     # LiveNewsSignalChecker.get_instance().check(test_entry)
 
-# run()
+def est_to_utc(_datetime):
+    return _datetime.replace(tzinfo=pytz.timezone('US/Eastern')).astimezone(pytz.utc)
+
+
+run()
