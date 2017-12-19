@@ -154,9 +154,12 @@ class PreProcessedDataProvider(object):
         return values[0], [_min, _max]
 
     def __scale_values(self, row, key, max_value=1):
-        scaled = row[key] - self.scale_map[key][row['title']][0]
-        scaled /= self.scale_map[key][row['title']][1] - self.scale_map[key][row['title']][0]
-        scaled *= max_value
+        if row[key] is None:
+            scaled = 0
+        else:
+            scaled = row[key] - self.scale_map[key][row['title']][0]
+            scaled /= self.scale_map[key][row['title']][1] - self.scale_map[key][row['title']][0]
+            scaled *= max_value
 
         if scaled > max_value:
             # TODO check why in two cases row['actual'] is larger than previously counted max

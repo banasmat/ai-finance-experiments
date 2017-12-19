@@ -52,8 +52,8 @@ class LiveNewsSignalChecker(object):
             data_set = self.data_set_provider.prepare_single_data_set(calendar_entry, quotes, symbol)
 
             prediction = self.nn.predict(data_set[0])
-            # print(prediction)
-            # quit()
+            print(prediction)
+            quit()
 
             signal = Signal(prediction, symbol, calendar_entry)
             session.add(signal)
