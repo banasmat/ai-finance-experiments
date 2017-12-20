@@ -14,6 +14,7 @@ class CalendarEntry(Base):
     forecast = Column(String(32), nullable=True)
     previous = Column(String(32), nullable=True)
     created_at = Column(DateTime, nullable=False)
+    updated_at = Column(DateTime, nullable=True)
 
     def __init__(self, currency, dt, title, actual=None, forecast=None, previous=None):
         self.currency = currency

@@ -106,6 +106,7 @@ class NewsScrapper(object):
                     session.add(calendar_entry)
                 elif calendar_entry.actual == '' and actual != '':
                     calendar_entry.actual = actual
+                    calendar_entry.updated_at = datetime.datetime.now()
                     calendar_event = CalendarEntryUpdatedEvent(calendar_entry)
                     zope.event.notify(calendar_event)
 
