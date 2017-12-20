@@ -21,7 +21,8 @@ def run():
     #     scrapper.run()
 
 
-    test_entry = session.query(CalendarEntry).filter(CalendarEntry.id == 105).first()
+
+    test_entry = session.query(CalendarEntry).filter(CalendarEntry.id == 106).first()
     LiveNewsSignalChecker.get_instance().check(test_entry)
 
 def est_to_utc(_datetime):

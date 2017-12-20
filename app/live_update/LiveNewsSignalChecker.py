@@ -53,7 +53,6 @@ class LiveNewsSignalChecker(object):
 
             prediction = self.nn.predict(data_set[0])
             print(prediction)
-            quit()
 
             signal = Signal(prediction, symbol, calendar_entry)
             session.add(signal)
