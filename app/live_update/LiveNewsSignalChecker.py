@@ -52,9 +52,13 @@ class LiveNewsSignalChecker(object):
             data_set = self.data_set_provider.prepare_single_data_set(calendar_entry, quotes, symbol)
 
             prediction = self.nn.predict(data_set[0])
-            print(prediction)
 
-            signal = Signal(prediction, symbol, calendar_entry)
-            session.add(signal)
+            existing_signal = session.query(Signal)\
+                .filter_by(symbol=symbol, calendar_entry=calendar_entry)\
+                .first()
+
+            if existing_signal is None:
+                signal = Signal(prediction, symbol, calendar_entry)
+                session.add(signal)
 
         session.commit()

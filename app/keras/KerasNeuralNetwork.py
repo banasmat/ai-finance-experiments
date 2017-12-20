@@ -21,9 +21,12 @@ class KerasNeuralNetwork:
         model = self.build_model()
         model.load_weights(os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'forex_analyzer_model.h5'))
         prediction = model.predict(np.array([X]), 10)[0][0]
-        return prediction
 
-        # return np.round(prediction * 2) / 2
+        result = np.round(prediction * 2) / 2
+        if result == -0.:
+            result = 0
+
+        return result
 
     def train(self, x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray, y_test: np.ndarray):
 
@@ -64,7 +67,7 @@ class KerasNeuralNetwork:
         model = self.build_model()
         model.fit(x_train, y_train,
                   batch_size=10,
-                  epochs=10,
+                  epochs=100,
                   verbose=1,
                   validation_split=0.1
                   )
