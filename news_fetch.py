@@ -16,15 +16,15 @@ def run():
         .filter_by(actual='').all()
 
     # Run only if any news can be updated
-    if len(entries_to_update) is 0 or est_to_utc(entries_to_update[0].datetime) <= datetime.datetime.utcnow().replace(tzinfo=pytz.utc):
-        scrapper = NewsScrapper()
-        scrapper.run()
+    # if len(entries_to_update) is 0 or est_to_utc(entries_to_update[0].datetime) <= datetime.datetime.utcnow().replace(tzinfo=pytz.utc):
+    #     scrapper = NewsScrapper()
+    #     scrapper.run()
 
-    # test_entry = session.query(CalendarEntry).filter(CalendarEntry.id == 103).first()
-    # LiveNewsSignalChecker.get_instance().check(test_entry)
+    test_entry = session.query(CalendarEntry).filter(CalendarEntry.id == 138).first()
+    LiveNewsSignalChecker.get_instance().check(test_entry)
 
 def est_to_utc(_datetime):
     return _datetime.replace(tzinfo=pytz.timezone('US/Eastern')).astimezone(pytz.utc)
 
 
-# run()
+run()

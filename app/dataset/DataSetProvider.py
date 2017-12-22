@@ -18,13 +18,18 @@ class DataSetProvider(object):
     labels_provider = LabelsProvider()
     data_visualizer = DataVisualizer()
 
-    def prepare_single_data_set(self, calendar_entry: CalendarEntry, price_quotes: List[PriceQuote], currency_pair: str):
+    def prepare_single_dataset(self, calendar_entry: CalendarEntry, price_quotes: List[PriceQuote], currency_pair: str):
+        return self.data_set_from_records([calendar_entry], price_quotes, currency_pair)
+
+    def data_set_from_records(self, calendar_entries: List[CalendarEntry], price_quotes: List[PriceQuote], currency_pair: str):
         self.prep_data_provider.load_scale_map()
 
-        news_dict = calendar_entry.to_dict()
+        news_dicts = list(map(lambda entry: entry.to_dict(), calendar_entries))
+        # news_dicts = list(map(lambda entry: entry.to_dict(), calendar_entries))
 
-        news_dict['symbol_pair'] = currency_pair
-        news = pd.DataFrame.from_records([news_dict])
+        news = pd.DataFrame.from_records(news_dicts)
+
+        news['symbol_pair'] = currency_pair
 
         price_dicts = list(map(lambda quote: quote.to_dict(), price_quotes))
 

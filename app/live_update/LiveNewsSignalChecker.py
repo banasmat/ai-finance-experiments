@@ -49,9 +49,11 @@ class LiveNewsSignalChecker(object):
                 .filter_by(symbol=symbol)\
                 .filter(PriceQuote.datetime >= quotes_since).all()
 
-            data_set = self.data_set_provider.prepare_single_data_set(calendar_entry, quotes, symbol)
+            data_set = self.data_set_provider.prepare_single_dataset(calendar_entry, quotes, symbol)
 
             prediction = self.nn.predict(data_set[0])
+
+            print(prediction)
 
             existing_signal = session.query(Signal)\
                 .filter_by(symbol=symbol, calendar_entry=calendar_entry)\
