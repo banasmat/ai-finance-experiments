@@ -21,11 +21,17 @@ class NewsScrapper(object):
         if end_date is None:
             end_date = datetime.datetime.now()
 
+        delta = end_date - start_date
+        mod = delta.days % 7
+        if mod != 0:
+            end_date = end_date + datetime.timedelta(days=(7-mod))
+
         path_base = 'calendar.php?week='
         # Dec11.2017
-        format = '%b%d.%Y'
+        dt_format = '%b%d.%Y'
         # self.setLogger()
-        self.getEconomicCalendar(path_base + start_date.strftime(format), path_base + end_date.strftime(format))
+
+        self.getEconomicCalendar(path_base + start_date.strftime(dt_format).lower(), path_base + end_date.strftime(dt_format).lower())
 
     def setLogger(self):
         logs_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'news_scrapper_logs')
@@ -57,7 +63,6 @@ class NewsScrapper(object):
         trs = table.select("tr.calendar__row.calendar_row")
         fields = ["date","time","currency","impact","event","actual","forecast","previous"]
 
-        # FIXME it saved news for december 2018 in december 2017
         # some rows do not have a date (cells merged)
         curr_year = startlink[-4:]
         curr_date = ""
