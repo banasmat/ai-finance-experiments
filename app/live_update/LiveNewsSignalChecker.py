@@ -1,3 +1,5 @@
+import math
+
 from app.model.CalendarEntry import CalendarEntry
 from app.model.PriceQuote import PriceQuote
 from app.model.Signal import Signal
@@ -58,6 +60,10 @@ class LiveNewsSignalChecker(object):
             existing_signal = session.query(Signal)\
                 .filter_by(symbol=symbol, calendar_entry=calendar_entry)\
                 .first()
+
+            if math.isnan(prediction):
+                print('nan prediction for Calendar Entry with id: ' + calendar_entry.id)
+                continue
 
             if existing_signal is None:
                 signal = Signal(prediction, symbol, calendar_entry)

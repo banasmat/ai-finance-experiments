@@ -57,6 +57,7 @@ class NewsScrapper(object):
         trs = table.select("tr.calendar__row.calendar_row")
         fields = ["date","time","currency","impact","event","actual","forecast","previous"]
 
+        # FIXME it saved news for december 2018 in december 2017
         # some rows do not have a date (cells merged)
         curr_year = startlink[-4:]
         curr_date = ""

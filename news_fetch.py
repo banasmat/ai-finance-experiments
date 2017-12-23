@@ -19,8 +19,10 @@ def run():
     # if len(entries_to_update) is 0 or est_to_utc(entries_to_update[0].datetime) <= datetime.datetime.utcnow().replace(tzinfo=pytz.utc):
     #     scrapper = NewsScrapper()
     #     scrapper.run()
+    scrapper = NewsScrapper()
+    scrapper.run(datetime.datetime.strptime('Dec 15 2017  1:00AM', '%b %d %Y %I:%M%p'))
 
-    test_entry = session.query(CalendarEntry).filter(CalendarEntry.id == 138).first()
+    test_entry = session.query(CalendarEntry).filter(CalendarEntry.id == 123).first()
     LiveNewsSignalChecker.get_instance().check(test_entry)
 
 def est_to_utc(_datetime):
