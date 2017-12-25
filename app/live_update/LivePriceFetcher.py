@@ -21,6 +21,8 @@ class LivePriceFetcher:
         data = xmltodict.parse(data)
         rates: OrderedDict = data.get('Rates').get('Rate')
 
+        # TODO probably shouldn't save if last quote datetime hasn't changed
+
         for rate in rates:
             symbol = rate.get('@Symbol')
             #TODO get from saved list of trained symbols

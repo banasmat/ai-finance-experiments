@@ -18,10 +18,10 @@ class DataSetProvider(object):
     labels_provider = LabelsProvider()
     data_visualizer = DataVisualizer()
 
-    def prepare_single_dataset(self, calendar_entry: CalendarEntry, price_quotes: List[PriceQuote], currency_pair: str):
-        return self.data_set_from_records([calendar_entry], price_quotes, currency_pair)
+    def prepare_single_data_set(self, calendar_entry: CalendarEntry, price_quotes: List[PriceQuote], currency_pair: str):
+        return self.__get_news_matrix(self.data_frames_from_records([calendar_entry], price_quotes, currency_pair)[1])
 
-    def data_set_from_records(self, calendar_entries: List[CalendarEntry], price_quotes: List[PriceQuote], currency_pair: str):
+    def data_frames_from_records(self, calendar_entries: List[CalendarEntry], price_quotes: List[PriceQuote], currency_pair: str):
         self.prep_data_provider.load_scale_map()
 
         news_dicts = list(map(lambda entry: entry.to_dict(), calendar_entries))
@@ -45,7 +45,7 @@ class DataSetProvider(object):
         news = self.prep_data_provider.scale_news_data(news)
         news = self.feature_provider.add_preceding_price_feature(prices, news)
 
-        return self.__get_news_matrix(news)
+        return prices, news
 
     def prepare_full_data_set(self):
         currency_pairs = self.prep_data_provider.get_currency_pairs()

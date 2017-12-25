@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime
 from datetime import datetime as dtm
 from app.model.Base import Base
+from sqlalchemy.orm import relationship
 
 
 class CalendarEntry(Base):
@@ -15,6 +16,7 @@ class CalendarEntry(Base):
     previous = Column(String(32), nullable=True)
     created_at = Column(DateTime, nullable=False)
     updated_at = Column(DateTime, nullable=True)
+    signals = relationship("Signal", back_populates="calendar_entry")
 
     def __init__(self, currency, dt, title, actual=None, forecast=None, previous=None):
         self.currency = currency

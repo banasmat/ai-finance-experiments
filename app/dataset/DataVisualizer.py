@@ -12,8 +12,7 @@ class DataVisualizer(object):
     def __init__(self):
         plotly.tools.set_credentials_file(username='banasmat', api_key='La513i6uVpqf7qAHQnCD')
 
-
-    def visualize(self, prices, news, labels):
+    def visualize(self, prices, news, labels, filename='eurcad'):
 
         news = news.iloc[:len(labels)]
         news_labels = pd.DataFrame(labels)
@@ -80,14 +79,14 @@ class DataVisualizer(object):
             name='news - sell signals'
         )
 
-        py.plot([trace0, trace1, trace2, trace3, trace4], filename='eurcad')
+        py.plot([trace0, trace1, trace2, trace3, trace4], filename=filename)
 
         return
 
     @staticmethod
     def __timestamp_to_datetime_string(timestamp):
         return timestamp.strftime('%Y-%m-%d %H')
-    
+
     def __get_news_ys(self, prices, news_labels, label_val):
         news_labels = news_labels.loc[news_labels[0] == label_val]
 

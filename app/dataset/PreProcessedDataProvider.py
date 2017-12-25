@@ -89,8 +89,9 @@ class PreProcessedDataProvider(object):
             pickle.dump(self.scale_map, f)
 
     def load_scale_map(self):
-        with open('output/scale_map.pkl', 'rb') as f:
-            self.scale_map = pickle.load(f)
+        if not self.scale_map:
+            with open('output/scale_map.pkl', 'rb') as f:
+                self.scale_map = pickle.load(f)
 
     @staticmethod
     def normalize_numeric_string_value(val):

@@ -17,9 +17,9 @@ class NewsScrapper(object):
     def run(self, start_date: datetime.datetime=None, end_date: datetime.datetime=None):
 
         if start_date is None:
-            start_date = datetime.datetime.now()
+            start_date = datetime.datetime.now().replace(hour=0, minute=0, second=0)
         if end_date is None:
-            end_date = datetime.datetime.now()
+            end_date = datetime.datetime.now().replace(hour=0, minute=0, second=0)
 
         delta = end_date - start_date
         mod = delta.days % 7
@@ -46,6 +46,8 @@ class NewsScrapper(object):
 
     def getEconomicCalendar(self, startlink ,endlink):
         session = Connection.get_instance().get_session()
+
+        print(startlink)
 
         # write to console current status
         logging.info("Scraping data for link: {}".format(startlink))

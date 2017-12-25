@@ -21,7 +21,7 @@ def run():
     #     scrapper.run()
     scrapper = NewsScrapper()
     scrapper.run(datetime.datetime.strptime('Dec 15 2017  1:00AM', '%b %d %Y %I:%M%p'))
-    #
+
     # test_entry = session.query(CalendarEntry).filter(CalendarEntry.id == 123).first()
     # LiveNewsSignalChecker.get_instance().check(test_entry)
 
