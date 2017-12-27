@@ -4,3 +4,6 @@ database:
   password: root
   host: localhost
   name: forex_analyzer_python
+
+oanda:
+  api_key: abc
