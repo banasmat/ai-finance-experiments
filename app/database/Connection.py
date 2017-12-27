@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
+from app.Config import Config
 
 Base = declarative_base()
 
@@ -31,8 +32,7 @@ class Connection:
 
     def __init_db(self):
 
-        config_path = os.path.join(os.path.abspath(os.getcwd()), 'config.yml')
-        config = yaml.load(open(config_path))['database']
+        config = Config.get['database']
 
         self.__engine_url = config['engine'] + '://' + config['user'] + ':' + config['password'] + '@' + config['host'] + '/' + config['name']
 
