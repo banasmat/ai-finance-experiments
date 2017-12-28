@@ -11,7 +11,7 @@ def run():
     fetcher = OandaHistoryPriceFetcher()
 
     _to = datetime.datetime.now(tz=datetime.timezone.utc)
-    _from = _to - datetime.timedelta(days=1)
+    _from = _to - datetime.timedelta(minutes=10)
 
     currency_pairs = PreProcessedDataProvider.get_currency_pair_strings()
 
@@ -24,4 +24,4 @@ def run():
             print(str(e))
 
 
-run()
+# run()
