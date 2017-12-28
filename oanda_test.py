@@ -1,12 +1,14 @@
-import oandapy
-from app.Config import Config
+from app.live_update.OandaHistoryPriceFetcher import OandaHistoryPriceFetcher
+import datetime
 
-config = Config.get('oanda')
+fetcher = OandaHistoryPriceFetcher()
 
-oanda = oandapy.API(environment="practice", access_token=config['api_key'])
+_to = datetime.datetime.now()
+_from = _to - datetime.timedelta(days=2)
 
-response = oanda.get_prices(instruments="EUR_USD")
-prices = response.get("prices")
-asking_price = prices[0].get("ask")
 
-print(prices)
+# _to = datetime.datetime.strptime('Dec 22 2017  1:00AM', '%b %d %Y %I:%M%p')
+# _from = _to - datetime.timedelta(days=2)
+
+
+fetcher.fetch(_from, _to, 'M1', 'EURUSD')

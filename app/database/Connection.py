@@ -32,7 +32,7 @@ class Connection:
 
     def __init_db(self):
 
-        config = Config.get['database']
+        config = Config.get('database')
 
         self.__engine_url = config['engine'] + '://' + config['user'] + ':' + config['password'] + '@' + config['host'] + '/' + config['name']
 

@@ -11,13 +11,15 @@ class PriceQuote(Base):
     datetime = Column(DateTime, nullable=False)
     high = Column(Float(precision=32), nullable=False)
     low = Column(Float(precision=32), nullable=False)
+    volume = Column(Integer(), nullable=True)
     created_at = Column(DateTime, nullable=False)
 
-    def __init__(self, symbol, dt, high, low):
+    def __init__(self, symbol, dt, high, low, volume=None):
         self.symbol = symbol
         self.datetime = dt
         self.high = high
         self.low = low
+        self.volume = volume
         self.created_at = dtm.now()
 
     def to_dict(self):
