@@ -43,7 +43,7 @@ def run():
 
     prices, news = data_set_provider.data_frames_from_records(entries_to_show, prices_to_show, currency_pair)
 
-    prices = prices.fillna(0)
+    # prices = prices.fillna(0)
 
     labels = list(map(lambda signal: signal.value, signals_to_show))
 

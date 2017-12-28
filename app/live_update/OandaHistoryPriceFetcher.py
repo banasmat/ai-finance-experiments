@@ -1,13 +1,10 @@
-from urllib.request import urlopen, Request
-import xmltodict
-from collections import OrderedDict
+from sqlalchemy.exc import SQLAlchemyError
+
 from app.model.PriceQuote import PriceQuote
 from app.database.Connection import Connection
 import datetime
 
 from app.Config import Config
-import sys
-import json
 
 from oandapyV20.contrib.factories import InstrumentsCandlesFactory
 from oandapyV20 import API
@@ -23,7 +20,8 @@ class OandaHistoryPriceFetcher:
         client = API(access_token=config['api_key'])
 
         date_format_in = '%Y-%m-%dT%H:%M:%SZ'
-        date_format_out = '%Y-%m-%dT%H:%M:%SZ'
+        date_format_out = '%Y-%m-%dT%H:%M:%S'
+
 
         params = {
             "granularity": gran,
@@ -33,19 +31,31 @@ class OandaHistoryPriceFetcher:
 
         session = Connection.get_instance().get_session()
 
-        for r in InstrumentsCandlesFactory(instrument=instr, params=params):
-            print("REQUEST: {} {} {}".format(r, r.__class__.__name__, r.params))
-            rv = client.request(r)
+        existing_quotes = session.query(PriceQuote) \
+            .filter_by(symbol=symbol) \
+            .filter(PriceQuote.datetime >= (_from - datetime.timedelta(minutes=1)))\
+            .filter(PriceQuote.datetime <= _to).all()
 
-            for candle in r.response.get('candles'):
-                dt = candle.get('time')[0:19]
-                try:
-                    if candle['complete']:
-                        # TODO consider converting dt to GMT
-                        quote = PriceQuote(symbol, dt, candle['mid']['h'], candle['mid']['l'], candle['volume'])
+        existing_quote_dts = list(map(lambda _quote: _quote.datetime.strftime(date_format_out), existing_quotes))
+
+        try:
+            for r in InstrumentsCandlesFactory(instrument=instr, params=params):
+                print("REQUEST: {} {} {}".format(r, r.__class__.__name__, r.params))
+                rv = client.request(r)
+
+                for candle in r.response.get('candles'):
+                    dt = candle.get('time')[0:19]
+
+                    if candle['complete'] and dt not in existing_quote_dts:
+                        quote = PriceQuote(symbol, datetime.datetime.strptime(dt, date_format_out), candle['mid']['h'], candle['mid']['l'], candle['volume'])
+                        existing_quote_dts.append(dt)
                         session.add(quote)
 
-                except Exception as e:
-                    print(e, r)
+            session.commit()
 
-        session.commit()
+        except SQLAlchemyError as e:
+            session.rollback()
+            print(e)
+
+        except Exception as e:
+            print(e)

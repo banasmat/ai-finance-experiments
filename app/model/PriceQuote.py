@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, Float, String, DateTime
 from datetime import datetime as dtm
 from app.model.Base import Base
+from sqlalchemy import UniqueConstraint
 
 
 class PriceQuote(Base):
@@ -13,6 +14,8 @@ class PriceQuote(Base):
     low = Column(Float(precision=32), nullable=False)
     volume = Column(Integer(), nullable=True)
     created_at = Column(DateTime, nullable=False)
+
+    UniqueConstraint('symbol', 'datetime', name='uix_sym_dt')
 
     def __init__(self, symbol, dt, high, low, volume=None):
         self.symbol = symbol
