@@ -8,6 +8,7 @@ from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
 from app.dataset.DataSetProvider import DataSetProvider
 from app.keras.KerasNeuralNetwork import KerasNeuralNetwork
 import datetime
+import numpy as np
 
 
 class LiveNewsSignalChecker(object):
@@ -55,15 +56,18 @@ class LiveNewsSignalChecker(object):
 
             prediction = self.nn.predict(data_set[0])
 
-            print(prediction)
+            print('prediction', prediction)
+
+            if math.isnan(prediction):
+                # TODO log
+                print('CalendarEntry', calendar_entry.id)
+                print('symbol', symbol)
+
+                continue
 
             existing_signal = session.query(Signal)\
                 .filter_by(symbol=symbol, calendar_entry=calendar_entry)\
                 .first()
-
-            if math.isnan(prediction):
-                print('nan prediction for Calendar Entry with id: ' + calendar_entry.id)
-                continue
 
             if existing_signal is None:
                 signal = Signal(prediction, symbol, calendar_entry)
