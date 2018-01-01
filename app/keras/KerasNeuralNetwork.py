@@ -14,11 +14,13 @@ from sklearn.pipeline import Pipeline
 class KerasNeuralNetwork:
 
     y_input_len = 1
+    model = None
 
     def predict(self, X):
-        model = self.build_model(X.shape[0])
-        model.load_weights(os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'forex_analyzer_model.h5'))
-        prediction = model.predict(np.array([X]), 10)[0][0]
+        if self.model is None:
+            self.model = self.build_model(X.shape[0])
+            self.model.load_weights(os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'forex_analyzer_model.h5'))
+        prediction = self.model.predict(np.array([X]), 10)[0][0]
 
         result = np.round(prediction * 2) / 2
         if result == -0.:
@@ -75,10 +77,30 @@ class KerasNeuralNetwork:
         print('')
         print('accuracy', loss_and_metrics[1])
 
-    def test(self, x_test: np.ndarray, y_test: np.ndarray):
-        model = self.build_model(x_test.shape[1])
-        # TODO iterate manually (Keras Regressor show only loss)
-        return model.evaluate(x_test, y_test, batch_size=128)
+    def test(self, x_test: np.ndarray, y_test: np.ndarray, verbose=True):
+        self.model = self.build_model(x_test.shape[1])
+
+        i = 0
+        right = 0
+        wrong = 0
+        for x in x_test:
+            prediction = self.predict(x)
+            label = y_test[i]
+            if verbose:
+                print(i)
+                print('prediction',prediction)
+                print('label', label)
+            i += 1
+            if prediction == label:
+                right += 1
+            else:
+                wrong += 1
+
+        return right / len(y_test)
+
+
+
+
 
     def build_model(self, x_input_len, optimizer='adam', loss='mean_squared_error'):
 
