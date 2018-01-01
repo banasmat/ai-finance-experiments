@@ -10,15 +10,13 @@ from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 
+
 class KerasNeuralNetwork:
 
-    x_input_len = 0
     y_input_len = 1
 
     def predict(self, X):
-        self.x_input_len = X.shape[0]
-
-        model = self.build_model()
+        model = self.build_model(X.shape[0])
         model.load_weights(os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'forex_analyzer_model.h5'))
         prediction = model.predict(np.array([X]), 10)[0][0]
 
@@ -29,8 +27,6 @@ class KerasNeuralNetwork:
         return result
 
     def train(self, x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray, y_test: np.ndarray):
-
-        self.x_input_len = x_train.shape[1]
 
         # X = np.append(x_train, x_test, axis=0)
         # Y = np.append(y_train, y_test, axis=0)
@@ -63,8 +59,7 @@ class KerasNeuralNetwork:
         # print('scores', grid_search.grid_scores_)
         # print('best score', grid_search.best_score_)
 
-
-        model = self.build_model()
+        model = self.build_model(x_train.shape[1])
         model.fit(x_train, y_train,
                   batch_size=10,
                   epochs=100,
@@ -80,16 +75,21 @@ class KerasNeuralNetwork:
         print('')
         print('accuracy', loss_and_metrics[1])
 
-    def build_model(self, optimizer='adam', loss='mean_squared_error'):
+    def test(self, x_test: np.ndarray, y_test: np.ndarray):
+        model = self.build_model(x_test.shape[1])
+        # TODO iterate manually (Keras Regressor show only loss)
+        return model.evaluate(x_test, y_test, batch_size=128)
 
-        x_y_input_len_avg = int((self.x_input_len + self.y_input_len) / 2)
+    def build_model(self, x_input_len, optimizer='adam', loss='mean_squared_error'):
+
+        x_y_input_len_avg = int((x_input_len + self.y_input_len) / 2)
 
         model = Sequential()
 
         model.add(Dense(units=x_y_input_len_avg,
                         activation='relu',
                         kernel_initializer='uniform',
-                        input_shape=(self.x_input_len,)
+                        input_shape=(x_input_len,)
                         ))
         # TODO activate dropout in case of overfitting (big difference between training and testing accuracy)
         # model.add(Dropout(p=0.1))
