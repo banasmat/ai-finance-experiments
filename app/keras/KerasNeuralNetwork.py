@@ -79,6 +79,7 @@ class KerasNeuralNetwork:
 
     def test(self, x_test: np.ndarray, y_test: np.ndarray, verbose=True):
         self.model = self.build_model(x_test.shape[1])
+        self.model.load_weights(os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'forex_analyzer_model.h5'))
 
         i = 0
         right = 0
@@ -97,10 +98,6 @@ class KerasNeuralNetwork:
                 wrong += 1
 
         return right / len(y_test)
-
-
-
-
 
     def build_model(self, x_input_len, optimizer='adam', loss='mean_squared_error'):
 
