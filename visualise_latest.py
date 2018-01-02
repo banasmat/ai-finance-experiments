@@ -13,6 +13,8 @@ def run():
     data_visualizer = DataVisualizer()
 
     currency_pair = 'EURUSD'
+    # currency_pair = 'EURCAD'
+    # currency_pair = 'AUDJPY'
 
     curr_1 = currency_pair[:3]
     curr_2 = currency_pair[-3:]
@@ -21,7 +23,7 @@ def run():
 
     now = datetime.datetime.now()
 
-    date_from = now - datetime.timedelta(days=30)
+    date_from = now - datetime.timedelta(days=90)
     date_to = now + datetime.timedelta(days=2)
 
     entries_and_signals = session.query(CalendarEntry, Signal) \

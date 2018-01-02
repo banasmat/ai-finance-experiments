@@ -12,7 +12,7 @@ class DataVisualizer(object):
     def __init__(self):
         plotly.tools.set_credentials_file(username='banasmat', api_key='La513i6uVpqf7qAHQnCD')
 
-    def visualize(self, prices, news, labels, filename='eurcad'):
+    def visualize(self, prices, news, labels, filename):
 
         news = news.iloc[:len(labels)]
         news_labels = pd.DataFrame(labels)
@@ -26,6 +26,7 @@ class DataVisualizer(object):
 
         price_xs = list(map(self.__timestamp_to_datetime_string, price_xs))
 
+        news_zero_ys = self.__get_news_ys(prices, news_labels, 0)
         news_up_ys = self.__get_news_ys(prices, news_labels, 1)
         news_down_ys = self.__get_news_ys(prices, news_labels, -1)
         news_up_ys_lg = self.__get_news_ys(prices, news_labels, 2)
@@ -78,8 +79,18 @@ class DataVisualizer(object):
             ),
             name='news - sell signals'
         )
+        trace5 = go.Scattergl(
+            x=np.array(price_xs),
+            y=np.array(news_zero_ys),
+            mode='markers',
+            marker=dict(
+                color='rgb(0,0,0)',
+                size=10
+            ),
+            name='news - no movement signals'
+        )
 
-        py.plot([trace0, trace1, trace2, trace3, trace4], filename=filename)
+        py.plot([trace0, trace1, trace2, trace3, trace4, trace5], filename=filename)
 
         return
 

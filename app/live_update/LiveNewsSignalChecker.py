@@ -52,18 +52,18 @@ class LiveNewsSignalChecker(object):
                 .filter_by(symbol=symbol)\
                 .filter(PriceQuote.datetime >= quotes_since).all()
 
-            data_set = self.data_set_provider.prepare_single_data_set(calendar_entry, quotes, symbol)
+            if len(quotes) > 0:
+                data_set = self.data_set_provider.prepare_single_data_set(calendar_entry, quotes, symbol)
+                prediction = self.nn.predict(data_set[0])
 
-            prediction = self.nn.predict(data_set[0])
+                if math.isnan(prediction):
+                    # TODO log
+                    # print('CalendarEntry', calendar_entry.id)
+                    # print('symbol', symbol)
 
-            print('prediction', prediction)
-
-            if math.isnan(prediction):
-                # TODO log
-                print('CalendarEntry', calendar_entry.id)
-                print('symbol', symbol)
-
-                continue
+                    continue
+                else:
+                    print('prediction', prediction)
 
             existing_signal = session.query(Signal)\
                 .filter_by(symbol=symbol, calendar_entry=calendar_entry)\
