@@ -3,12 +3,13 @@ from typing import List, Tuple
 import numpy as np
 import pandas as pd
 
-from .DataVisualizer import DataVisualizer
-from .FeatureProvider import FeatureProvider
-from .LabelsProvider import LabelsProvider
-from .PreProcessedDataProvider import PreProcessedDataProvider
+# from app.dataset.DataVisualizer import DataVisualizer
+from app.dataset.FeatureProvider import FeatureProvider
+from app.dataset.LabelsProvider import LabelsProvider
+from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
 from app.model.CalendarEntry import CalendarEntry
 from app.model.PriceQuote import PriceQuote
+from multiprocessing import Pool
 
 
 class DataSetProvider(object):
@@ -16,7 +17,9 @@ class DataSetProvider(object):
     prep_data_provider = PreProcessedDataProvider()
     feature_provider = FeatureProvider()
     labels_provider = LabelsProvider()
-    data_visualizer = DataVisualizer()
+    # data_visualizer = DataVisualizer()
+
+    price_news_map = {}
 
     def prepare_single_data_set(self, calendar_entry: CalendarEntry, price_quotes: List[PriceQuote], currency_pair: str):
         return self.__get_news_matrix(self.data_frames_from_records([calendar_entry], price_quotes, currency_pair)[1])
@@ -55,9 +58,7 @@ class DataSetProvider(object):
         x_test_all = []
         y_test_all = []
 
-        price_news_map = {}
-
-        # symbol_pairs = symbol_pairs[3:5]
+        # currency_pairs = currency_pairs[3:9]
 
         for currency_pair in currency_pairs:
 
@@ -65,35 +66,35 @@ class DataSetProvider(object):
 
             symbol_pair_str = currency_pair[0] + currency_pair[1]
 
-            if symbol_pair_str not in price_news_map.keys():
-                price_news_map[symbol_pair_str] = {}
+            if symbol_pair_str not in self.price_news_map.keys():
+                self.price_news_map[symbol_pair_str] = {}
 
-            price_news_map[symbol_pair_str]['prices'] = self.prep_data_provider.get_price_data(currency_pair[0],
+            self.price_news_map[symbol_pair_str]['prices'] = self.prep_data_provider.get_price_data(currency_pair[0],
                                                                                           currency_pair[1])
-            price_news_map[symbol_pair_str]['news'] = self.prep_data_provider.get_news_data(
-                price_news_map[symbol_pair_str]['prices'].index[0], currency_pair[0], currency_pair[1])
+            self.price_news_map[symbol_pair_str]['news'] = self.prep_data_provider.get_news_data(
+                self.price_news_map[symbol_pair_str]['prices'].index[0], currency_pair[0], currency_pair[1])
+
+        for currency_pair in currency_pairs:
+
+            symbol_pair_str = currency_pair[0] + currency_pair[1]
+            self.price_news_map[symbol_pair_str]['news'] = self.prep_data_provider.scale_news_data(self.price_news_map[symbol_pair_str]['news'])
+
+        pool = Pool()
+        result_map = {}
+
+        self.prep_data_provider.save_scale_map()
 
         for currency_pair in currency_pairs:
 
             symbol_pair_str = currency_pair[0] + currency_pair[1]
 
-            prices = price_news_map[symbol_pair_str]['prices']
-            news = price_news_map[symbol_pair_str]['news']
-            news = self.prep_data_provider.scale_news_data(news)
-            news = self.feature_provider.add_preceding_price_feature(prices, news)
+            result_map[symbol_pair_str] = pool.apply_async(self.get_currency_pair_data_set, [symbol_pair_str, self.price_news_map])
 
-            # TODO features:
-            # - rolling mean instead of price mean(?)
-            # - volume (we don't have the data)
-            # - rolling mean in last 24, 12, 6, now ?
-            # OR recurrent neural network
-            # + news as additional feature
+        for currency_pair in currency_pairs:
 
-            labels = self.labels_provider.get_labels(prices, news)
+            symbol_pair_str = currency_pair[0] + currency_pair[1]
 
-            # self.data_visualizer.visualize(prices, news, labels)
-
-            x_train, y_train, x_test, y_test = self.__get_full_data_set(news, labels)
+            x_train, y_train, x_test, y_test = result_map[symbol_pair_str].get()
 
             if len(x_train_all) is 0:
                 x_train_all = x_train
@@ -115,11 +116,32 @@ class DataSetProvider(object):
 
             print(len(x_train_all))
 
-        self.prep_data_provider.save_scale_map()
-
         return x_train_all, y_train_all, x_test_all, y_test_all
 
+    def get_currency_pair_data_set(self, currency_pair_str, price_news_map):
+
+        self.prep_data_provider.load_scale_map()
+
+        prices = price_news_map[currency_pair_str]['prices']
+        news = price_news_map[currency_pair_str]['news']
+
+        news = self.feature_provider.add_preceding_price_feature(prices, news)
+
+        # TODO features:
+        # - rolling mean instead of price mean(?)
+        # - volume (we don't have the data)
+        # - rolling mean in last 24, 12, 6, now ?
+        # OR recurrent neural network
+        # + news as additional feature
+
+        labels = self.labels_provider.get_labels(prices, news)
+
+        # self.data_visualizer.visualize(prices, news, labels)
+
+        return self.__get_full_data_set(news, labels)
+
     def __get_full_data_set(self, news: pd.DataFrame, labels: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+
 
         x = self.__get_news_matrix(news, len(labels))
 
