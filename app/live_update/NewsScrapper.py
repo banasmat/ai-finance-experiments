@@ -112,7 +112,7 @@ class NewsScrapper(object):
                 if calendar_entry is None and previous != '':
                     calendar_entry = CalendarEntry(currency, dt, event, actual, forecast, previous)
                     session.add(calendar_entry)
-                elif calendar_entry.actual == '' and actual != '':
+                elif actual != '' and len(calendar_entry.signals) == 0:
                     calendar_entry.actual = actual
                     calendar_entry.updated_at = datetime.datetime.now()
                     calendar_event = CalendarEntryUpdatedEvent(calendar_entry)
