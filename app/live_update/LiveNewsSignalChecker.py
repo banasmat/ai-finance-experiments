@@ -54,6 +54,8 @@ class LiveNewsSignalChecker(object):
 
             if len(quotes) > 0:
                 data_set = self.data_set_provider.prepare_single_data_set(calendar_entry, quotes, symbol)
+                if data_set.shape[0] == 0:
+                    continue
                 prediction = self.nn.predict(data_set[0])
                 # print(data_set[0])
                 if math.isnan(prediction):
@@ -71,7 +73,7 @@ class LiveNewsSignalChecker(object):
                 .filter_by(symbol=symbol, calendar_entry=calendar_entry)\
                 .first()
 
-            if existing_signal is None:
+            if existing_signal is None and prediction:
                 signal = Signal(prediction, symbol, calendar_entry)
                 session.add(signal)
 

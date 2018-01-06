@@ -72,6 +72,8 @@ class PreProcessedDataProvider(object):
 
     def scale_news_data(self, news: pd.DataFrame) -> pd.DataFrame:
 
+        news = news.loc[news['title'].isin(self.get_all_titles())]
+
         for key in ['forecast', 'previous']:
             self.scale_map[key] = dict(map(self.__reduce_to_min_and_max, self.scale_map[key].items()))
             news = news.apply(lambda row: self.__scale_values(row, key), axis=1)
@@ -155,6 +157,11 @@ class PreProcessedDataProvider(object):
         return values[0], [_min, _max]
 
     def __scale_values(self, row, key, max_value=1):
+
+        if row['title'] not in self.scale_map[key]:
+            print('x')
+            return None
+
         if row[key] is None:
             scaled = 0
         else:
