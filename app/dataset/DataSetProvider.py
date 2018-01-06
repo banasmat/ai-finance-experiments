@@ -58,7 +58,7 @@ class DataSetProvider(object):
         x_test_all = []
         y_test_all = []
 
-        # currency_pairs = currency_pairs[3:9]
+        # currency_pairs = currency_pairs[7:8]
 
         for currency_pair in currency_pairs:
 
@@ -142,7 +142,6 @@ class DataSetProvider(object):
 
     def __get_full_data_set(self, news: pd.DataFrame, labels: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
 
-
         x = self.__get_news_matrix(news, len(labels))
 
         # all_labels = LabelsProvider.get_all_labels()
@@ -160,12 +159,18 @@ class DataSetProvider(object):
         return x_tra, y_tra, x_tes, y_tes
 
     def __get_news_matrix(self, news: pd.DataFrame, max_len=1):
+        ordered_cols = ['datetime', 'symbol', 'title', 'actual', 'forecast', 'previous', 'symbol_pair', 'preceding_price']
+        news = news[ordered_cols]
 
         all_titles = self.prep_data_provider.get_all_titles()
         all_pairs = self.prep_data_provider.get_currency_pair_strings()
         all_currencies = self.prep_data_provider.get_all_currencies()
 
         news = news.reset_index(drop=True)
+        #
+        # print(news.iloc[11717].tolist())
+        # print(news.iloc[11718].tolist())
+        # print(news.iloc[11719].tolist())
 
         # news = self.__one_hot_from_all_items(news, 'preceding_price', all_labels)
         news['preceding_price'].apply(lambda x: x * 10)
@@ -173,6 +178,10 @@ class DataSetProvider(object):
         news = self.__one_hot_from_all_items(news, 'symbol_pair', all_pairs)
         news = self.__one_hot_from_all_items(news, 'title', all_titles)
 
+        # print(news.iloc[11717].tolist())
+        # print(news.iloc[11718].tolist())
+        # print(news.iloc[11719].tolist())
+        # quit()
         news = news.drop('datetime', 1)
         return news.as_matrix()[:max_len]
 

@@ -7,8 +7,8 @@ fetcher = OandaHistoryPriceFetcher()
 # _from = _to - datetime.timedelta(days=2)
 
 
-_to = datetime.datetime.strptime('Sep 29 2017  1:00AM', '%b %d %Y %I:%M%p')
-_from = _to - datetime.timedelta(days=20)
+_to = datetime.datetime.strptime('Mar 16 2017  1:00AM', '%b %d %Y %I:%M%p')
+_from = _to - datetime.timedelta(days=5)
 
 
-fetcher.fetch(_from, _to, 'M1', 'EURUSD')
+fetcher.fetch(_from, _to, 'M1', 'AUDUSD')
