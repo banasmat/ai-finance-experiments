@@ -14,5 +14,5 @@ x_test = x_test.round(0)
 nn = KerasNeuralNetwork()
 
 if __name__ == "__main__":
-    # nn.train(x_train, y_train, x_test, y_test)
+    nn.train(x_train, y_train, x_test, y_test)
     print('\naccuracy', nn.test(x_test, y_test))
