@@ -72,6 +72,9 @@ class PreProcessedDataProvider(object):
 
     def scale_news_data(self, news: pd.DataFrame) -> pd.DataFrame:
 
+        # Rounding to previous hour - now we don't need 1M price data, but 1H TODO news timezone seems to me ok (utc) how about training prices???
+        news = news.apply(lambda row: row['datetime'].replace(microsecond=0, second=0, minute=0), axis=1)
+
         news = news.loc[news['title'].isin(self.get_all_titles())]
 
         for key in ['forecast', 'previous']:
