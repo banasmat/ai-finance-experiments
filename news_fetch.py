@@ -34,12 +34,12 @@ def run():
     # if len(entries_to_update) is 0 or est_to_utc(entries_to_update[0].datetime) <= _to:
     #     scrapper = NewsScrapper()
     #     scrapper.run(entries_to_update[0].datetime)
-    # scrapper = NewsScrapper()
-    # scrapper.run(datetime.datetime.strptime('Jul 20 2017  1:00AM', '%b %d %Y %I:%M%p'), datetime.datetime.strptime('Jul 20 2017  11:00PM', '%b %d %Y %I:%M%p'))
+    scrapper = NewsScrapper()
+    scrapper.run(datetime.datetime.strptime('Jan 4 2017  1:00AM', '%b %d %Y %I:%M%p'), datetime.datetime.strptime('Jan 6 2017  11:00PM', '%b %d %Y %I:%M%p'))
     # #
     # test_entry = session.query(CalendarEntry).filter(CalendarEntry.id == 2405).first()
-    for test_entry in entries_to_update:
-        LiveNewsSignalChecker.get_instance().check(test_entry)
+    # for test_entry in entries_to_update:
+    #     LiveNewsSignalChecker.get_instance().check(test_entry)
 
 def est_to_utc(_datetime):
     return _datetime.replace(tzinfo=pytz.timezone('US/Eastern')).astimezone(pytz.utc)
