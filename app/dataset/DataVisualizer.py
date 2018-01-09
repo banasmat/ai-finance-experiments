@@ -93,7 +93,7 @@ class DataVisualizer(object):
         plots = [trace0, trace1, trace2, trace3, trace4]
 
         if show_zeros:
-            plots.add(trace5)
+            plots.append(trace5)
 
         py.plot(plots, filename=filename)
 
@@ -109,9 +109,6 @@ class DataVisualizer(object):
         news_ys = []
 
         for price_datetime, price in prices.iterrows():
-            #
-            # if isinstance(price_datetime, str) or np.math.isnan(price):
-            #     continue
 
             if not news_labels.loc[news_labels.index == price_datetime].empty:
                 news_ys.append(price[0])

@@ -40,7 +40,7 @@ class DataSetProvider(object):
         prices.index = prices.pop('datetime')
 
         prices['mean'] = (prices.pop('high') + prices.pop('low')) / 2
-        prices = prices['mean'].resample('1H').mean()
+        prices['mean'] = prices['mean'].resample('1H').mean()
 
         for key in ['actual', 'forecast', 'previous']:
             news[key] = news[key].apply(self.prep_data_provider.normalize_numeric_string_value)
