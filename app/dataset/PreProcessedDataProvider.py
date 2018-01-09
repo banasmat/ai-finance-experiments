@@ -7,26 +7,26 @@ import pickle
 
 class PreProcessedDataProvider(object):
     res_dir = 'resources/'
-    price_res_dir = 'resources/prices/'
+    price_res_dir = 'resources/oanda_prices/'
     scale_map = {}
 
     @staticmethod
     def get_currency_pair_strings() -> List:
         pairs = []
         for filename in os.listdir(PreProcessedDataProvider.price_res_dir):
-            if filename.endswith('.txt'):
+            if filename.endswith('.csv'):
                 pairs.append(filename[:-4])
 
         return pairs
 
     def get_currency_pairs(self) -> np.chararray:
 
-        pairs_len = len([filename for filename in os.listdir(self.price_res_dir) if filename.endswith('.txt')])
+        pairs_len = len([filename for filename in os.listdir(self.price_res_dir) if filename.endswith('.csv')])
         pairs = np.chararray((pairs_len, 2), itemsize=3, unicode=True)
         i = 0
 
         for filename in os.listdir(self.price_res_dir):
-            if filename.endswith('.txt'):
+            if filename.endswith('.csv'):
                 fname = filename[:-4]
                 pairs[i][0] = fname[:-3]
                 pairs[i][1] = fname[3:]
@@ -38,12 +38,17 @@ class PreProcessedDataProvider(object):
         return list(set(self.get_currency_pairs().flatten().tolist()))
 
     def get_price_data(self, symbol_1: str, symbol_2: str) -> pd.DataFrame:
+        #
+        # prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.txt', sep=',', dtype=str,
+        #                      usecols=('<DTYYYYMMDD>', '<TIME>', '<HIGH>', '<LOW>'))
+        # prices.index = pd.to_datetime(prices.pop('<DTYYYYMMDD>').astype(str) + prices.pop('<TIME>').astype(str), format='%Y%m%d%H%M%S')
+        # prices['mean'] = (pd.to_numeric(prices.pop('<HIGH>')) + pd.to_numeric(prices.pop('<LOW>'))) / 2
+        # prices = prices['mean'].resample('1H').mean()
 
-        prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.txt', sep=',', dtype=str,
-                             usecols=('<DTYYYYMMDD>', '<TIME>', '<HIGH>', '<LOW>'))
-        prices.index = pd.to_datetime(prices.pop('<DTYYYYMMDD>').astype(str) + prices.pop('<TIME>').astype(str), format='%Y%m%d%H%M%S')
-        prices['mean'] = (pd.to_numeric(prices.pop('<HIGH>')) + pd.to_numeric(prices.pop('<LOW>'))) / 2
-        prices = prices['mean'].resample('1H').mean()
+        prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.csv', sep=',', dtype=str, usecols=[0, 3, 4])
+        prices.columns = ['datetime', 'high', 'low']
+        prices.index = pd.to_datetime(prices.pop('datetime').astype(str), format='%Y-%m-%dT%H:%M:%S')
+        prices['mean'] = (pd.to_numeric(prices.pop('high')) + pd.to_numeric(prices.pop('low'))) / 2
 
         return prices
 
@@ -73,7 +78,7 @@ class PreProcessedDataProvider(object):
     def scale_news_data(self, news: pd.DataFrame) -> pd.DataFrame:
 
         # Rounding to previous hour - now we don't need 1M price data, but 1H TODO news timezone seems to me ok (utc) how about training prices???
-        news = news.apply(lambda row: row['datetime'].replace(microsecond=0, second=0, minute=0), axis=1)
+        news['datetime'] = news.apply(lambda row: row['datetime'].replace(microsecond=0, second=0, minute=0), axis=1)
 
         news = news.loc[news['title'].isin(self.get_all_titles())]
 

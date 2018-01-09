@@ -20,6 +20,7 @@ data_set_provider = DataSetProvider()
 if __name__ == '__main__':
     x_train_all, y_train_all, x_test_all, y_test_all = data_set_provider.prepare_full_data_set()
     print(x_train_all)
+
     np.save('output/x_train_all.npy', x_train_all)
     np.save('output/y_train_all.npy', y_train_all)
     np.save('output/x_test_all.npy', x_test_all)

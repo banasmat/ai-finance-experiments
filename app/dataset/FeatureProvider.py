@@ -32,9 +32,9 @@ class FeatureProvider:
             if i > 100:
                 break
 
-            price_when_news_happens = prices_preceding_news[-1]
+            price_when_news_happens = prices_preceding_news['mean'][-1]
 
-            price_mean_in_affected_period = prices_preceding_news.mean()
+            price_mean_in_affected_period = prices_preceding_news.mean()[0]
 
             diff = price_mean_in_affected_period - price_when_news_happens
 

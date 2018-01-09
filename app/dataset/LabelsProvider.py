@@ -32,9 +32,9 @@ class LabelsProvider(object):
             if i > 100:
                 break
 
-            price_when_news_happens = prices_affected_by_news[0]
+            price_when_news_happens = prices_affected_by_news['mean'][0]
 
-            price_mean_in_affected_period = prices_affected_by_news.mean()
+            price_mean_in_affected_period = prices_affected_by_news.mean()[0]
 
             diff = price_mean_in_affected_period - price_when_news_happens
 

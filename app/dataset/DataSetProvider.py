@@ -58,7 +58,7 @@ class DataSetProvider(object):
         x_test_all = []
         y_test_all = []
 
-        # currency_pairs = currency_pairs[7:8]
+        # currency_pairs = currency_pairs[:1]
 
         for currency_pair in currency_pairs:
 
