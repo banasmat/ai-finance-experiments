@@ -12,7 +12,7 @@ class DataVisualizer(object):
     def __init__(self):
         plotly.tools.set_credentials_file(username='banasmat', api_key='La513i6uVpqf7qAHQnCD')
 
-    def visualize(self, prices, news, labels, filename):
+    def visualize(self, prices, news, labels, filename, show_zeros=True):
 
         news = news.iloc[:len(labels)]
         news_labels = pd.DataFrame(labels)
@@ -90,7 +90,12 @@ class DataVisualizer(object):
             name='news - no movement signals'
         )
 
-        py.plot([trace0, trace1, trace2, trace3, trace4, trace5], filename=filename)
+        plots = [trace0, trace1, trace2, trace3, trace4]
+
+        if show_zeros:
+            plots.add(trace5)
+
+        py.plot(plots, filename=filename)
 
         return
 
@@ -103,10 +108,13 @@ class DataVisualizer(object):
 
         news_ys = []
 
-        for price_datetime, price in prices.iteritems():
+        for price_datetime, price in prices.iterrows():
+            #
+            # if isinstance(price_datetime, str) or np.math.isnan(price):
+            #     continue
 
             if not news_labels.loc[news_labels.index == price_datetime].empty:
-                news_ys.append(price)
+                news_ys.append(price[0])
             else:
                 news_ys.append(None)
 
