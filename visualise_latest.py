@@ -23,8 +23,8 @@ def run():
 
     now = datetime.datetime.now()
 
-    date_from = now - datetime.timedelta(days=385)
-    date_to = now - datetime.timedelta(days=365)
+    date_from = now - datetime.timedelta(days=365)
+    date_to = now
 
     entries_and_signals = session.query(CalendarEntry, Signal) \
         .join(CalendarEntry.signals)\
