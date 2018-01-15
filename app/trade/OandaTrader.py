@@ -15,6 +15,7 @@ class OandaTrader(object):
         currency_pair = currency_pair[:3] + '_' + currency_pair[-3:]
 
         access_token = Config.get('oanda')['api_key']
+        account_id = Config.get('oanda')['account_id']
 
         api = oandapyV20.API(access_token=access_token)
 
@@ -25,7 +26,7 @@ class OandaTrader(object):
             stopLossOnFill=StopLossDetails(price=stop_loss).data)
 
         # create the OrderCreate request
-        r = orders.OrderCreate(access_token, data=mkt_order.data)
+        r = orders.OrderCreate(account_id, data=mkt_order.data)
         try:
             # create the OrderCreate request
             rv = api.request(r)
