@@ -45,11 +45,19 @@ class PreProcessedDataProvider(object):
         # prices['mean'] = (pd.to_numeric(prices.pop('<HIGH>')) + pd.to_numeric(prices.pop('<LOW>'))) / 2
         # prices = prices['mean'].resample('1H').mean()
 
-        prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.csv', sep=',', dtype=str, usecols=[0, 3, 4])
-        prices.columns = ['datetime', 'high', 'low']
-        prices.index = pd.to_datetime(prices.pop('datetime').astype(str), format='%Y-%m-%dT%H:%M:%S')
+        prices = self.get_price_records(symbol_1, symbol_2, [0, 3, 4])
         prices['mean'] = (pd.to_numeric(prices.pop('high')) + pd.to_numeric(prices.pop('low'))) / 2
 
+        return prices
+
+    def get_price_records(self, symbol_1, symbol_2, usecols=[0, 1, 2, 3, 4, 5, 6]):
+        prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.csv', sep=',', dtype=str, usecols=usecols)
+        all_cols = ['datetime', 'active', 'open', 'high', 'low', 'close', 'volume']
+        cols = []
+        for i in usecols:
+            cols.append(all_cols[i])
+        prices.columns = cols
+        prices.index = pd.to_datetime(prices.pop('datetime').astype(str), format='%Y-%m-%dT%H:%M:%S')
         return prices
 
     def get_news_data(self, from_datetime: pd.Timestamp, symbol_1: str, symbol_2: str) -> pd.DataFrame:
