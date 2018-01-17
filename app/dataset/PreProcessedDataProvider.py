@@ -52,12 +52,13 @@ class PreProcessedDataProvider(object):
 
     def get_price_records(self, symbol_1, symbol_2, usecols=[0, 1, 2, 3, 4, 5, 6]):
         prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.csv', sep=',', dtype=str, usecols=usecols)
-        all_cols = ['datetime', 'active', 'open', 'high', 'low', 'close', 'volume']
+        all_cols = ['datetime', 'finished', 'open', 'high', 'low', 'close', 'volume']
         cols = []
         for i in usecols:
             cols.append(all_cols[i])
         prices.columns = cols
-        prices.index = pd.to_datetime(prices.pop('datetime').astype(str), format='%Y-%m-%dT%H:%M:%S')
+        if 'datetime' in prices.columns:
+            prices.index = pd.to_datetime(prices.pop('datetime').astype(str), format='%Y-%m-%dT%H:%M:%S')
         return prices
 
     def get_news_data(self, from_datetime: pd.Timestamp, symbol_1: str, symbol_2: str) -> pd.DataFrame:
