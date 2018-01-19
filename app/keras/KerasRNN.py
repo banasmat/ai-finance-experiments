@@ -25,6 +25,11 @@ class KerasRNN(object):
         predicted_stock_price = regressor.predict(x_test)
         # predicted_stock_price = sc.inverse_transform(predicted_stock_price)
 
+    def test(self, x_test, y_test):
+        regressor = self.create_model(x_test)
+        regressor.load_weights(os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'rnn_model.h5'))
+        #TODO
+
     def train(self, x_train, y_train):
         regressor = self.create_model(x_train)
         regressor.fit(x_train, y_train, epochs=100, batch_size=32)
