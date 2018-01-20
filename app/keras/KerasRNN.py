@@ -10,27 +10,11 @@ class KerasRNN(object):
     model_path = os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'rnn_model.h5')
 
     def predict(self, x_test: np.array):
-        # inputs = dataset_total[len(dataset_total) - len(dataset_test) - 60:].values
-        # inputs = inputs.reshape(-1, 1)
-        # inputs = sc.transform(inputs)
-        #
-        # x_test = []
-        # for i in range(60, 80):
-        #     x_test.append(inputs[i - 60:i, 0])
-        # x_test = np.array(x_test)
-        #
-        # x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], num_of_helper_indicators))
 
         regressor = self.create_model(x_test)
         regressor.load_weights(self.model_path)
 
-        predicted_stock_price = regressor.predict(x_test)
-        # predicted_stock_price = sc.inverse_transform(predicted_stock_price)
-
-    def test(self, x_test, y_test):
-        regressor = self.create_model(x_test)
-        regressor.load_weights(os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'rnn_model.h5'))
-        #TODO
+        return regressor.predict(x_test)
 
     def train(self, x_train, y_train):
         regressor = self.create_model(x_train)

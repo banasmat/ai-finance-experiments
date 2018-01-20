@@ -7,25 +7,29 @@ class RNNDatasetProvider(object):
 
     scaler_map = {}
 
-    def prepare_dataset(self, training_set: pd.DataFrame, lstm_length=120):
+    def prepare_dataset(self, prices: pd.DataFrame, main_col_name='close', lstm_length=120) -> (np.array, np.array):
 
-        training_set.is_copy = False
+        price_dataset: pd.DataFrame = prices.copy()
 
-        for col in training_set.columns:
+        for col in price_dataset.columns:
 
             if col not in self.scaler_map:
                 self.scaler_map[col] = MinMaxScaler(feature_range=(0, 1))
-            training_set[col] = self.scaler_map[col].fit_transform(training_set.loc[:, col].values.reshape(-1, 1))
+            price_dataset[col] = self.scaler_map[col].fit_transform(price_dataset.loc[:, col].values.reshape(-1, 1))
 
-        # cols_order = ['close', 'open', 'high', 'low', 'volume']
-        cols_order = ['close', 'volume']
-        training_set = training_set[cols_order]
+        # Moving main column to front
+        cols_order = price_dataset.columns.tolist()
+        cols_order.insert(0, cols_order.pop(cols_order.index(main_col_name)))
+        price_dataset = price_dataset[cols_order]
 
-        x_train = np.empty((training_set.shape[0], lstm_length, len(training_set.columns)))
-        y_train = np.empty((training_set.shape[0], 1))
+        x_train = np.empty((price_dataset.shape[0], lstm_length, len(price_dataset.columns)))
+        y_train = np.empty((price_dataset.shape[0], 1))
 
-        for i in range(lstm_length, len(training_set)):
-            x_train[i] = training_set.iloc[i - lstm_length:i].as_matrix()
-            y_train[i] = training_set['close'][i]
+        for i in range(lstm_length, len(price_dataset)):
+            x_train[i] = price_dataset.iloc[i - lstm_length:i].as_matrix()
+            y_train[i] = price_dataset[main_col_name][i]
 
         return x_train, y_train
+
+    def unscale_predictions(self, predictions, main_col_name='close'):
+        return self.scaler_map[main_col_name].inverse_transform(predictions)
