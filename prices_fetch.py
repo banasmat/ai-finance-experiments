@@ -5,8 +5,6 @@ import datetime
 
 
 def run():
-    from app.live_update.OandaHistoryPriceFetcher import OandaHistoryPriceFetcher
-    import datetime
 
     fetcher = OandaHistoryPriceFetcher()
 
