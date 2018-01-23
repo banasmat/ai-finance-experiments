@@ -28,7 +28,7 @@ def run():
     fetcher.fetch_to_file(predict_from, _to, 'H1', currency_pair)
 
     # process train data to get right scalers
-    prices = prep_data_provider.get_price_records(curr_1, curr_2, ('datetime', 'close', 'volume'))
+    prices = prep_data_provider.get_price_records(curr_1, curr_2, ('datetime', 'close', 'high', 'low', 'volume'))
     date_from = datetime.datetime.strptime('2005-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
     all_prices = prices.loc[(prices.index > date_from) & (prices.index < _to)]
     all_xs, all_ys = dataset_provider.prepare_dataset(all_prices, lstm_length=lstm_length)
@@ -50,8 +50,8 @@ def run():
     print(real_prices[-1:])
     print(predictions[-1:])
 
-    plt.plot(real_prices[-10:], color='red', label='Real EURUSD Price')
-    plt.plot(predictions[-11:], color='blue', label='Predicted EURUSD Price')
+    plt.plot(real_prices[-30:], color='red', label='Real EURUSD Price')
+    plt.plot(predictions[-31:], color='blue', label='Predicted EURUSD Price')
     plt.grid(which='both')
     plt.title('EURUSD Price Prediction')
     plt.xlabel('Time')
