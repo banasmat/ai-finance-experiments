@@ -15,7 +15,7 @@ def run():
 
     for currency_pair in currency_pairs:
         try:
-            fetcher.fetch(_from, _to, 'H1', currency_pair)
+            fetcher.fetch_to_db(_from, _to, 'H1', currency_pair)
         except Exception as e:
             with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'price-fetcher-errors.txt'),"a") as f:
                 f.writelines('ERROR OCCURRED AT: ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n' + str(e) + '\n\n')
