@@ -56,10 +56,15 @@ class OandaHistoryPriceFetcher:
                 all_lines = O.readlines()
                 last_line = all_lines[len(all_lines) - 1]
                 last_dt = datetime.datetime.strptime(last_line[0:19], self.date_format_out)
-                #FIXME get timedelta from gran param
-                _from = last_dt + datetime.timedelta(hours=1)
 
-        print(_from)
+                if gran == '1H':
+                    delta = datetime.timedelta(hours=1)
+                elif gran == '1D':
+                    delta = datetime.timedelta(days=1)
+                else:
+                    delta = datetime.timedelta(minutes=1)
+
+                _from = last_dt + delta
 
         instr = symbol[:3] + '_' + symbol[-3:]
 

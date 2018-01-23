@@ -4,6 +4,7 @@ from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
 from app.dataset.RNNDatasetProvider import RNNDatasetProvider
 from app.keras.KerasRNN import KerasRNN
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def run():
@@ -18,46 +19,40 @@ def run():
     curr_1 = 'EUR'
     curr_2 = 'USD'
 
-    # process train data to get right scalers
-    # TODO save scaler to file instead
-    prices = prep_data_provider.get_price_records(curr_1, curr_2, [0, 5, 6])
-    date_from = datetime.datetime.strptime('2005-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
-    date_to = datetime.datetime.now() - datetime.timedelta(weeks=4)
-    train_prices = prices.loc[(prices.index > date_from) & (prices.index < date_to)]
-    x_train, y_train = dataset_provider.prepare_dataset(train_prices, lstm_length=lstm_length)
-    #
-    # print(train_prices)
-    # print(x_train)
-
     # fetch data for predicting
     _to = datetime.datetime.now(tz=datetime.timezone.utc) - datetime.timedelta(minutes=5)
-    _from = _to - datetime.timedelta(hours=lstm_length+1)
+    predict_from = _to - datetime.timedelta(hours=lstm_length+1)
 
     currency_pair = curr_1 + curr_2
 
-    prices = fetcher.fetch_to_file(_from, _to, 'H1', currency_pair)
+    fetcher.fetch_to_file(predict_from, _to, 'H1', currency_pair)
 
-    quit()
+    # process train data to get right scalers
+    prices = prep_data_provider.get_price_records(curr_1, curr_2, [0, 5, 6])
+    date_from = datetime.datetime.strptime('2005-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
+    all_prices = prices.loc[(prices.index > date_from) & (prices.index < _to)]
+    all_xs, all_ys = dataset_provider.prepare_dataset(all_prices, lstm_length=lstm_length)
 
-    prices.drop(['open', 'high', 'low'], axis=1, inplace=True)
-    x_test, y_test = dataset_provider.prepare_dataset(prices, lstm_length=lstm_length)
+    x_test = all_xs[-(lstm_length+1):]
+    scaled_predictions = nn.predict(x_test)
+    predictions = dataset_provider.unscale_predictions(scaled_predictions)
+
+    y_test = all_ys[-lstm_length:]
+    real_prices = dataset_provider.unscale_predictions(y_test)
 
     # print(prices)
     # print(x_test)
     # quit()
 
-    scaled_predictions = nn.predict(x_test)
+    print(len(real_prices))
+    print(len(predictions))
 
-    print(scaled_predictions[0])
+    print(real_prices[-1:])
+    print(predictions[-1:])
 
-    # print(scaled_predictions)
-    quit()
-    predictions = dataset_provider.unscale_predictions(scaled_predictions)
-
-    real_prices = dataset_provider.unscale_predictions(y_test)
-
-    plt.plot(real_prices, color='red', label='Real EURUSD Price')
-    plt.plot(predictions, color='blue', label='Predicted EURUSD Price')
+    plt.plot(real_prices[-10:], color='red', label='Real EURUSD Price')
+    plt.plot(predictions[-11:], color='blue', label='Predicted EURUSD Price')
+    plt.grid(which='both')
     plt.title('EURUSD Price Prediction')
     plt.xlabel('Time')
     plt.ylabel('EURUSD Price')
