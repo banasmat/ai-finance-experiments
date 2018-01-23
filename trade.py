@@ -28,7 +28,7 @@ def run():
     fetcher.fetch_to_file(predict_from, _to, 'H1', currency_pair)
 
     # process train data to get right scalers
-    prices = prep_data_provider.get_price_records(curr_1, curr_2, [0, 5, 6])
+    prices = prep_data_provider.get_price_records(curr_1, curr_2, ('datetime', 'close', 'volume'))
     date_from = datetime.datetime.strptime('2005-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
     all_prices = prices.loc[(prices.index > date_from) & (prices.index < _to)]
     all_xs, all_ys = dataset_provider.prepare_dataset(all_prices, lstm_length=lstm_length)

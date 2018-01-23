@@ -38,25 +38,21 @@ class PreProcessedDataProvider(object):
         return list(set(self.get_currency_pairs().flatten().tolist()))
 
     def get_price_data(self, symbol_1: str, symbol_2: str) -> pd.DataFrame:
-        #
-        # prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.txt', sep=',', dtype=str,
-        #                      usecols=('<DTYYYYMMDD>', '<TIME>', '<HIGH>', '<LOW>'))
-        # prices.index = pd.to_datetime(prices.pop('<DTYYYYMMDD>').astype(str) + prices.pop('<TIME>').astype(str), format='%Y%m%d%H%M%S')
-        # prices['mean'] = (pd.to_numeric(prices.pop('<HIGH>')) + pd.to_numeric(prices.pop('<LOW>'))) / 2
-        # prices = prices['mean'].resample('1H').mean()
-
-        prices = self.get_price_records(symbol_1, symbol_2, [0, 3, 4])
+        prices = self.get_price_records(symbol_1, symbol_2, ('datetime', 'high', 'low'))
         prices['mean'] = (pd.to_numeric(prices.pop('high')) + pd.to_numeric(prices.pop('low'))) / 2
 
         return prices
 
-    def get_price_records(self, symbol_1, symbol_2, usecols=[0, 1, 2, 3, 4, 5, 6]):
-        prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.csv', sep=',', dtype=str, usecols=usecols)
-        all_cols = ['datetime', 'finished', 'open', 'high', 'low', 'close', 'volume']
-        cols = []
-        for i in usecols:
-            cols.append(all_cols[i])
-        prices.columns = cols
+    def get_price_records(self, symbol_1, symbol_2, usecols=('datetime', 'finished', 'open', 'high', 'low', 'close', 'volume')):
+
+        col_indexes = []
+        all_cols=['datetime', 'finished', 'open', 'high', 'low', 'close', 'volume']
+        for col in usecols:
+            col_indexes.append(all_cols.index(col))
+
+        prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.csv', sep=',', dtype=str, usecols=col_indexes)
+        prices.columns = usecols
+
         if 'datetime' in prices.columns:
             prices.index = pd.to_datetime(prices.pop('datetime').astype(str), format='%Y-%m-%dT%H:%M:%S')
         return prices
