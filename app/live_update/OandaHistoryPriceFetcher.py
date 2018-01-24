@@ -47,7 +47,7 @@ class OandaHistoryPriceFetcher:
 
         return df
 
-    def fetch_to_file(self, _from: datetime.datetime, _to: datetime.datetime, gran: str, symbol: str):
+    def fetch_to_file(self, _from: datetime.datetime, _to: datetime.datetime, gran='H1', symbol='EURUSD'):
         file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'oanda_prices', symbol + '.csv')
         mode = 'w'
         if(os.path.isfile(file_path)):
@@ -57,12 +57,12 @@ class OandaHistoryPriceFetcher:
                 last_line = all_lines[len(all_lines) - 1]
                 last_dt = datetime.datetime.strptime(last_line[0:19], self.date_format_out)
 
-                if gran == '1H':
-                    delta = datetime.timedelta(hours=1)
-                elif gran == '1D':
+                if gran == 'M1':
+                    delta = datetime.timedelta(minutes=1)
+                elif gran == 'D1':
                     delta = datetime.timedelta(days=1)
                 else:
-                    delta = datetime.timedelta(minutes=1)
+                    delta = datetime.timedelta(hours=1)
 
                 _from = last_dt + delta
 
@@ -98,7 +98,7 @@ class OandaHistoryPriceFetcher:
             except Exception as e:
                 print(e, r)
             else:
-                h.write(rec + "\n")
+                h.write("\n" + rec)
 
     def fetch_to_db(self, _from: datetime.datetime, _to: datetime.datetime, gran: str, symbol: str):
 

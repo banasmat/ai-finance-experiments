@@ -4,6 +4,7 @@ from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
 from app.dataset.RNNDatasetProvider import RNNDatasetProvider
 from app.keras.KerasRNN import KerasRNN
 import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 
 
@@ -36,7 +37,8 @@ def run():
     x_test = all_xs[-(lstm_length+1):]
     scaled_predictions = nn.predict(x_test)
     predictions = dataset_provider.unscale_predictions(scaled_predictions)
-
+    print(len(x_test))
+    print(len(predictions))
     y_test = all_ys[-lstm_length:]
     real_prices = dataset_provider.unscale_predictions(y_test)
 
@@ -44,18 +46,20 @@ def run():
     # print(x_test)
     # quit()
 
-    print(len(real_prices))
-    print(len(predictions))
-
-    print(real_prices[-1:])
-    print(predictions[-1:])
+    print('last price', real_prices[-1:])
+    print('last prediction', predictions[-1:])
+    dates = prices.loc[(prices.index > (_to - datetime.timedelta(hours=30))) & (prices.index < (_to + datetime.timedelta(hours=1)))].index.tolist()
+    hours = list(map(lambda date: date.strftime('%H'), dates))
+    print(hours)
 
     plt.plot(real_prices[-30:], color='red', label='Real EURUSD Price')
     plt.plot(predictions[-31:], color='blue', label='Predicted EURUSD Price')
+    # plt.plot_date(dates, predictions[-31:], color='blue', label='Predicted EURUSD Price')
     plt.grid(which='both')
     plt.title('EURUSD Price Prediction')
     plt.xlabel('Time')
     plt.ylabel('EURUSD Price')
+    plt.xticks(np.arange(31), hours)
     plt.legend()
     plt.show()
 
