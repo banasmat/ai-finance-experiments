@@ -92,12 +92,12 @@ class PreProcessedDataProvider(object):
 
         news = news.loc[news['title'].isin(self.get_all_titles())]
 
-        for key in ['forecast', 'previous']:
+        for key in ['forecast', 'previous', 'actual']:
             self.scale_map[key] = dict(map(self.__reduce_to_min_and_max, self.scale_map[key].items()))
             news = news.apply(lambda row: self.__scale_values(row, key), axis=1)
 
-        self.scale_map['actual'] = dict(map(self.__reduce_to_min_and_max, self.scale_map['actual'].items()))
-        news = news.apply(lambda row: self.__scale_values(row, 'actual', 10), axis=1)
+        # self.scale_map['actual'] = dict(map(self.__reduce_to_min_and_max, self.scale_map['actual'].items()))
+        # news = news.apply(lambda row: self.__scale_values(row, 'actual', 10), axis=1)
 
         return news
 

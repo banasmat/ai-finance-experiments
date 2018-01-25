@@ -13,20 +13,18 @@ import pytz
 
 def run():
     #TODO event subscriber should be auto initialized with every command (use framework?)
-    CalendarEventSubscriber.get_instance()
+    # CalendarEventSubscriber.get_instance()
 
     _to = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
 
     session = Connection.get_instance().get_session()
     signals = aliased(Signal)
     #TODO add some optional arg to fetch after some date
-    entries_to_update = session.query(CalendarEntry)\
-        .outerjoin(signals, CalendarEntry.signals)\
-        .filter(signals.id == None)\
-        .filter(CalendarEntry.datetime <= _to)\
-        .order_by(CalendarEntry.datetime.asc()).all()
-
-    print('calendar entries to update', len(entries_to_update))
+    # entries_to_update = session.query(CalendarEntry)\
+    #     .outerjoin(signals, CalendarEntry.signals)\
+    #     .filter(signals.id == None)\
+    #     .filter(CalendarEntry.datetime <= _to)\
+    #     .order_by(CalendarEntry.datetime.asc()).all()
 
     #TODO protect form duplicates
 
@@ -34,12 +32,12 @@ def run():
     # if len(entries_to_update) is 0 or est_to_utc(entries_to_update[0].datetime) <= _to:
     #     scrapper = NewsScrapper()
     #     scrapper.run(entries_to_update[0].datetime)
-    # scrapper = NewsScrapper()
-    # scrapper.run(datetime.datetime.strptime('Jan 4 2017  1:00AM', '%b %d %Y %I:%M%p'), datetime.datetime.strptime('Jan 6 2017  11:00PM', '%b %d %Y %I:%M%p'))
+    scrapper = NewsScrapper()
+    scrapper.run(datetime.datetime.strptime('Jan 22 2018 01:00AM', '%b %d %Y %I:%M%p'), datetime.datetime.strptime('Jan 25 2018  11:00PM', '%b %d %Y %I:%M%p'), to_file=True)
     # #
     # test_entry = session.query(CalendarEntry).filter(CalendarEntry.id == 2405).first()
-    for test_entry in entries_to_update:
-        LiveNewsSignalChecker.get_instance().check(test_entry)
+    # for test_entry in entries_to_update:
+    #     LiveNewsSignalChecker.get_instance().check(test_entry)
 
 def est_to_utc(_datetime):
     return _datetime.replace(tzinfo=pytz.timezone('US/Eastern')).astimezone(pytz.utc)
