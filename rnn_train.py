@@ -11,7 +11,7 @@ dataset_provider = RNNDatasetProvider()
 nn = KerasRNN()
 
 
-prices = prep_data_provider.get_price_records('EUR', 'USD', ('datetime', 'close', 'high', 'low', 'volume'))
+prices = prep_data_provider.get_price_records('EUR', 'USD', ('datetime', 'close', 'high', 'low'))
 date_from = datetime.datetime.strptime('2005-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
 date_to = datetime.datetime.strptime('2018-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
 
