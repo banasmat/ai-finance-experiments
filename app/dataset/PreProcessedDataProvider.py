@@ -43,18 +43,23 @@ class PreProcessedDataProvider(object):
 
         return prices
 
-    def get_price_records(self, symbol_1, symbol_2, usecols=('datetime', 'finished', 'open', 'high', 'low', 'close', 'volume')):
+    def get_price_records(self, symbol_1, symbol_2, usecols=('datetime', 'finished', 'open', 'high', 'low', 'close', 'volume'), gran='H1'):
 
         col_indexes = []
         all_cols=['datetime', 'finished', 'open', 'high', 'low', 'close', 'volume']
         for col in usecols:
             col_indexes.append(all_cols.index(col))
 
-        prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.csv', sep=',', dtype=str, usecols=col_indexes)
+        prices = pd.read_csv(self.price_res_dir + symbol_1 + symbol_2 + '.csv', sep=',', usecols=col_indexes)
         prices.columns = usecols
 
         if 'datetime' in prices.columns:
             prices.index = pd.to_datetime(prices.pop('datetime').astype(str), format='%Y-%m-%dT%H:%M:%S')
+
+        if gran == 'D1':
+            prices = prices.resample('1D').mean()
+            prices.dropna(inplace=True)
+
         return prices
 
     def get_news_data(self, from_datetime: pd.Timestamp, symbol_1: str, symbol_2: str) -> pd.DataFrame:

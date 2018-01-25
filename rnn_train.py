@@ -11,16 +11,18 @@ dataset_provider = RNNDatasetProvider()
 nn = KerasRNN()
 
 
-prices = prep_data_provider.get_price_records('EUR', 'USD', ('datetime', 'close', 'high', 'low'))
+prices = prep_data_provider.get_price_records('EUR', 'USD', ('datetime', 'close', 'high', 'low'), gran='D1')
 date_from = datetime.datetime.strptime('2005-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
 date_to = datetime.datetime.strptime('2018-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
 
 lstm_length = 120
+# gran = 'H1'
+gran = 'D1'
 
 train_prices = prices.loc[(prices.index > date_from) & (prices.index < date_to)]
 x_train, y_train = dataset_provider.prepare_dataset(train_prices, lstm_length=lstm_length)
 
-nn.train(x_train, y_train)
+# nn.train(x_train, y_train, gran)
 
 test_prices = prices.loc[prices.index > (date_to - datetime.timedelta(hours=lstm_length))]
 x_test, y_test = dataset_provider.prepare_dataset(test_prices, lstm_length=lstm_length)

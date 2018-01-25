@@ -7,7 +7,7 @@ class RNNDatasetProvider(object):
 
     scaler_map = {}
 
-    def prepare_dataset(self, prices: pd.DataFrame, main_col_name='close', lstm_length=120) -> (np.array, np.array):
+    def prepare_dataset(self, prices: pd.DataFrame, main_col_name='close', lstm_length=120, gran='1H') -> (np.array, np.array):
 
         price_dataset: pd.DataFrame = prices.copy()
 
