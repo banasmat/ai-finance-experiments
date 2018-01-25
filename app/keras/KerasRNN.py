@@ -7,19 +7,17 @@ import os
 
 class KerasRNN(object):
 
-    model_path = os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'rnn_model.h5')
-
-    def predict(self, x_test: np.array):
+    def predict(self, x_test: np.array, gran='H1'):
 
         regressor = self.create_model(x_test)
-        regressor.load_weights(self.model_path)
+        regressor.load_weights(self.__get_model_path(gran))
 
         return regressor.predict(x_test)
 
-    def train(self, x_train, y_train):
+    def train(self, x_train, y_train, gran='H1'):
         regressor = self.create_model(x_train)
         regressor.fit(x_train, y_train, epochs=60, batch_size=32)
-        regressor.save(self.model_path)
+        regressor.save(self.__get_model_path(gran))
 
     def create_model(self, x_data):
         regressor = Sequential()
@@ -43,3 +41,5 @@ class KerasRNN(object):
 
         return regressor
 
+    def __get_model_path(self, gran='H1'):
+        return os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'rnn_model_' + gran.lower() + '.h5')
