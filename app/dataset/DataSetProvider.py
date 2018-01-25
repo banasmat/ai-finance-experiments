@@ -145,7 +145,7 @@ class DataSetProvider(object):
         x = self.__get_news_matrix(news, len(labels))
 
         # all_labels = LabelsProvider.get_all_labels()
-        # labels = self.__one_hot_from_all_items(pd.DataFrame(labels), 0, all_labels)
+        # labels = self.one_hot_from_all_items(pd.DataFrame(labels), 0, all_labels)
         # y = labels.as_matrix()
         y = labels
 
@@ -172,11 +172,11 @@ class DataSetProvider(object):
         # print(news.iloc[11718].tolist())
         # print(news.iloc[11719].tolist())
 
-        # news = self.__one_hot_from_all_items(news, 'preceding_price', all_labels)
+        # news = self.one_hot_from_all_items(news, 'preceding_price', all_labels)
         news['preceding_price'].apply(lambda x: x * 10)
-        news = self.__one_hot_from_all_items(news, 'symbol', all_currencies)
-        news = self.__one_hot_from_all_items(news, 'symbol_pair', all_pairs)
-        news = self.__one_hot_from_all_items(news, 'title', all_titles)
+        news = self.one_hot_from_all_items(news, 'symbol', all_currencies)
+        news = self.one_hot_from_all_items(news, 'symbol_pair', all_pairs)
+        news = self.one_hot_from_all_items(news, 'title', all_titles)
 
         # print(news.iloc[11717].tolist())
         # print(news.iloc[11718].tolist())
@@ -187,7 +187,7 @@ class DataSetProvider(object):
 
 
     @staticmethod
-    def __one_hot_from_all_items(df: pd.DataFrame, column, all_items) -> pd.DataFrame:
+    def one_hot_from_all_items(df: pd.DataFrame, column, all_items) -> pd.DataFrame:
         # TODO consider normalizing titles further: treating simmilar as one
         one_hot = np.zeros((len(df[column]), len(all_items)), dtype=np.int)
 

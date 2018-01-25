@@ -81,7 +81,7 @@ class PreProcessedDataProvider(object):
         news = news.loc[~news['actual'].isnull()]
 
         # reversing order
-        news = news.iloc[::-1]
+        # news = news.iloc[::-1]
 
         return news
 
@@ -191,6 +191,6 @@ class PreProcessedDataProvider(object):
             # TODO check why in two cases row['actual'] is larger than previously counted max
             scaled = max_value
 
-        row[key] = float("{0:.2f}".format(scaled * 100))
+        row[key] = float("{0:.2f}".format(scaled * 10))
 
         return row
