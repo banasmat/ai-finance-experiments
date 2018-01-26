@@ -22,13 +22,16 @@ class KerasRNN(object):
     def create_model(self, x_data):
         regressor = Sequential()
 
-        regressor.add(LSTM(units=50, return_sequences=True, input_shape=(x_data.shape[1], x_data.shape[2])))
+        regressor.add(LSTM(units=100, return_sequences=True, input_shape=(x_data.shape[1], x_data.shape[2])))
         regressor.add(Dropout(0.2))
 
-        regressor.add(LSTM(units=50, return_sequences=True))
+        regressor.add(LSTM(units=100, return_sequences=True))
         regressor.add(Dropout(0.2))
 
-        regressor.add(LSTM(units=50, return_sequences=True))
+        regressor.add(LSTM(units=100, return_sequences=True))
+        regressor.add(Dropout(0.2))
+
+        regressor.add(LSTM(units=100, return_sequences=True))
         regressor.add(Dropout(0.2))
 
         regressor.add(LSTM(units=50))
