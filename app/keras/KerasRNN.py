@@ -16,7 +16,7 @@ class KerasRNN(object):
 
     def train(self, x_train, y_train, gran='H1'):
         regressor = self.create_model(x_train)
-        regressor.fit(x_train, y_train, epochs=60, batch_size=32)
+        regressor.fit(x_train, y_train, epochs=50, batch_size=32)
         regressor.save(self.__get_model_path(gran))
 
     def create_model(self, x_data):

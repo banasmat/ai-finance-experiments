@@ -16,13 +16,13 @@ nn = KerasRNN()
 
 curr_1 = 'EUR'
 curr_2 = 'USD'
+lstm_length = 120
+gran = 'H1'
 
-prices = prep_data_provider.get_price_records(curr_1, curr_2, ('datetime', 'close', 'high', 'low'), gran='D1')
+prices = prep_data_provider.get_price_records(curr_1, curr_2, ('datetime', 'close', 'high', 'low'), gran=gran)
 date_from = datetime.datetime.strptime('2005-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
 date_to = datetime.datetime.strptime('2018-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
 
-lstm_length = 120
-gran = 'H1'
 
 news = prep_data_provider.get_news_data(date_from, curr_1, curr_2)
 news = prep_data_provider.scale_news_data(news)
