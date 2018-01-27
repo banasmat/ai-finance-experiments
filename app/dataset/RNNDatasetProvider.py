@@ -38,6 +38,8 @@ class RNNDatasetProvider(object):
         news = self.prep_data_provider.get_news_data(date_from, curr_1, curr_2)
         news = self.prep_data_provider.scale_news_data(news)
 
+        pd.options.mode.chained_assignment = None
+
         #TODO consider adding title to dataset
         all_titles = self.prep_data_provider.get_all_titles()
         news.index = news['datetime'].dt.round('h')

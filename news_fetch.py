@@ -33,7 +33,7 @@ def run():
     #     scrapper = NewsScrapper()
     #     scrapper.run(entries_to_update[0].datetime)
     scrapper = NewsScrapper()
-    scrapper.run(datetime.datetime.strptime('Jan 22 2018 01:00AM', '%b %d %Y %I:%M%p'), datetime.datetime.strptime('Jan 25 2018  11:00PM', '%b %d %Y %I:%M%p'), to_file=True)
+    scrapper.run(datetime.datetime.strptime('Jan 26 2018 01:00AM', '%b %d %Y %I:%M%p'), datetime.datetime.strptime('Jan 27 2018  11:00PM', '%b %d %Y %I:%M%p'), to_file=True)
     # #
     # test_entry = session.query(CalendarEntry).filter(CalendarEntry.id == 2405).first()
     # for test_entry in entries_to_update:
