@@ -1,9 +1,12 @@
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
+from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
 
 
 class RNNDatasetProvider(object):
+
+    prep_data_provider = PreProcessedDataProvider()
 
     scaler_map = {}
 
@@ -30,6 +33,31 @@ class RNNDatasetProvider(object):
             ys[i] = price_dataset[main_col_name][i]
 
         return xs, ys
+
+    def add_news_to_dataset(self, prices, date_from, curr_1='EUR', curr_2='USD'):
+        news = self.prep_data_provider.get_news_data(date_from, curr_1, curr_2)
+        news = self.prep_data_provider.scale_news_data(news)
+
+        #TODO consider adding title to dataset
+        all_titles = self.prep_data_provider.get_all_titles()
+        news.index = news['datetime'].dt.round('h')
+        news: pd.DataFrame = news.drop(['symbol', 'symbol_pair', 'title'], axis=1)
+        # news = data_set_provider.one_hot_from_all_items(news, 'title', all_titles)
+
+        prices.loc[:, 'actual'] = 0
+        prices.loc[:, 'forecast'] = 0
+        prices.loc[:, 'previous'] = 0
+
+        for dt, price in prices.iterrows():
+            news_during_dt = news.loc[news.index == dt]
+            if len(news_during_dt) > 0:
+                prices.loc[dt, 'actual'] = news_during_dt['actual'].mean()
+                prices.loc[dt, 'forecast'] = news_during_dt['forecast'].dropna().mean()
+                prices.loc[dt, 'previous'] = news_during_dt['previous'].dropna().mean()
+
+        prices.fillna(0, inplace=True)
+
+        return prices
 
     def unscale_predictions(self, predictions, main_col_name='close'):
         return self.scaler_map[main_col_name].inverse_transform(predictions)

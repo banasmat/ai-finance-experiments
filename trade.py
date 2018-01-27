@@ -33,6 +33,8 @@ def run():
     date_from = datetime.datetime.strptime('2005-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
     all_prices = prices.loc[(prices.index > date_from) & (prices.index < _to)]
 
+    all_prices = rnn_dataset_provider.add_news_to_dataset(all_prices, date_from, curr_1, curr_2)
+
     all_xs, all_ys = rnn_dataset_provider.prepare_dataset(all_prices, lstm_length=lstm_length)
 
     x_test = all_xs[-(lstm_length + 1):]
