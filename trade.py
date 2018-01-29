@@ -45,21 +45,21 @@ def run():
     y_test = all_ys[-lstm_length:]
     real_prices = rnn_dataset_provider.unscale_predictions(y_test)
 
-    dates = prices.loc[(prices.index > (_to - datetime.timedelta(days=20))) & (prices.index < (_to + datetime.timedelta(days=1)))].index.tolist()
-    hours = list(map(lambda date: date.strftime('%H'), dates))
+    dates = prices.loc[(prices.index > (_to - datetime.timedelta(days=20))) & (prices.index < (_to))].index.tolist()
+    hours = list(map(lambda date: date.strftime('%d') if date.strftime('%H') == '00' else date.strftime('%H'), dates))
 
     # _predictions = np.empty(real_prices.shape)
     # _predictions[:] = np.nan
     # predictions = np.append(_predictions, predictions, axis=0)
 
-    plt.plot(real_prices[-20:], color='red', label='Real EURUSD Price')
-    plt.plot(predictions[-21:], color='blue', label='Predicted EURUSD Price', marker='o')
+    plt.plot(prices['close'].tolist()[-78:-58], color='red', label='Real EURUSD Price')
+    plt.plot(predictions[-78:-58], color='blue', label='Predicted EURUSD Price', marker='o')
     # plt.plot_date(dates, predictions[-31:], color='blue', label='Predicted EURUSD Price')
     plt.grid(which='both')
     plt.title('EURUSD Price Prediction')
     plt.xlabel('Time')
     plt.ylabel('EURUSD Price')
-    plt.xticks(np.arange(21), hours)
+    plt.xticks(np.arange(20), prices.index.tolist()[-78:-58], rotation=90)
     plt.legend()
     plt.show()
 
