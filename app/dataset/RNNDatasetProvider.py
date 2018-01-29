@@ -61,5 +61,26 @@ class RNNDatasetProvider(object):
 
         return prices
 
+    def add_rsi_to_dataset(self, prices, n=14):
+
+        delta = prices['close'].diff()
+
+        delta_up, delta_down = delta.copy(), delta.copy()
+        delta_up[delta_up < 0] = 0
+        delta_down[delta_down > 0] = 0
+
+        rol_up = delta_up.rolling(n).mean()
+        rol_down = delta_down.rolling(n).mean().abs()
+
+        prices['rsi'] = round(rol_up / rol_down, 6)
+
+        print(prices['rsi'].max())
+
+        prices['rsi'] = np.nan_to_num(prices['rsi'])
+
+        print(prices['rsi'].max())
+
+        return prices
+
     def unscale_predictions(self, predictions, main_col_name='close'):
         return self.scaler_map[main_col_name].inverse_transform(predictions)
