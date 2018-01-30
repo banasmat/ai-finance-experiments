@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
+from stockstats import StockDataFrame
 
 
 class RNNDatasetProvider(object):
@@ -61,24 +62,37 @@ class RNNDatasetProvider(object):
 
         return prices
 
-    def add_rsi_to_dataset(self, prices, n=14):
+    def add_rsi_to_dataset(self, prices, window_length=14):
 
+        # Get the difference in price from previous step
         delta = prices['close'].diff()
+        # Get rid of the first row, which is NaN since it did not have a previous
+        # row to calculate the differences
+        delta = delta[1:]
 
-        delta_up, delta_down = delta.copy(), delta.copy()
-        delta_up[delta_up < 0] = 0
-        delta_down[delta_down > 0] = 0
+        # Make the positive gains (up) and negative gains (down) Series
+        up, down = delta.copy(), delta.copy()
+        up[up < 0] = 0
+        down[down > 0] = 0
 
-        rol_up = delta_up.rolling(n).mean()
-        rol_down = delta_down.rolling(n).mean().abs()
+        # Calculate the EWMA
+        # roll_up1 = pd.stats.moments.ewma(up, window_length)
+        # roll_down1 = pd.stats.moments.ewma(down.abs(), window_length)
+        #
+        # # Calculate the RSI based on EWMA
+        # rs_1 = roll_up1 / roll_down1
+        # rsi_1 = 100.0 - (100.0 / (1.0 + rs_1))
 
-        prices['rsi'] = round(rol_up / rol_down, 6)
+        # Calculate the SMA
+        roll_up2 = up.rolling(window_length).mean()
+        roll_down2 = down.abs().rolling(window_length).mean()
 
-        print(prices['rsi'].max())
+        # Calculate the RSI based on SMA
+        rs_2 = roll_up2 / roll_down2
+        rsi_2 = 100.0 - (100.0 / (1.0 + rs_2))
 
+        prices['rsi'] = round(rsi_2, 6)
         prices['rsi'] = np.nan_to_num(prices['rsi'])
-
-        print(prices['rsi'].max())
 
         return prices
 

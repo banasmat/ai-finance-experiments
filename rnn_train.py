@@ -29,7 +29,7 @@ prices = rnn_dataset_provider.add_rsi_to_dataset(prices)
 train_prices = prices.loc[(prices.index > date_from) & (prices.index < date_to)]
 x_train, y_train = rnn_dataset_provider.prepare_dataset(train_prices, lstm_length=lstm_length)
 
-nn.train(x_train, y_train, gran)
+# nn.train(x_train, y_train, gran)
 
 test_prices = prices.loc[prices.index > (date_to - datetime.timedelta(hours=lstm_length))]
 x_test, y_test = rnn_dataset_provider.prepare_dataset(test_prices, lstm_length=lstm_length)
@@ -38,13 +38,18 @@ scaled_predictions = nn.predict(x_test)
 predictions = rnn_dataset_provider.unscale_predictions(scaled_predictions)
 real_prices = rnn_dataset_provider.unscale_predictions(y_test)
 
-print(test_prices)
-print(y_test)
-# print(real_prices)
+fig = plt.figure(facecolor='white')
 
-plt.plot(test_prices['close'].tolist()[lstm_length:], color='red', label='Real EURUSD Price')
-plt.plot(test_prices['rsi'].tolist()[lstm_length:], color='green', label='RSI')
-plt.plot(predictions[lstm_length:], color='blue', label='Predicted EURUSD Price')
+left, width = 0.1, 0.8
+rect1 = [left, 0.3, width, 0.4]
+rect2 = [left, 0.1, width, 0.2]
+
+ax1 = fig.add_axes(rect1)
+ax2 = fig.add_axes(rect2, sharex=ax1)
+
+ax1.plot(test_prices['close'].tolist()[-lstm_length:], color='red', label='Real EURUSD Price')
+ax1.plot(predictions.tolist()[-lstm_length:], color='blue', label='Predicted EURUSD Price')
+ax2.plot(test_prices['rsi'].tolist()[-lstm_length:], color='green', label='RSI')
 plt.title('EURUSD Price Prediction')
 plt.xlabel('Time')
 plt.ylabel('EURUSD Price')
