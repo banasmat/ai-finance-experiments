@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
+import jhtalib as jhta
 from stockstats import StockDataFrame
 
 
@@ -94,6 +95,22 @@ class RNNDatasetProvider(object):
         prices['rsi'] = round(rsi_2, 6)
         prices['rsi'] = np.nan_to_num(prices['rsi'])
 
+        return prices
+
+    def enhance_dataset(self, prices):
+
+        prices = self.add_rsi_to_dataset(prices)
+
+        fibopr = pd.DataFrame(jhta.FIBOPR(prices, 'close'))
+        cols = []
+        for key in fibopr.iloc[0].keys():
+            cols.append('fibopr_' + str(key))
+
+        fibopr.columns = cols
+        fibopr.index = prices.index
+        prices = pd.concat([prices, fibopr], axis=1)
+
+        # prices['gannpr'] = jhta.GANNPR(prices, 'close')
         return prices
 
     def unscale_predictions(self, predictions, main_col_name='close'):
