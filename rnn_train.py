@@ -29,7 +29,7 @@ prices = rnn_dataset_provider.add_rsi_to_dataset(prices)
 train_prices = prices.loc[(prices.index > date_from) & (prices.index < date_to)]
 x_train, y_train = rnn_dataset_provider.prepare_dataset(train_prices, lstm_length=lstm_length)
 
-# nn.train(x_train, y_train, gran)
+nn.train(x_train, y_train, gran)
 
 test_prices = prices.loc[prices.index > (date_to - datetime.timedelta(hours=lstm_length))]
 x_test, y_test = rnn_dataset_provider.prepare_dataset(test_prices, lstm_length=lstm_length)
