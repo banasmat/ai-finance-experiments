@@ -23,6 +23,7 @@ prices = prep_data_provider.get_price_records(curr_1, curr_2, ('datetime', 'clos
 date_from = datetime.datetime.strptime('2005-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
 date_to = datetime.datetime.strptime('2018-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
 
+prices = rnn_dataset_provider.add_secondary_prices_to_dataset(prices, date_from, 'GBP', 'CHF', gran)
 prices = rnn_dataset_provider.add_news_to_dataset(prices, date_from, curr_1, curr_2)
 prices = rnn_dataset_provider.enhance_dataset(prices)
 

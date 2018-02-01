@@ -115,3 +115,13 @@ class RNNDatasetProvider(object):
 
     def unscale_predictions(self, predictions, main_col_name='close'):
         return self.scaler_map[main_col_name].inverse_transform(predictions)
+
+    def add_secondary_prices_to_dataset(self, prices: pd.DataFrame, date_from, curr_1, curr_2, gran):
+
+        sec_prices = self.prep_data_provider.get_price_records(curr_1, curr_2, ('datetime', 'close'), gran=gran)
+        sec_prices = sec_prices.loc[sec_prices.index >= date_from]
+        sec_prices.columns = [(curr_1 + '_' + curr_2).lower()]
+
+        prices = prices.merge(sec_prices, left_index=True, right_index=True)
+
+        return prices
