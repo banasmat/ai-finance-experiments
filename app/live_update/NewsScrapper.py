@@ -69,74 +69,76 @@ class NewsScrapper(object):
         curr_year = startlink[-4:]
         curr_date = ""
         curr_time = ""
-        with open(os.path.join(os.path.abspath(os.getcwd()), 'resources', 'forex-news.csv'), "a") as f:
-            for tr in trs:
+        news_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'forex-news.csv')
 
-                # fields may mess up sometimes, see Tue Sep 25 2:45AM French Consumer Spending
-                # in that case we append to errors.csv the date time where the error is
-                try:
-                    for field in fields:
-                        data = tr.select("td.calendar__cell.calendar__{}.{}".format(field,field))[0]
-                        # print(data)
-                        if field=="date" and data.text.strip()!="":
-                            curr_date = data.text.strip()
-                        elif field=="time" and data.text.strip()!="":
-                            # time is sometimes "All Day" or "Day X" (eg. WEF Annual Meetings)
-                            if data.text.strip().find("Day")!=-1:
-                                curr_time = "12:00am"
-                            else:
-                                curr_time = data.text.strip()
-                        elif field=="currency":
-                            currency = data.text.strip()
-                        elif field=="impact":
-                            # when impact says "Non-Economic" on mouseover, the relevant
-                            # class name is "Holiday", thus we do not use the classname
-                            impact = data.find("span")["title"]
-                        elif field=="event":
-                            event = data.text.strip()
-                        elif field=="actual":
-                            actual = data.text.strip()
-                        elif field=="forecast":
-                            forecast = data.text.strip()
-                        elif field=="previous":
-                            previous = data.text.strip()
+        for tr in trs:
+            # fields may mess up sometimes, see Tue Sep 25 2:45AM French Consumer Spending
+            # in that case we append to errors.csv the date time where the error is
+            try:
+                for field in fields:
+                    data = tr.select("td.calendar__cell.calendar__{}.{}".format(field,field))[0]
+                    # print(data)
+                    if field=="date" and data.text.strip()!="":
+                        curr_date = data.text.strip()
+                    elif field=="time" and data.text.strip()!="":
+                        # time is sometimes "All Day" or "Day X" (eg. WEF Annual Meetings)
+                        if data.text.strip().find("Day")!=-1:
+                            curr_time = "12:00am"
+                        else:
+                            curr_time = data.text.strip()
+                    elif field=="currency":
+                        currency = data.text.strip()
+                    elif field=="impact":
+                        # when impact says "Non-Economic" on mouseover, the relevant
+                        # class name is "Holiday", thus we do not use the classname
+                        impact = data.find("span")["title"]
+                    elif field=="event":
+                        event = data.text.strip()
+                    elif field=="actual":
+                        actual = data.text.strip()
+                    elif field=="forecast":
+                        forecast = data.text.strip()
+                    elif field=="previous":
+                        previous = data.text.strip()
 
-                    dt = datetime.datetime.strptime(",".join([curr_year,curr_date,curr_time]),
-                                                    "%Y,%a%b %d,%I:%M%p")
+                dt = datetime.datetime.strptime(",".join([curr_year,curr_date,curr_time]),
+                                                "%Y,%a%b %d,%I:%M%p")
 
-                    if to_file:
-                        rec = '"{date}";"{time}";"{symbol}";"{title}";"{actual}";"{forecast}";"{previous}"'.format(
-                            date=dt.strftime('%Y-%m-%d'),
-                            time=dt.strftime('%H:%M'),
-                            symbol=currency,
-                            title=event,
-                            actual=actual,
-                            forecast=forecast,
-                            previous=previous,
-                        )
-                        f.write("\n" + rec)
+                if to_file and actual:
+                    rec = '"{date}";"{time}";"{symbol}";"{title}";"{actual}";"{forecast}";"{previous}"'.format(
+                        date=dt.strftime('%Y-%m-%d'),
+                        time=dt.strftime('%H:%M'),
+                        symbol=currency,
+                        title=event,
+                        actual=actual,
+                        forecast=forecast,
+                        previous=previous,
+                    )
+                    print(rec)
+                    with open(news_file_path, 'a') as news_file:
+                        news_file.write("\n" + rec)
 
-                    #TODO save only news that have titles konwn by nn
+                #TODO save only news that have titles konwn by nn
 
-                    #TODO give option to save to csv (if dumping ALL news for training)
-
-
-                    calendar_entry = session.query(CalendarEntry).filter_by(currency=currency, datetime=dt, title=event).first()
-
-                    if calendar_entry is None and previous != '':
-                        calendar_entry = CalendarEntry(currency, dt, event, actual, forecast, previous)
-                        session.add(calendar_entry)
-                    elif actual != '' and len(calendar_entry.signals) == 0:
-                        calendar_entry.actual = actual
-                        calendar_entry.updated_at = datetime.datetime.now()
-                        calendar_event = CalendarEntryUpdatedEvent(calendar_entry)
-                        zope.event.notify(calendar_event)
-
-                except Exception as e:
-                    with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'news-scrapper-errors.csv'),"a") as f:
-                        csv.writer(f).writerow([curr_year,curr_date,curr_time, str(e)])
+                #TODO give option to save to csv (if dumping ALL news for training)
 
 
+                calendar_entry = session.query(CalendarEntry).filter_by(currency=currency, datetime=dt, title=event).first()
+
+                if calendar_entry is None and previous != '':
+                    calendar_entry = CalendarEntry(currency, dt, event, actual, forecast, previous)
+                    session.add(calendar_entry)
+                elif actual != '' and len(calendar_entry.signals) == 0:
+                    calendar_entry.actual = actual
+                    calendar_entry.updated_at = datetime.datetime.now()
+                    calendar_event = CalendarEntryUpdatedEvent(calendar_entry)
+                    zope.event.notify(calendar_event)
+
+            except Exception as e:
+                with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'news-scrapper-errors.csv'),"a") as f:
+                    csv.writer(f).writerow([curr_year,curr_date,curr_time, str(e)])
+
+        news_file.close()
         session.commit()
 
         # exit recursion when last available link has reached
