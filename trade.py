@@ -34,6 +34,7 @@ def run():
     all_prices = prices.loc[(prices.index > date_from) & (prices.index < _to)]
 
     all_prices = rnn_dataset_provider.add_news_to_dataset(all_prices, date_from, curr_1, curr_2)
+    all_prices = rnn_dataset_provider.enhance_dataset(all_prices)
 
     all_xs, all_ys = rnn_dataset_provider.prepare_dataset(all_prices, lstm_length=lstm_length)
 
@@ -52,14 +53,16 @@ def run():
     # _predictions[:] = np.nan
     # predictions = np.append(_predictions, predictions, axis=0)
 
-    plt.plot(prices['close'].tolist()[-78:-58], color='red', label='Real EURUSD Price')
-    plt.plot(predictions[-78:-58], color='blue', label='Predicted EURUSD Price', marker='o')
+    show_from = -36
+
+    plt.plot(prices['close'].tolist()[show_from:], color='red', label='Real EURUSD Price')
+    plt.plot(predictions[show_from-1:], color='blue', label='Predicted EURUSD Price', marker='o')
     # plt.plot_date(dates, predictions[-31:], color='blue', label='Predicted EURUSD Price')
     plt.grid(which='both')
     plt.title('EURUSD Price Prediction')
     plt.xlabel('Time')
     plt.ylabel('EURUSD Price')
-    plt.xticks(np.arange(20), prices.index.tolist()[-78:-58], rotation=90)
+    plt.xticks(np.arange(abs(show_from)+1), prices.index.tolist()[show_from-1:], rotation=90)
     plt.legend()
     plt.show()
 
