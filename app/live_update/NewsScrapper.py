@@ -14,6 +14,12 @@ import zope.event
 
 class NewsScrapper(object):
 
+    news_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'forex-news.csv')
+    path_base = 'calendar.php?week='
+    # Dec11.2017
+    dt_format_in = '%b%d.%Y'
+    dt_format_out = '"%Y-%m-%d";"%H:%M"'
+
     def run(self, start_date: datetime.datetime=None, end_date: datetime.datetime=None, to_file=False):
 
         if start_date is None:
@@ -23,15 +29,17 @@ class NewsScrapper(object):
 
         delta = end_date - start_date
         mod = delta.days % 7
+
         if mod != 0:
-            end_date = end_date + datetime.timedelta(days=(7-mod))
+            end_date = end_date + datetime.timedelta(days=(7-mod+1))
 
-        path_base = 'calendar.php?week='
-        # Dec11.2017
-        dt_format = '%b%d.%Y'
-        # self.setLogger()
+        if to_file:
+            with open(self.news_file_path, 'r') as news_file:
+                all_lines = news_file.readlines()
+                last_line = all_lines[len(all_lines) - 1]
+                start_date = datetime.datetime.strptime(last_line[0:20], self.dt_format_out)
 
-        self.getEconomicCalendar(path_base + start_date.strftime(dt_format).lower(), path_base + end_date.strftime(dt_format).lower(), to_file=to_file)
+        self.getEconomicCalendar(start_date, end_date, to_file=to_file)
 
     def setLogger(self):
         logs_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'news_scrapper_logs')
@@ -44,7 +52,11 @@ class NewsScrapper(object):
         console.setFormatter(formatter)
         logging.getLogger('').addHandler(console)
 
-    def getEconomicCalendar(self, startlink, endlink, to_file=False):
+    def getEconomicCalendar(self, start_date, end_date, to_file=False):
+
+
+        startlink, endlink = self.__date_to_link(start_date), self.__date_to_link(end_date)
+
         session = Connection.get_instance().get_session()
 
         print(startlink)
@@ -69,7 +81,6 @@ class NewsScrapper(object):
         curr_year = startlink[-4:]
         curr_date = ""
         curr_time = ""
-        news_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'forex-news.csv')
 
         for tr in trs:
             # fields may mess up sometimes, see Tue Sep 25 2:45AM French Consumer Spending
@@ -103,11 +114,12 @@ class NewsScrapper(object):
 
                 dt = datetime.datetime.strptime(",".join([curr_year,curr_date,curr_time]),
                                                 "%Y,%a%b %d,%I:%M%p")
+                if dt > end_date:
+                    return
 
-                if to_file and actual:
-                    rec = '"{date}";"{time}";"{symbol}";"{title}";"{actual}";"{forecast}";"{previous}"'.format(
-                        date=dt.strftime('%Y-%m-%d'),
-                        time=dt.strftime('%H:%M'),
+                if to_file and actual and start_date <= dt:
+                    rec = '{dt};"{symbol}";"{title}";"{actual}";"{forecast}";"{previous}"'.format(
+                        dt=dt.strftime(self.dt_format_out),
                         symbol=currency,
                         title=event,
                         actual=actual,
@@ -115,12 +127,11 @@ class NewsScrapper(object):
                         previous=previous,
                     )
                     print(rec)
-                    with open(news_file_path, 'a') as news_file:
+                    with open(self.news_file_path, 'a') as news_file:
                         news_file.write("\n" + rec)
 
-                #TODO save only news that have titles konwn by nn
 
-                #TODO give option to save to csv (if dumping ALL news for training)
+                #TODO save only news that have titles konwn by nn
 
 
                 calendar_entry = session.query(CalendarEntry).filter_by(currency=currency, datetime=dt, title=event).first()
@@ -138,7 +149,6 @@ class NewsScrapper(object):
                 with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'news-scrapper-errors.csv'),"a") as f:
                     csv.writer(f).writerow([curr_year,curr_date,curr_time, str(e)])
 
-        news_file.close()
         session.commit()
 
         # exit recursion when last available link has reached
@@ -147,7 +157,10 @@ class NewsScrapper(object):
             return
 
         # get the link for the next week and follow
-        follow = soup.select("a.calendar__pagination.calendar__pagination--next.next")
-        follow = follow[0]["href"]
+        # follow = soup.select("a.calendar__pagination.calendar__pagination--next.next")
+        # follow = follow[0]["href"]
 
-        self.getEconomicCalendar(follow, endlink, to_file=to_file)
+        self.getEconomicCalendar(start_date + datetime.timedelta(days=7), end_date, to_file=to_file)
+
+    def __date_to_link(self, date):
+        return self.path_base + date.strftime(self.dt_format_in).lower()

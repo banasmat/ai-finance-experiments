@@ -3,6 +3,7 @@ import datetime
 from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
 from app.dataset.RNNDatasetProvider import RNNDatasetProvider
 from app.keras.KerasRNN import KerasRNN
+from app.live_update.NewsScrapper import NewsScrapper
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
@@ -11,6 +12,7 @@ import numpy as np
 def run():
 
     fetcher = OandaHistoryPriceFetcher()
+    news_scrapper = NewsScrapper()
     prep_data_provider = PreProcessedDataProvider()
     rnn_dataset_provider = RNNDatasetProvider()
     nn = KerasRNN()
@@ -27,6 +29,7 @@ def run():
     gran = 'H1'
 
     fetcher.fetch_to_file(predict_from, _to)
+    news_scrapper.run(predict_from, _to, to_file=True)
 
     # process train data to get right scalers
     prices = prep_data_provider.get_price_records(curr_1, curr_2, ('datetime', 'close', 'high', 'low'), gran)
