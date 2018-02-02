@@ -39,6 +39,7 @@ class NewsScrapper(object):
                 last_line = all_lines[len(all_lines) - 1]
                 start_date = datetime.datetime.strptime(last_line[0:20], self.dt_format_out)
 
+        end_date = end_date.replace(tzinfo=None)
         self.getEconomicCalendar(start_date, end_date, to_file=to_file)
 
     def setLogger(self):
@@ -53,7 +54,6 @@ class NewsScrapper(object):
         logging.getLogger('').addHandler(console)
 
     def getEconomicCalendar(self, start_date, end_date, to_file=False):
-
 
         startlink, endlink = self.__date_to_link(start_date), self.__date_to_link(end_date)
 
@@ -117,7 +117,7 @@ class NewsScrapper(object):
                 if dt > end_date:
                     return
 
-                if to_file and actual and start_date <= dt:
+                if to_file and actual and dt >= start_date:
                     rec = '{dt};"{symbol}";"{title}";"{actual}";"{forecast}";"{previous}"'.format(
                         dt=dt.strftime(self.dt_format_out),
                         symbol=currency,
