@@ -1,0 +1,9 @@
+from app.backtest.BackTester import BackTester
+import datetime
+
+backtester = BackTester()
+
+date_from = datetime.datetime.strptime('2017-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
+date_to = datetime.datetime.strptime('2018-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
+
+backtester.run(date_from, date_to, gran='D1')
