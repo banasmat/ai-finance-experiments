@@ -1,10 +1,12 @@
 import backtrader as bt
+from app.backtest.RNNIndicator import RNNIndicator
 
 
 class TestStrategy(bt.Strategy):
     params = (
         ('maperiod', 15),
         ('printlog', False),
+        ('rnn_dataset_provider', None),
     )
 
     def log(self, txt, dt=None, doprint=False):
@@ -16,14 +18,15 @@ class TestStrategy(bt.Strategy):
 
     def __init__(self):
         # Keep a reference to the "close" line in the data[0] dataseries
-        self.dataclose = self.datas[0].close
-        self.datatest = self.datas[0].test
+        self.data_close = self.datas[0].close
+        self.data_predictions = self.datas[0].predictions
         # To keep track of pending orders
         self.order = None
         self.buyprice = None
         self.buycomm = None
 
         self.sma = bt.indicators.MovingAverageSimple(self.datas[0], period=self.params.maperiod)
+        # self.rnn = RNNIndicator(xs=self.data_xs, rnn_dataset_provider=self.params.rnn_dataset_provider)
 
         # bt.indicators.ExponentialMovingAverage(self.datas[0], period=25)
         # bt.indicators.WeightedMovingAverage(self.datas[0], period=25).subplot = True
@@ -72,7 +75,7 @@ class TestStrategy(bt.Strategy):
 
     def next(self):
         # Simply log the closing price of the series from the reference
-        self.log('Close, %.4f' % self.dataclose[0])
+        self.log('Close, %.4f' % self.data_close[0])
 
         # Check if an order is pending ... if yes, we cannot send a 2nd one
         if self.order:
@@ -82,18 +85,18 @@ class TestStrategy(bt.Strategy):
         if not self.position:
 
             # Not yet ... we MIGHT BUY if ...
-            if self.dataclose[0] > self.sma[0]:
+            if self.data_close[0] > self.sma[0]:
                 # BUY, BUY, BUY!!! (with all possible default parameters)
-                self.log('BUY CREATE, %.4f' % self.dataclose[0])
+                self.log('BUY CREATE, %.4f' % self.data_close[0])
 
                 # Keep track of the created order to avoid a 2nd order
                 self.order = self.buy()
 
         else:
 
-            if self.dataclose[0] < self.sma[0]:
+            if self.data_close[0] < self.sma[0]:
                 # SELL, SELL, SELL!!! (with all possible default parameters)
-                self.log('SELL CREATE, %.4f' % self.dataclose[0])
+                self.log('SELL CREATE, %.4f' % self.data_close[0])
 
                 # Keep track of the created order to avoid a 2nd order
                 self.order = self.sell()

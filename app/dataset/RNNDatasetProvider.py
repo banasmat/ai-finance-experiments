@@ -36,6 +36,31 @@ class RNNDatasetProvider(object):
 
         return xs, ys
 
+    def unscale_predictions(self, predictions, main_col_name='close'):
+        return self.scaler_map[main_col_name].inverse_transform(predictions)
+
+    def enhance_dataset(self, prices, date_from, date_to, curr_1='EUR', curr_2='USD', sec_curr_1='GBP', sec_curr_2='CHF', gran='H1'):
+
+        prices = self.add_rsi_to_dataset(prices)
+        prices = self.add_secondary_prices_to_dataset(prices, date_from, sec_curr_1, sec_curr_2, gran)
+        prices = self.add_news_to_dataset(prices, date_from, curr_1, curr_2)
+        prices = self.add_fibopr_to_dataset(prices)
+
+        return prices
+
+    def add_fibopr_to_dataset(self, prices):
+        fibopr = pd.DataFrame(jhta.FIBOPR(prices, 'close'))
+        cols = []
+        for key in fibopr.iloc[0].keys():
+            cols.append('fibopr_' + str(key))
+
+        fibopr.columns = cols
+        fibopr.index = prices.index
+        prices = pd.concat([prices, fibopr], axis=1)
+
+        # prices['gannpr'] = jhta.GANNPR(prices, 'close')
+        return prices
+
     def add_news_to_dataset(self, prices, date_from, curr_1='EUR', curr_2='USD'):
         news = self.prep_data_provider.get_news_data(date_from, curr_1, curr_2)
         news = self.prep_data_provider.scale_news_data(news)
@@ -96,25 +121,6 @@ class RNNDatasetProvider(object):
         prices['rsi'] = np.nan_to_num(prices['rsi'])
 
         return prices
-
-    def enhance_dataset(self, prices):
-
-        prices = self.add_rsi_to_dataset(prices)
-
-        fibopr = pd.DataFrame(jhta.FIBOPR(prices, 'close'))
-        cols = []
-        for key in fibopr.iloc[0].keys():
-            cols.append('fibopr_' + str(key))
-
-        fibopr.columns = cols
-        fibopr.index = prices.index
-        prices = pd.concat([prices, fibopr], axis=1)
-
-        # prices['gannpr'] = jhta.GANNPR(prices, 'close')
-        return prices
-
-    def unscale_predictions(self, predictions, main_col_name='close'):
-        return self.scaler_map[main_col_name].inverse_transform(predictions)
 
     def add_secondary_prices_to_dataset(self, prices: pd.DataFrame, date_from, curr_1, curr_2, gran):
 

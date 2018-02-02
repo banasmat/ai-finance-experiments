@@ -3,9 +3,9 @@ import backtrader as bt
 
 class PriceData(bt.feeds.PandasData):
 
-    params = (('test', -1),)
-    lines = (('test'),)
+    params = (('predictions', -1),)
+    lines = (('predictions'),)
 
     def __init__(self):
-        self.datafields.append('test')
+        self.datafields.append('predictions')
         super(PriceData, self).__init__()
