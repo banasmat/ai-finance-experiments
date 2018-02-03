@@ -4,8 +4,6 @@ from app.backtest.PriceData import PriceData
 from app.dataset.RNNDatasetProvider import RNNDatasetProvider
 from app.keras.KerasRNN import KerasRNN
 import pandas as pd
-import numpy
-import datetime
 
 from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
 
@@ -25,9 +23,9 @@ class BackTester(object):
 
         self.cerebro.addstrategy(RNNStrategy)
 
-        # self.cerebro.broker.setcommission(commission=0.001)
+        self.cerebro.broker.setcommission(commission=0.001)
 
-        self.cerebro.addsizer(bt.sizers.FixedSize, stake=10)
+        self.cerebro.addsizer(bt.sizers.PercentSizer, percents=10)
 
         lstm_length = 120
         prices = self.prep_data_provider.get_price_records(curr_1, curr_2, ('datetime', 'open', 'high', 'low', 'close', 'volume'), gran)
@@ -41,16 +39,12 @@ class BackTester(object):
 
         prices = prices.loc[(prices.index > date_from) & (prices.index < date_to)]
         prices['predictions'] = self.rnn_dataset_provider.unscale_predictions(scaled_predictions)
-        # predictions.columns = ['predictions']
-        # predictions.index = prices.index
 
         prices.fillna(1, inplace=True)
 
-        # predictions = PriceData(dataname=predictions)
         data = PriceData(dataname=prices)
 
         self.cerebro.adddata(data, curr_1 + curr_2)
-        # self.cerebro.adddata(predictions, 'Predictions')
 
         self.cerebro.broker.setcash(1000.0)
 

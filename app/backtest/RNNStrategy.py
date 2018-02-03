@@ -1,6 +1,4 @@
 import backtrader as bt
-from app.backtest.RNNIndicator import RNNIndicator
-from random import randint
 
 
 class RNNStrategy(bt.Strategy):
@@ -24,9 +22,8 @@ class RNNStrategy(bt.Strategy):
         self.order = None
         self.buyprice = None
         self.buycomm = None
+
         # self.sma = bt.indicators.MovingAverageSimple(self.datas[0], period=self.params.maperiod)
-
-
 
         # bt.indicators.ExponentialMovingAverage(self.datas[0], period=25)
         # bt.indicators.WeightedMovingAverage(self.datas[0], period=25).subplot = True
