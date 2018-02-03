@@ -1,10 +1,11 @@
 import backtrader as bt
 from app.backtest.RNNIndicator import RNNIndicator
+from random import randint
 
 
 class RNNStrategy(bt.Strategy):
     params = (
-        ('maperiod', 15),
+        # ('maperiod', 15),
         ('printlog', True),
     )
 
@@ -19,7 +20,6 @@ class RNNStrategy(bt.Strategy):
         # Keep a reference to the "close" line in the data[0] dataseries
         self.data_close = self.datas[0].close
         self.data_predictions = self.datas[0].predictions
-        self.datas[0].predictions = None
         # To keep track of pending orders
         self.order = None
         self.buyprice = None
@@ -62,7 +62,7 @@ class RNNStrategy(bt.Strategy):
             self.bar_executed = len(self)
 
         elif order.status in [order.Canceled, order.Margin, order.Rejected]:
-            self.log('Order Canceles/Margin/Rejected (' + str(order.status) + ')')
+            self.log('Order Canceled/Margin/Rejected (' + str(order.status) + ')')
 
         self.order = None
 
@@ -83,7 +83,6 @@ class RNNStrategy(bt.Strategy):
         try:
             # Check if we are in the market
             if not self.position:
-
                 if self.data_predictions[1] > self.data_predictions[0]:
                     self.log('BUY CREATE, %.4f - Prediction: %.4f' % (self.data_close[0], self.data_predictions[1]))
 
