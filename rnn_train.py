@@ -40,13 +40,13 @@ real_prices = rnn_dataset_provider.unscale_predictions(y_test)
 fig = plt.figure(facecolor='white')
 
 left, width = 0.1, 0.8
-rect1 = [left, 0.3, width, 0.4]
+rect1 = [left, 0.5, width, 0.4]
 rect2 = [left, 0.1, width, 0.2]
-rect3 = [left, 0.1, width, 0.2]
+# rect3 = [left, 0.1, width, 0.2]
 
 ax1 = fig.add_axes(rect1)
 ax2 = fig.add_axes(rect2, sharex=ax1)
-ax3 = fig.add_axes(rect3, sharex=ax1)
+# ax3 = fig.add_axes(rect3)
 
 ax1.plot(test_prices['close'].tolist()[-lstm_length:], color='red', label='Real EURUSD Price')
 # ax1.plot(test_prices['fibopr_618'].tolist()[-lstm_length:], color='pink', label='FIBOPR_618')

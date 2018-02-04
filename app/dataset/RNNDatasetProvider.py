@@ -1,10 +1,11 @@
-import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
 import jhtalib as jhta
-from stockstats import StockDataFrame
 
+import numpy as np
+import scipy.stats as stats
+import pylab as pl
 
 class RNNDatasetProvider(object):
 
@@ -29,10 +30,31 @@ class RNNDatasetProvider(object):
 
         xs = np.empty((price_dataset.shape[0], lstm_length, len(price_dataset.columns)))
         ys = np.empty((price_dataset.shape[0], 1))
-
+        deltas = []
         for i in range(lstm_length, len(price_dataset)):
             xs[i] = price_dataset.iloc[i - lstm_length:i].as_matrix()
-            ys[i] = price_dataset[main_col_name][i]
+            # ys[i] = price_dataset[main_col_name].iloc[i]
+            try:
+                delta = price_dataset[main_col_name].iloc[i] - price_dataset[main_col_name].iloc[i-1]
+                deltas.append(delta)
+
+            except IndexError:
+                delta = 0
+
+            if delta <= 0.002:
+                delta = -1
+            elif delta >= 0.002:
+                delta = 1
+            else:
+                delta = 0
+            ys[i] = delta
+
+        # h = sorted(deltas)
+        # fit = stats.norm.pdf(h, np.mean(h), np.std(h))  # this is a fitting indeed
+        # pl.plot(h, fit, '-o')
+        # pl.hist(h, normed=True)  # use this to draw histogram of your data
+        # pl.show()
+        # quit()
 
         return xs, ys
 
