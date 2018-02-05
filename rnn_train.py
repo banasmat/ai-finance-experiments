@@ -28,22 +28,27 @@ prices = rnn_dataset_provider.enhance_dataset(prices, date_from, date_to)
 train_prices = prices.loc[(prices.index > date_from) & (prices.index < date_to)]
 x_train, y_train = rnn_dataset_provider.prepare_dataset(train_prices, lstm_length=lstm_length)
 
-# nn.train(x_train, y_train, gran)
+nn.train(x_train, y_train, gran)
 
 test_prices = prices.loc[prices.index > (date_to - datetime.timedelta(hours=1000))]
 x_test, y_test = rnn_dataset_provider.prepare_dataset(test_prices, lstm_length=lstm_length)
 #
-scaled_predictions = nn.predict(x_test)
-predictions = rnn_dataset_provider.unscale_predictions(scaled_predictions)
-real_prices = rnn_dataset_provider.unscale_predictions(y_test)
+# scaled_predictions = nn.predict(x_test)
+# predictions = rnn_dataset_provider.unscale_predictions(scaled_predictions)
+# real_prices = rnn_dataset_provider.unscale_predictions(y_test)
+
+one_hot_predictions = nn.predict(x_test)
 
 fig = plt.figure(facecolor='white')
 
-up_signals, down_signals = scaled_predictions.copy(), scaled_predictions.copy()
+# up_signals, down_signals = scaled_predictions.copy(), scaled_predictions.copy()
+
+up_signals = one_hot_predictions[:2]
+down_signals = one_hot_predictions[:0]
 
 #FIXME output prices are in range (-0.85, -0.71). something is wrong
-up_signals = np.apply_along_axis(lambda x: 1 if int(x) > -0.7 else None, 1, up_signals)
-down_signals = np.apply_along_axis(lambda x: 1 if x < -0.8 else None, 1, down_signals)
+# up_signals = np.apply_along_axis(lambda x: 1 if int(x) > -0.7 else None, 1, up_signals)
+# down_signals = np.apply_along_axis(lambda x: 1 if x < -0.8 else None, 1, down_signals)
 
 # print(scaled_predictions)
 # print(predictions)
