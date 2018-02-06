@@ -16,7 +16,7 @@ class KerasRNN(object):
 
     def train(self, x_train, y_train, gran='H1'):
         regressor = self.create_model(x_train)
-        regressor.fit(x_train, y_train, epochs=1, batch_size=32)
+        regressor.fit(x_train, y_train, epochs=50, batch_size=32)
         regressor.save(self.__get_model_path(gran))
 
     def create_model(self, x_data):
@@ -37,7 +37,7 @@ class KerasRNN(object):
         regressor.add(Dense(units=3))
 
         # RMSprop optimizer is usually used for rnn
-        regressor.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        regressor.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
 
         return regressor
 
