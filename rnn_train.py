@@ -19,8 +19,9 @@ curr_2 = 'USD'
 lstm_length = 120
 gran = 'H1'
 
+#FIXME add delta to dataset and use it as the main column
 prices = prep_data_provider.get_price_records(curr_1, curr_2, ('datetime', 'close', 'high', 'low'), gran=gran)
-date_from = datetime.datetime.strptime('2017-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
+date_from = datetime.datetime.strptime('2005-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
 date_to = datetime.datetime.strptime('2018-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
 
 prices = rnn_dataset_provider.enhance_dataset(prices, date_from, date_to)
@@ -38,8 +39,9 @@ x_test, y_test = rnn_dataset_provider.prepare_dataset(test_prices, lstm_length=l
 # real_prices = rnn_dataset_provider.unscale_predictions(y_test)
 
 delta_predictions = nn.predict(x_test)
-
-print(delta_predictions)
+#
+# print(y_test.tolist()[-lstm_length:])
+# print(delta_predictions.tolist()[-lstm_length:])
 
 fig = plt.figure(facecolor='white')
 
