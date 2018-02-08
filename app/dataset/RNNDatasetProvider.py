@@ -34,8 +34,7 @@ class RNNDatasetProvider(object):
 
         for i in range(lstm_length, len(price_dataset)):
             xs[i] = price_dataset.iloc[i - lstm_length:i].as_matrix()
-            # ys[i] = price_dataset[main_col_name].iloc[i]
-            ys[i] = price_dataset[main_col_name].iloc[i] - price_dataset[main_col_name].iloc[i - 1]
+            ys[i] = price_dataset[main_col_name].iloc[i]
 
         return xs, ys
 
@@ -44,10 +43,16 @@ class RNNDatasetProvider(object):
 
     def enhance_dataset(self, prices, date_from, date_to, curr_1='EUR', curr_2='USD', sec_curr_1='GBP', sec_curr_2='CHF', gran='H1'):
 
+        prices = self.add_delta_to_dataset(prices)
         prices = self.add_rsi_to_dataset(prices)
         prices = self.add_secondary_prices_to_dataset(prices, date_from, sec_curr_1, sec_curr_2, gran)
         prices = self.add_news_to_dataset(prices, date_from, curr_1, curr_2)
         prices = self.add_fibopr_to_dataset(prices)
+
+        return prices
+
+    def add_delta_to_dataset(self, prices):
+        prices['delta'] = prices['close'].diff()
 
         return prices
 

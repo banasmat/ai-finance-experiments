@@ -19,7 +19,6 @@ curr_2 = 'USD'
 lstm_length = 120
 gran = 'H1'
 
-#FIXME add delta to dataset and use it as the main column
 prices = prep_data_provider.get_price_records(curr_1, curr_2, ('datetime', 'close', 'high', 'low'), gran=gran)
 date_from = datetime.datetime.strptime('2005-01-01 01:00:00', '%Y-%m-%d %H:%M:%S')
 date_to = datetime.datetime.strptime('2018-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
@@ -27,21 +26,21 @@ date_to = datetime.datetime.strptime('2018-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
 prices = rnn_dataset_provider.enhance_dataset(prices, date_from, date_to)
 
 train_prices = prices.loc[(prices.index > date_from) & (prices.index < date_to)]
-x_train, y_train = rnn_dataset_provider.prepare_dataset(train_prices, lstm_length=lstm_length)
+x_train, y_train = rnn_dataset_provider.prepare_dataset(train_prices, lstm_length=lstm_length, main_col_name='delta')
 
-# nn.train(x_train, y_train, gran)
+nn.train(x_train, y_train, gran)
 
 test_prices = prices.loc[prices.index > (date_to - datetime.timedelta(hours=(lstm_length*2)))]
-x_test, y_test = rnn_dataset_provider.prepare_dataset(test_prices, lstm_length=lstm_length)
+x_test, y_test = rnn_dataset_provider.prepare_dataset(test_prices, lstm_length=lstm_length, main_col_name='delta')
 #
 # scaled_predictions = nn.predict(x_test)
 # predictions = rnn_dataset_provider.unscale_predictions(scaled_predictions)
 # real_prices = rnn_dataset_provider.unscale_predictions(y_test)
 
 delta_predictions = nn.predict(x_test)
-#
-# print(y_test.tolist()[-lstm_length:])
-# print(delta_predictions.tolist()[-lstm_length:])
+
+print(y_test.tolist()[-lstm_length:])
+print(delta_predictions.tolist()[-lstm_length:])
 
 fig = plt.figure(facecolor='white')
 
@@ -62,7 +61,7 @@ ax1.plot(test_prices['close'].tolist()[-lstm_length:], color='blue', label='Real
 # ax3.plot(test_prices['fibopr_-618'].tolist()[-lstm_length:], color='yellow', label='FIBOPR_-618')
 # ax3.plot(test_prices['fibopr_381'].tolist()[-lstm_length:], color='purple', label='FIBOPR_381')
 # ax3.plot(test_prices['fibopr_-381'].tolist()[-lstm_length:], color='brown', label='FIBOPR_-381')
-ax3.plot(y_test.tolist()[-lstm_length:], color='green', label='Real deltas') #, marker='.', linestyle='None'
+# ax3.plot(y_test.tolist()[-lstm_length:], color='green', label='Real deltas') #, marker='.', linestyle='None'
 ax3.plot(delta_predictions.tolist()[-lstm_length:], color='red', label='Delta predictions') #, marker='.', linestyle='None'
 # ax2.plot(test_prices['rsi'].tolist()[-lstm_length:], color='green', label='RSI')
 plt.title('EURUSD Price Prediction')
