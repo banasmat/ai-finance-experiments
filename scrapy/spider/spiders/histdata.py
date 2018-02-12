@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.http import FormRequest
-from spider.items import CurrencyPair
 import zipfile, io
 
 

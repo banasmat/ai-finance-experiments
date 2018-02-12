@@ -63,12 +63,12 @@ PROBLEM
 
 '''
 
-file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'xbrl', '2017q3', 'sub.txt')
+file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'xbrl', '2017q3', 'tag.txt')
 
 subs: pd.DataFrame = pd.read_csv(file_path, sep='\t', encoding='ISO-8859-1')
 
-print(subs)
-# print(subs[['tag', 'plabel']].tail())
+# print(subs)
+print(subs[['tag', 'tlabel']])
 # print(len(subs['adsh'].drop_duplicates()))
 # print(len(subs['adsh']))
 # print(len(subs['adsh'])/len(subs['adsh'].drop_duplicates()))

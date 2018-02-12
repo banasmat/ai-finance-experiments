@@ -28,7 +28,7 @@ prices = rnn_dataset_provider.enhance_dataset(prices, date_from, date_to)
 train_prices = prices.loc[(prices.index > date_from) & (prices.index < date_to)]
 x_train, y_train = rnn_dataset_provider.prepare_dataset(train_prices, lstm_length=lstm_length, main_col_name='delta')
 
-nn.train(x_train, y_train, gran)
+# nn.train(x_train, y_train, gran)
 
 test_prices = prices.loc[prices.index > (date_to - datetime.timedelta(hours=(lstm_length*2)))]
 x_test, y_test = rnn_dataset_provider.prepare_dataset(test_prices, lstm_length=lstm_length, main_col_name='delta')
@@ -38,6 +38,8 @@ x_test, y_test = rnn_dataset_provider.prepare_dataset(test_prices, lstm_length=l
 # real_prices = rnn_dataset_provider.unscale_predictions(y_test)
 
 delta_predictions = nn.predict(x_test)
+delta_predictions = rnn_dataset_provider.unscale_predictions(delta_predictions)
+y_test = rnn_dataset_provider.unscale_predictions(y_test)
 
 print(y_test.tolist()[-lstm_length:])
 print(delta_predictions.tolist()[-lstm_length:])
@@ -52,7 +54,7 @@ rect3 = [left, 0.1, width, 0.2]
 
 ax1 = fig.add_axes(rect1)
 # ax2 = fig.add_axes(rect2, sharex=ax1)
-ax3 = fig.add_axes(rect3)
+ax3 = fig.add_axes(rect3, sharex=ax1)
 
 lstm_length = int(lstm_length/2)
 
@@ -61,7 +63,7 @@ ax1.plot(test_prices['close'].tolist()[-lstm_length:], color='blue', label='Real
 # ax3.plot(test_prices['fibopr_-618'].tolist()[-lstm_length:], color='yellow', label='FIBOPR_-618')
 # ax3.plot(test_prices['fibopr_381'].tolist()[-lstm_length:], color='purple', label='FIBOPR_381')
 # ax3.plot(test_prices['fibopr_-381'].tolist()[-lstm_length:], color='brown', label='FIBOPR_-381')
-# ax3.plot(y_test.tolist()[-lstm_length:], color='green', label='Real deltas') #, marker='.', linestyle='None'
+ax3.plot(y_test.tolist()[-lstm_length:], color='green', label='Real deltas') #, marker='.', linestyle='None'
 ax3.plot(delta_predictions.tolist()[-lstm_length:], color='red', label='Delta predictions') #, marker='.', linestyle='None'
 # ax2.plot(test_prices['rsi'].tolist()[-lstm_length:], color='green', label='RSI')
 plt.title('EURUSD Price Prediction')
