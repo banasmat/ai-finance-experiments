@@ -22,8 +22,10 @@ class XBRLDataSetProvider(object):
                 continue
 
             num_file = os.path.join(quarter_dir, 'num.txt')
+            sub_file = os.path.join(quarter_dir, 'sub.txt')
 
-            numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1')
+            numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'tag', 'value'])
+            subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'name'])
 
             # print(numbers['tag'])
             #
@@ -32,6 +34,18 @@ class XBRLDataSetProvider(object):
             #
             # tylko jak wybrać te dobre firmy? jak ustawić labels?
             # labels powinno być tyle ile firm
+
+            tags = numbers['tag'].unique()
+
+            df = pd.DataFrame(index=range(0, len(numbers.index)-1), columns=tags)
+            df.fillna(0, inplace=True)
+            tags.join(subs, on='adsh')
+
+
+            print(df.head())
+
+            print(df.columns)
+            quit()
 
 
             revenues = numbers.loc[numbers['tag'] == 'Revenue']
