@@ -37,7 +37,7 @@ class XBRLDataSetProvider(object):
 
             tags = numbers['tag'].unique()
 
-            df = pd.DataFrame(index=range(0, len(numbers.index)-1), columns=tags)
+            df = pd.DataFrame(index=range(0, len(subs.index)-1), columns=tags)
             df.fillna(0, inplace=True)
             tags.join(subs, on='adsh')
 
