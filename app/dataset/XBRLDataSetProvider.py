@@ -35,16 +35,30 @@ class XBRLDataSetProvider(object):
             # tylko jak wybrać te dobre firmy? jak ustawić labels?
             # labels powinno być tyle ile firm
 
-            tags = numbers['tag'].unique()
+            # 1. ile tagów jest reużywanych przez firmy?
 
-            df = pd.DataFrame(index=range(0, len(subs.index)-1), columns=tags)
+            # gdyby każda firma używała każdego taga wyszłoby 733076562 rekordów w num, a jest 2255775 (a często firma używa taga dwa razy dla jednego sprawozdania)
+            # Liczba wszystkich użyć tagów podzielona przez liczbę dostępnych tagów to 20 a firm mamy 6506
+            # stąd wniosek, że każda firma używa dużo customowych tagów
+            # trudno jest utworzyć w ogóle strukturę danych, która pomieści taką ilość tagów
+            # nie widzę sensu traktowania taga jako wspólnej jednostki dla różnych firm
+
+            tags = pd.Series(numbers['tag'].unique())
+            print(len(subs.index))
+            print(len(numbers['tag'])/len(tags))
+            quit()
+            # data = np.zeros((1, len(tags), 2), dtype={'names': tags, 'formats': ['f4'] * len(tags)})
+
+            df = pd.DataFrame(index=range(0, len(subs.index)), columns=tags, dtype=np.int8)
             df.fillna(0, inplace=True)
-            tags.join(subs, on='adsh')
+            df.index = subs['name']
+            # numbers.join(subs, on='adsh')
 
 
             print(df.head())
-
+            # print(data)
             print(df.columns)
+            print(df.info(memory_usage=True))
             quit()
 
 
