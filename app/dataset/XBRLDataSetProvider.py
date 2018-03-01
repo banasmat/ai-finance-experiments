@@ -7,7 +7,29 @@ import os
 
 class XBRLDataSetProvider(object):
 
+    @staticmethod
+    def extract_cik_numbers():
+        res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
 
+        cik_numbers = []
+
+        for quarter_dir in reversed(os.listdir(res_dir)):
+
+            quarter_dir = os.path.join(res_dir, quarter_dir)
+
+            if not os.path.isdir(quarter_dir):
+                continue
+
+            sub_file = os.path.join(quarter_dir, 'sub.txt')
+            subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['cik'])
+
+            cik_numbers = list(set(cik_numbers + subs['cik'].tolist()))
+
+        cik_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'cik.txt')
+
+        with open(cik_file_path, 'w') as f:
+            for cik in cik_numbers:
+                f.write("%s\n" % cik)
 
     @staticmethod
     def get_data_set():
