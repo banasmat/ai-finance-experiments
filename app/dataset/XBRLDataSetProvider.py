@@ -3,6 +3,7 @@ from typing import List, Tuple
 import numpy as np
 import pandas as pd
 import os
+import pickle
 
 
 class XBRLDataSetProvider(object):
@@ -11,7 +12,7 @@ class XBRLDataSetProvider(object):
     def extract_cik_numbers():
         res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
 
-        cik_numbers = []
+        cik_map = {}
 
         for quarter_dir in reversed(os.listdir(res_dir)):
 
@@ -21,15 +22,15 @@ class XBRLDataSetProvider(object):
                 continue
 
             sub_file = os.path.join(quarter_dir, 'sub.txt')
-            subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['cik'])
+            subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['cik', 'name'])
 
-            cik_numbers = list(set(cik_numbers + subs['cik'].tolist()))
+            for index, row in subs.iterrows():
+                cik_map[row['cik']] = row['name']
 
-        cik_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'cik.txt')
+        cik_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'cik.pkl')
 
-        with open(cik_file_path, 'w') as f:
-            for cik in cik_numbers:
-                f.write("%s\n" % cik)
+        with open(cik_file_path, 'wb') as f:
+            pickle.dump(cik_map, f)
 
     @staticmethod
     def get_data_set():
