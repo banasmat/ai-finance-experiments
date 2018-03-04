@@ -66,6 +66,28 @@ class FinancialStatementSpider(scrapy.Spider):
             'balance_sheet': 'consolidated balance sheets',
             'cash_flow': 'consolidated statements of cash flows'
         }
+        titles = [
+            'revenue', #?
+            'net operating revenues',
+            'cost of goods sold',
+            'gross profit', #
+            'selling, general and administrative expenses',
+            'research', #?
+            'research and development',
+            'depreciation', #?
+            'Depreciation depletion and amortization',
+            'operating profit', #
+            'interest expense',
+            'gain (loss) sale assets',
+            'other',
+            'income before tax', #
+            'income before income taxes',
+            'income taxes paid',
+            'income taxes',
+            'net earnings', #!
+
+            ''
+        ]
 
         is_period_important = False
         is_document_important = False
@@ -115,8 +137,10 @@ class FinancialStatementSpider(scrapy.Spider):
                 mode = 'a'
             with open(file_path, mode) as f:
                 print('Saving output to ' + file_path)
+                #FIXME sort before saving
                 w = csv.DictWriter(f, fin_dict.keys())
-                w.writeheader()
+                if mode == 'w':
+                    w.writeheader()
                 w.writerow(fin_dict)
         else:
             pass
