@@ -85,7 +85,7 @@ class FinancialStatementSpider(scrapy.Spider):
             # balance sheet
             'cash & short-term investments': [],
             'total inventory': [],
-            'total receivables, net': [],
+            'total receivables, net': ['AccountsReceivableNetCurrent'],
             'prepaid expenses': [],
             'other current assets, total': [],
             'total current assets': [], #
@@ -95,8 +95,8 @@ class FinancialStatementSpider(scrapy.Spider):
             'long-term investments': [],
             'other assets': [],
             'total assets': [], #
-            'accounts payable': [],
-            'accrued expenses': [],
+            'accounts payable': ['AccountsPayableCurrent', 'AccountsPayableRelatedPartiesCurrent'],
+            'accrued expenses': ['AccruedLiabilitiesCurrent'],
             'short-term debt': [],
             'long-term debt due': [],
             'other current liabilities': [],
@@ -108,7 +108,7 @@ class FinancialStatementSpider(scrapy.Spider):
             'total liabilities': [], #
             'preferred stock': [],
             'common stock': [],
-            'additional paid in capital': [],
+            'additional paid in capital': ['AdditionalPaidInCapital'],
             'retained earnings': [],
             'treasury stock-common': [],
             'other equity': [],
@@ -117,7 +117,7 @@ class FinancialStatementSpider(scrapy.Spider):
 
             # cash flow
             'net income': [],
-            'depreciation': [],
+            'depreciation': ['AccumulatedDepreciationDepletionAndAmortizationPropertyPlantAndEquipment'],
             'amortization': [],
             'total cash from operating activities': [], #
             'capital expenditures': [],
@@ -129,7 +129,7 @@ class FinancialStatementSpider(scrapy.Spider):
             'total cash from financing activities': [], #
             'net change in cash': [], #
 
-
+            '?': ['AllowanceForDoubtfulAccountsReceivableCurrent']
 
         }
 

@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import os
 import pickle
+import csv
 
 
 class XBRLDataSetProvider(object):
@@ -31,6 +32,30 @@ class XBRLDataSetProvider(object):
 
         with open(cik_file_path, 'wb') as f:
             pickle.dump(cik_map, f)
+
+    @staticmethod
+    def organize_tags():
+        res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
+        all_tags = pd.Series()
+
+        for quarter_dir in reversed(os.listdir(res_dir)):
+
+            quarter_dir = os.path.join(res_dir, quarter_dir)
+
+            if not os.path.isdir(quarter_dir):
+                continue
+
+            tag_file = os.path.join(quarter_dir, 'tag.txt')
+            tags = pd.read_csv(tag_file, sep='\t', encoding='utf-8', quoting=csv.QUOTE_NONE, usecols=['tag'])
+            all_tags = all_tags.append(tags)
+
+        all_tags = all_tags['tag'].unique().tolist()
+
+        target_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'tags.txt')
+
+        with open(target_file_path, 'w') as f:
+            for item in all_tags:
+                f.write("%s\n" % item)
 
     @staticmethod
     def get_data_set():
