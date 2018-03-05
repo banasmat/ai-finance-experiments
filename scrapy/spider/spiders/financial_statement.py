@@ -21,7 +21,7 @@ class FinancialStatementSpider(scrapy.Spider):
         with open(cik_file_path, 'rb') as f:
             self.cik_map = pickle.load(f)
 
-        for cik in list(self.cik_map.keys())[:2]:
+        for cik in list(self.cik_map.keys())[:10]:
             self.start_urls.append(self.url_base + '/Archives/edgar/data/' + str(cik))
 
         super().__init__(**kwargs)
@@ -66,28 +66,72 @@ class FinancialStatementSpider(scrapy.Spider):
             'balance_sheet': 'consolidated balance sheets',
             'cash_flow': 'consolidated statements of cash flows'
         }
-        titles = [
-            'revenue', #?
-            'net operating revenues',
-            'cost of goods sold',
-            'gross profit', #
-            'selling, general and administrative expenses',
-            'research', #?
-            'research and development',
-            'depreciation', #?
-            'Depreciation depletion and amortization',
-            'operating profit', #
-            'interest expense',
-            'gain (loss) sale assets',
-            'other',
-            'income before tax', #
-            'income before income taxes',
-            'income taxes paid',
-            'income taxes',
-            'net earnings', #!
+        titles = {
+            # income statement
+            'revenue': ['net operating revenues', 'total non-interest revenues'],
+            'cost of goods sold': [],
+            'gross profit': [], #
+            'selling, general & admin': ['selling, general and administrative expenses'],
+            'research & development': ['research', 'research and development'], #?
+            'interest': ['interest expense'],
+            'depreciation': ['depreciation depletion and amortization'], #?
+            'operating profit': [], #
+            'gain (loss) sale assets': [],
+            'other': [],
+            'income before tax': ['income before income taxes'], #
+            'income taxes paid': ['income taxes'],
+            'net earnings': [], #!
 
-            ''
-        ]
+            # balance sheet
+            'cash & short-term investments': [],
+            'total inventory': [],
+            'total receivables, net': [],
+            'prepaid expenses': [],
+            'other current assets, total': [],
+            'total current assets': [], #
+            'property/plant/equipment': [],
+            'goodwill, net': [],
+            'intangibles, net': [],
+            'long-term investments': [],
+            'other assets': [],
+            'total assets': [], #
+            'accounts payable': [],
+            'accrued expenses': [],
+            'short-term debt': [],
+            'long-term debt due': [],
+            'other current liabilities': [],
+            'total current liabilities': [], #
+            'long-term debt': [],
+            'deferred income tax': [],
+            'minority interest': [],
+            'other liabilities': [],
+            'total liabilities': [], #
+            'preferred stock': [],
+            'common stock': [],
+            'additional paid in capital': [],
+            'retained earnings': [],
+            'treasury stock-common': [],
+            'other equity': [],
+            'total shareholders equity': [], #
+            'total liabilities & shareholders equity': [], #
+
+            # cash flow
+            'net income': [],
+            'depreciation': [],
+            'amortization': [],
+            'total cash from operating activities': [], #
+            'capital expenditures': [],
+            'other investing cash flow items': [],
+            'total cash from investing activities': [], #
+            'cash dividends paid': [],
+            'issuance retirement of stock, net': [],
+            'issuance retirement of debt, net': [],
+            'total cash from financing activities': [], #
+            'net change in cash': [], #
+
+
+
+        }
 
         is_period_important = False
         is_document_important = False
@@ -139,8 +183,8 @@ class FinancialStatementSpider(scrapy.Spider):
                 print('Saving output to ' + file_path)
                 #FIXME sort before saving
                 w = csv.DictWriter(f, fin_dict.keys())
-                if mode == 'w':
-                    w.writeheader()
+                # if mode == 'w':
+                w.writeheader()
                 w.writerow(fin_dict)
         else:
             pass
