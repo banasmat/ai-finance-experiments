@@ -1,0 +1,60 @@
+
+revenue:
+OR - 90
+NetworkCosts - 64
+NetworkAccess - 62
+NOK - 60
+NetworkOperations - 60
+ImpairmentChargeSatelliteNetworkNet - 60
+Net - 60
+AtmNetworkFees - 59
+FivePointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt16-October-2012Member - 59
+TwoPointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt14-December-2012Member - 59
+
+costofgoodssold:
+OR - 90
+NetworkCosts - 64
+NetworkAccess - 62
+NOK - 60
+NetworkOperations - 60
+ImpairmentChargeSatelliteNetworkNet - 60
+Net - 60
+AtmNetworkFees - 59
+FivePointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt16-October-2012Member - 59
+TwoPointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt14-December-2012Member - 59
+
+grossprofit:
+OR - 90
+NetworkCosts - 64
+NetworkAccess - 62
+NOK - 60
+NetworkOperations - 60
+ImpairmentChargeSatelliteNetworkNet - 60
+Net - 60
+AtmNetworkFees - 59
+FivePointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt16-October-2012Member - 59
+TwoPointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt14-December-2012Member - 59
+
+selling,general&admin:
+OR - 90
+NetworkCosts - 64
+NetworkAccess - 62
+NOK - 60
+NetworkOperations - 60
+ImpairmentChargeSatelliteNetworkNet - 60
+Net - 60
+AtmNetworkFees - 59
+FivePointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt16-October-2012Member - 59
+TwoPointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt14-December-2012Member - 59
+
+research&development:
+OR - 90
+NetworkCosts - 64
+NetworkAccess - 62
+NOK - 60
+NetworkOperations - 60
+ImpairmentChargeSatelliteNetworkNet - 60
+Net - 60
+AtmNetworkFees - 59
+FivePointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt16-October-2012Member - 59
+TwoPointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt14-December-2012Member - 59

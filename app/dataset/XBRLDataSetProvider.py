@@ -5,9 +5,76 @@ import pandas as pd
 import os
 import pickle
 import csv
-
+from fuzzywuzzy import process
 
 class XBRLDataSetProvider(object):
+
+    titles = {
+        # income statement
+        'revenue': ['net operating revenues', 'total non-interest revenues'],
+        'cost of goods sold': [],
+        'gross profit': [],  #
+        'selling, general & admin': ['selling, general and administrative expenses'],
+        'research & development': ['research', 'research and development'],  # ?
+        'interest': ['interest expense'],
+        'depreciation': ['depreciation depletion and amortization'],  # ?
+        'operating profit': [],  #
+        'gain (loss) sale assets': [],
+        'other': [],
+        'income before tax': ['income before income taxes'],  #
+        'income taxes paid': ['income taxes'],
+        'net earnings': [],  # !
+
+        # balance sheet
+        'cash & short-term investments': [],
+        'total inventory': [],
+        'total receivables, net': ['AccountsReceivableNetCurrent'],
+        'prepaid expenses': [],
+        'other current assets, total': [],
+        'total current assets': [],  #
+        'property/plant/equipment': [],
+        'goodwill, net': [],
+        'intangibles, net': [],
+        'long-term investments': [],
+        'other assets': [],
+        'total assets': [],  #
+        'accounts payable': ['AccountsPayableCurrent', 'AccountsPayableRelatedPartiesCurrent'],
+        'accrued expenses': ['AccruedLiabilitiesCurrent'],
+        'short-term debt': [],
+        'long-term debt due': [],
+        'other current liabilities': [],
+        'total current liabilities': [],  #
+        'long-term debt': [],
+        'deferred income tax': [],
+        'minority interest': [],
+        'other liabilities': [],
+        'total liabilities': [],  #
+        'preferred stock': [],
+        'common stock': [],
+        'additional paid in capital': ['AdditionalPaidInCapital'],
+        'retained earnings': [],
+        'treasury stock-common': [],
+        'other equity': [],
+        'total shareholders equity': [],  #
+        'total liabilities & shareholders equity': [],  #
+
+        # cash flow
+        'net income': [],
+    #    'depreciation': ['AccumulatedDepreciationDepletionAndAmortizationPropertyPlantAndEquipment'],
+        'amortization': [],
+        'total cash from operating activities': [],  #
+        'capital expenditures': [],
+        'other investing cash flow items': [],
+        'total cash from investing activities': [],  #
+        'cash dividends paid': [],
+        'issuance retirement of stock, net': [],
+        'issuance retirement of debt, net': [],
+        'total cash from financing activities': [],  #
+        'net change in cash': [],  #
+
+     #   '?': ['AllowanceForDoubtfulAccountsReceivableCurrent']
+
+    }
 
     @staticmethod
     def extract_cik_numbers():
@@ -51,11 +118,23 @@ class XBRLDataSetProvider(object):
 
         all_tags = all_tags['tag'].unique().tolist()
 
-        target_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'tags.txt')
+        # target_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'tags.txt')
+        #
+        # with open(target_file_path, 'a') as f:
+        #     for item in all_tags:
+        #         f.write("%s\n" % item)
 
-        with open(target_file_path, 'w') as f:
-            for item in all_tags:
-                f.write("%s\n" % item)
+        target_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'tags_organized.txt')
+
+        for title in XBRLDataSetProvider.titles.keys():
+
+            title = title.replace(' ', '')
+
+            result = process.extract("new york jets", all_tags, limit=10)
+            with open(target_file_path, 'a') as f:
+                f.write("\n%s:\n" % title)
+                for item in result:
+                    f.write("%s - %s\n" % (item[0], str(item[1])))
 
     @staticmethod
     def get_data_set():
