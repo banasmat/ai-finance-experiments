@@ -128,9 +128,9 @@ class XBRLDataSetProvider(object):
 
         for title in XBRLDataSetProvider.titles.keys():
 
-            title = title.replace(' ', '')
+            title = title.replace('&', 'and')
 
-            result = process.extract("new york jets", all_tags, limit=10)
+            result = process.extract(title, all_tags, limit=15)
             with open(target_file_path, 'a') as f:
                 f.write("\n%s:\n" % title)
                 for item in result:

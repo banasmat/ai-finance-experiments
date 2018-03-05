@@ -1,60 +1,459 @@
 
 revenue:
-OR - 90
-NetworkCosts - 64
-NetworkAccess - 62
-NOK - 60
-NetworkOperations - 60
-ImpairmentChargeSatelliteNetworkNet - 60
-Net - 60
-AtmNetworkFees - 59
-FivePointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt16-October-2012Member - 59
-TwoPointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt14-December-2012Member - 59
+Revenue - 100
+Revenues - 93
+Revenue1 - 93
+ElectricalConstructionRevenue - 90
+ShippingAndInstallationRevenue - 90
+OperatingLeaseAndOtherPropertyRevenue - 90
+DiagnosticServiceRevenue - 90
+OperatingRevenues - 90
+RevenuesTitleInsuranceAbstract - 90
+SalesRevenueAncillaryServices - 90
+OtherRevenue - 90
+AirfreightRevenue - 90
+CustomsBrokerageAndOtherServicesRevenue - 90
+OceanFreightAndOceanServicesRevenue - 90
+FairValueOfRevenueEquipmentTraded - 90
 
-costofgoodssold:
-OR - 90
-NetworkCosts - 64
-NetworkAccess - 62
-NOK - 60
-NetworkOperations - 60
-ImpairmentChargeSatelliteNetworkNet - 60
-Net - 60
-AtmNetworkFees - 59
-FivePointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt16-October-2012Member - 59
-TwoPointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt14-December-2012Member - 59
+cost of goods sold:
+CostOfGoodsSold - 91
+CostOfGoodsSold1 - 88
+CostOfGoodsGold - 85
+CostOfGoodsSoldNet - 83
+CostOfGoodsSoldnet - 83
+NetCostOfGoodsSold - 83
+DistributionSalesCostOfGoodsSold - 82
+IncreaseDecreaseInDeferredCostOfGoodsSold - 82
+DepreciationCostOfGoodsSold - 82
+RestructuringChargesUnderCostOfGoodsSold - 82
+EquipmentTransferredToCostOfGoodsSold - 82
+MobilityProductsCostOfGoodsSold - 82
+LifestyleSegmentCostOfGoodsSold - 82
+ProductAndOtherCostOfGoodsSold - 82
+EnergyTechnologyCostOfGoodsSold - 82
 
-grossprofit:
-OR - 90
-NetworkCosts - 64
-NetworkAccess - 62
-NOK - 60
-NetworkOperations - 60
-ImpairmentChargeSatelliteNetworkNet - 60
-Net - 60
-AtmNetworkFees - 59
-FivePointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt16-October-2012Member - 59
-TwoPointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt14-December-2012Member - 59
+gross profit:
+GrossProfit - 96
+GrossProfit1 - 92
+GrossProfit2 - 92
+GrossProfits - 92
+IT - 90
+FI - 90
+ProductGrossProfit - 86
+ServicesGrossProfit - 86
+LeaseContractsGrossProfit - 86
+LicenseGrossProfit - 86
+MaintenanceGrossProfit - 86
+RentalAndRoyaltyGrossProfit - 86
+RealEstateLoansGrossProfit - 86
+IncreaseDecreaseDeferredGrossProfit - 86
+SystemsGrossProfit - 86
 
-selling,general&admin:
-OR - 90
-NetworkCosts - 64
-NetworkAccess - 62
-NOK - 60
-NetworkOperations - 60
-ImpairmentChargeSatelliteNetworkNet - 60
-Net - 60
-AtmNetworkFees - 59
-FivePointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt16-October-2012Member - 59
-TwoPointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt14-December-2012Member - 59
+selling, general and admin:
+StockbasedCompensationsellingGeneralAndAdmin - 83
+SellingGeneralAndAdministrative - 77
+OtherSellingGeneralAndAdministrativeExpense - 76
+RelatedPartyTransactionSellingGeneralAndAdministrativeExpensesFromTransactionsWithRelatedParty - 76
+SellingGeneralAndAdministrativeExpenseAbstract - 76
+SellingGeneralAndAdministrativeExpensesMember - 76
+SellingGeneralandAdministrativeExpenseAmortization - 76
+SellingGeneralAndAdministrativeExpenseRelatedParty - 76
+SellingGeneralandAdministrativeExpenseasaPercentageofNetSales - 76
+SellingGeneralAndAdministrativeExpenseExcludingDirectSellingCosts - 76
+SellingGeneralAndAdministrativeExpensePercentToSales - 76
+DepreciationAndAmortizationSellingGeneralAndAdministrative - 76
+SellingGeneralAndAdministrativeExpensesExcludingDepreciationAmortizationStockBasedCompensationAndPreopeningCosts - 76
+SellingGeneralAndAdministrativeExpensesNetPercentage - 76
+SellingGeneralandAdministrativeExpensePortionAttributabletoSegments - 76
 
-research&development:
+research and development:
+ResearchAndDevelopment - 96
+Research - 90
+Development - 90
+ResearchAndDevelopmentNet - 90
+ResearchAndDevelopmentFees - 88
+ResearchAndDevelopmentCost - 88
+ResearchAmpDevelopment - 87
+DeferredTaxAssetsInProcessResearchAndDevelopment - 86
+PaymentsToAcquireInProcessResearchAndDevelopment - 86
+AcquiredInProcessResearchandDevelopment - 86
+TaxIncentiveCreditsResearchAndDevelopment - 86
+IssuanceOfCommonStockForResearchAndDevelopment - 86
+AcquiredInProcessResearchAndDevelopment - 86
+PurchasedInProcessResearchAndDevelopment - 86
+IncreaseDecreaseInAccruedResearchAndDevelopment - 86
+
+interest:
+Interest - 100
+Interest1 - 94
+CollateralDepositDisbursementsRelatedToInterestRateSwap - 90
+NonCashInterestExpense - 90
+IncomeBeforeEquityInterestAndExtraordinaryLoss - 90
+Cashpaidforinterestcashflow - 90
+SubsidiaryDividendsToNoncontrollingInterests - 90
+IncomeBeforeInterestExpenseAndTaxes - 90
+ScheduleofinterestandincometaxespaidAbstract - 90
+IncreaseDecreaseInInterestAndTaxesPayable - 90
+AmortizationOfSubordinatedDeferrableInterestDebentures - 90
+AccruedInterestOnFinancingObligation - 90
+Contingentinterestpaymentfordebenture - 90
+InterestExpenseAndAmortizationOfDeferredFinancingCostsThirdParty - 90
+InterestPaidDeemedLandlordFinancing - 90
+
+depreciation:
+Depreciation - 100
+Depreciation1 - 96
+Depreciation2 - 96
+Deprecation - 96
+Depreciations - 96
+Depreciation3 - 96
+Inventorywritedownnetofdepreciation - 90
+GeneralAndAdministrativeExpenseExcludingDepreciation - 90
+Depreciationandamortizationexcludingdepreciationoncommunicationequipment - 90
+DepreciationDepletionAmortizationAndAccretionIncludingDiscontinuedOperations - 90
+DE - 90
+AccumulatedDepreciationDepletionAndAmortizationSaleOfPropertyPlantAndEquipment1 - 90
+AccumulatedDepreciationDepletionAndAmortizationPropertyPlantAndEquipment - 90
+AccumulatedDepreciationDepletionAndAmortizationPropertyPlantAndEquipmentPeriodIncreaseDecrease - 90
+CostOfServicesDepreciation - 90
+
+operating profit:
+IN - 90
+NG - 90
+PE - 90
+IT - 90
+FI - 90
+Operating - 90
+FinancialServicesOperatingProfit - 87
+OperatingProfitLoss - 86
+OperatingProfitNetPercentage - 85
+ReconciliationOfOperatingProfitLossFromSegmentsToConsolidatedAbstract - 85
+OperatingRights - 77
+Racing - 75
+OperatingPropertiesNet - 74
+TransferFromInvestmentInUnconsolidatedJointVenturesToOperatingProperties - 73
+Transferfromoperatingpropertiestoliabilitiesofrealestateassetsheldforsale - 73
+
+gain (loss) sale assets:
+Assets - 90
+Loss - 90
+WarrantsIssuedForAcquisitionOfSensationalBrandsInc.Assets - 86
+ProceedsFromMaturitiesOfInvestmentSecuritiesAvailable-For-Sale - 86
+AccretionOfNetDiscountsOnSecuritiesAvailable-For-Sale - 86
+PaymentsForImprovementOfRealEstateHeld-For-Sale - 86
+GainLossOnSaleAssets - 84
+GainLossOnSaleOfAssets - 80
+GainLossonSaleofAssets - 80
+GainLossOnSaleofAssets - 80
+GainLossOnSaleOfAssets1 - 78
+GainLossOnSalesOfAssets - 78
+GainLossOnSaleAndWrite-DownOfOtherRealEstateAndRepossessedAssets - 77
+GainLossOnSaleOfAssets11 - 77
+Assets1 - 77
+
+other:
+Other - 100
+Other2 - 91
+Others - 91
+DeferredChargesAndOtherAssets - 90
+FeesAndCommissionsOtherAffiliates - 90
+OperatingLeaseAndOtherPropertyRevenue - 90
+AdvancePaymentsAndOthersRelatedParties - 90
+CustomersOtherthanStarbucksMember - 90
+TradeandOtherReceivables - 90
+OtherRevenue - 90
+CostOfCustomsBrokerageAndOtherServices - 90
+CustomsBrokerageAndOtherServicesRevenue - 90
+AboveMarketLeasesandOtherLiabilities - 90
+RestructuringChargesAndOtherCosts - 90
+OtherLongTermAssets - 90
+
+income before tax:
+IncomeBeforeTaxes - 88
+NetIncomeBeforeTax - 86
+ComprehensiveIncomeBeforeTax - 85
+TotalComprehensiveIncomeBeforeTax - 85
+NetRealizedGainLossIncludedInNetIncomeBeforeTax - 85
+OtherComprehensiveIncomeBeforeTax - 85
+DefinedBenefitPlanAccumulatedOtherComprehensiveIncomeBeforeTax - 82
+OtherComprehensiveIncomeLossAmortizationOfNetUnrealizedHoldingLossesToIncomeBeforeTax - 82
+Othercomprehensiveincomelossderivativesqualifyingashedgesreclassificationadjustmentsinnetincomebeforetax - 82
+ChangesInOtherThanTemporaryImpairmentLossesRecognizedInOtherComprehensiveIncomeBeforeTax - 82
+OtherComprehensiveIncomeAmortizationOfUnrealizedHoldingGainLossPreviouslyRecognizedInOtherComprehensiveIncomeBeforeTax - 82
+OtherComprehensiveIncomeLossReclassificationAdjustmentIncludedInNetIncomeBeforeTax - 82
+PortionOfLossRecognizedInOtherComprehensiveIncomeBeforeTax - 82
+OtherThanTemporaryImpairmentReclassificationAdjustmentForLossesIncludedInNetIncomeBeforeTax - 82
+ReclassificationAdjustmentForCreditRelatedOttiIncludedInNetIncomeBeforeTax - 82
+
+income taxes paid:
+IncomeTaxesPaid - 94
+IncomeTaxesPaids - 91
+Taxes - 90
+IncomeTaxPaid - 87
+IncomeTaxesPaidNet - 86
+InterestAndIncomeTaxesPaid - 85
+DisposalGroupIncomeTaxesPaid - 85
+IncreaseDecreaseInIncomeTaxesPaid - 85
+AMTIncreaseDecreaseInIncomeTaxesPaid - 85
+IncomeTaxes - 82
+IncomeTax1 - 81
+TaxesPaid1 - 81
+IncomeTaxesPaidOther - 81
+IncomeTaxesPaidState - 81
+IncomeTax - 80
+
+net earnings:
+NetEarnings - 96
+NetEarnings1 - 92
+NetEarning - 91
+IN - 90
+AR - 90
+NG - 90
+Ar - 90
+Net - 90
+Earnings - 90
+InterestExpense-Net - 86
+DuetoAshfordInc.net - 86
+ContributionsfromtheWilliamsCompaniesInc.net - 86
+Long-TermCoreInventory-Net - 86
+FilmAndTelevisionCosts-Net - 86
+Retained-Earnings-Other - 86
+
+cash and short-term investments:
+Cash - 90
+Investments - 90
+Investment - 90
+Investments1 - 86
+TransferFromRealEstateUnderDevelopmentToCo-Investments - 86
+Investmentsbs - 83
+InvestmentsIn - 83
+InvestmentsBS - 83
+Investment1 - 82
+ShortTermInvestments - 81
+ChangeInShortTermInvestments - 81
+IncreaseDecreaseOfRestrictedCashAndShortTermInvestments - 81
+IncreaseDecreaseInRestrictedCashAndShortTermInvestments - 81
+DecreaseIncreaseInRestrictedCashAndShortTermInvestments - 81
+CostShortTermInvestments - 80
+
+total inventory:
+TotalInventory - 97
+InventoryTotal - 92
+AL - 90
+IN - 90
 OR - 90
-NetworkCosts - 64
-NetworkAccess - 62
-NOK - 60
-NetworkOperations - 60
-ImpairmentChargeSatelliteNetworkNet - 60
-Net - 60
-AtmNetworkFees - 59
-FivePointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt16-October-2012Member - 59
-TwoPointTwoFivePercentNewYorkLifeGlobalFundingMaturingAt14-December-2012Member - 59
+VE - 90
+Inventory - 90
+Total - 90
+Inventory1 - 86
+Inventorys - 86
+SharesIssuedForTheSettlementOfDebt-total - 86
+TotalInventoryAtNetRealizableValueAcquiredDuringYear - 84
+TotalInventories - 84
+BusinessAcquisitionPurchasePriceAllocationCurrentAssetsInventoryTotal - 83
+LotInventory - 81
+
+total receivables, net:
+Total - 90
+Receivables - 90
+Receivable - 90
+Net - 90
+ContributionsfromtheWilliamsCompaniesInc.net - 86
+SharesIssuedForTheSettlementOfDebt-total - 86
+TotalReceivable - 81
+ReceivablesNet - 78
+OtherReceivablesNet - 78
+Total1 - 78
+Tradereceivablesnet - 78
+NotesReceivablesNet - 78
+TradeReceivablesNet - 78
+ContractReceivablesNet - 77
+NoteReceivableNet - 77
+
+prepaid expenses:
+PrepaidExpenses - 97
+PrepaidExpenses3 - 94
+PrepaidExpenses1 - 94
+PrepaidExpense - 93
+PA - 90
+ID - 90
+Expenses - 90
+Expense - 90
+PrepaidExpense1 - 90
+Prepaid - 90
+EXPENSES - 90
+Re - 90
+IncreaseDecreaseInReceivablesAndPrepaidExpenses - 87
+ReceivablesAndPrepaidExpenses - 87
+IncreaseDecreaseinInventoriesandPrepaidExpenses - 87
+
+other current assets, total:
+Assets - 90
+Other - 90
+Total - 90
+Current - 90
+Rent - 90
+OtherNoncurrentAssetsTotal - 87
+WarrantsIssuedForAcquisitionOfSensationalBrandsInc.Assets - 86
+RecoverablePostretirementBenefits-Current - 86
+IncreaseDecreaseinPrepaidExpenseandOtherCurrentAssetsTotal - 83
+CurrentAssets - 83
+CurrentAsset - 83
+Total1 - 82
+OtherCurrentAssets - 80
+NetAssets - 80
+NETASSETS - 80
+
+total current assets:
+Totalcurrentassets - 95
+TotalCurrentAssets - 95
+TOTALCURRENTASSETS - 95
+TotalCurrentAssets1 - 92
+Assets - 90
+Total - 90
+Current - 90
+Rent - 90
+TotalNoncurrentAssets - 88
+TotalNoncurrent_Assets - 86
+DepositCapitalLeaseNon-Current - 86
+WarrantsIssuedForAcquisitionOfSensationalBrandsInc.Assets - 86
+RecoverablePostretirementBenefits-Current - 86
+SharesIssuedForTheSettlementOfDebt-total - 86
+TotalOtherCurrentAssets - 84
+
+property/plant/equipment:
+PropertyPlantEquipment - 96
+PropertyPlantAndEquipment - 90
+Equipment - 90
+PropertyPlantEquipmentNet - 90
+GainLossOnSaleOfPropertyPlantEquipment - 86
+PropertyAndEquipment - 86
+NonCashGainLossOnsaleofpropertyplantequipment - 86
+GainLossOnInvestmentsAndDispositionOfPropertyPlantEquipment - 86
+GainLossOnInvoluntaryConversionOfPropertyPlantEquipment - 86
+GainLossOnDispositionOfAdministrativePropertyPlantEquipment - 86
+NetGainLossOnSaleOfPropertyPlantEquipment - 86
+DepreciationandGainLossonDispositionofPropertyPlantEquipment - 86
+GainLossOnSpecificSaleOfPropertyPlantEquipment - 86
+GainLossOnSaleOrWritedownOfPropertyPlantEquipment - 86
+GainLossOnSaleOfIdlePropertyPlantEquipment - 86
+
+goodwill, net:
+GoodwillNet - 92
+Goodwill - 90
+Net - 90
+ContributionsfromtheWilliamsCompaniesInc.net - 86
+Long-TermCoreInventory-Net - 86
+FilmAndTelevisionCosts-Net - 86
+PropertyPlantAndEquipmentAndInvestmentsOtherAndGoodwillNet - 83
+IntangibleAssetsLiabilitiesandGoodwillNet - 83
+IntangibleAssetsAndGoodwillNet - 83
+IntangibleAssetsIncludingGoodwillNet - 83
+GoodwillNetOfCashAcquired - 79
+IntangibleAssetsNetExcludingGoodwillOne - 75
+Goodwill1 - 73
+GoodwillLineItems - 73
+Goodwill3 - 73
+
+intangibles, net:
+Intangibles - 95
+IntangiblesNet - 93
+IN - 90
+NG - 90
+Net - 90
+ContributionsfromtheWilliamsCompaniesInc.net - 86
+Long-TermCoreInventory-Net - 86
+FilmAndTelevisionCosts-Net - 86
+CoreDepositIntangiblesNet - 84
+BelowMarketLeaseContractIntangiblesNet - 84
+FranchiseAgreementsAndOtherIntangiblesNet - 84
+CoreDepositAndOtherAmortizableIntangiblesNet - 84
+BelowmarketLeaseIntangiblesNet - 84
+AcquiredCurriculumAndTechnologyIntangiblesNet - 84
+RealEstateInvestmentPropertyAndLeaseIntangiblesNet - 84
+
+long-term investments:
+LongTermInvestments - 95
+LongTermInvestment - 92
+Investments - 90
+Investment - 90
+InvestmentsLongTerm - 90
+PaymentsForProceedsFromLongtermInvestments - 86
+PaymentsToAcquireLongtermInvestments - 86
+ProceedsFromMaturitiesPrepaymentsAndCallsOfLongtermInvestments - 86
+ProceedsFromSaleOfLongtermInvestments - 86
+IncreaseDecreaseInLongtermInvestments - 86
+ProceedsfromDivestitureofBusinessandSaleofLongtermInvestments - 86
+Investments1 - 86
+PayableForPurchaseOfLongTermInvestments - 86
+PrepaymentsForPurchaseOfLongTermInvestments - 86
+PaymentsForAdvancesToAcquireLongTermInvestments - 86
+
+other assets:
+OtherAssets - 96
+OtherAssets1 - 92
+OtherAssets3 - 92
+OtherAssets2 - 92
+AssetsOther - 91
+OtherAsset - 91
+OtherAssts - 91
+Assets - 90
+Other - 90
+OtherAssetsBS - 88
+OtherAssetsCF - 88
+OtherAssetsNc - 88
+OfOtherAssets - 88
+DeferredChargesAndOtherAssets - 86
+IncreaseDecreaseInAccruedLiabilitiesAndOtherAssets - 86
+
+total assets:
+Totalassets - 96
+TotalAssets - 96
+TotalAssets1 - 92
+AssetsTotal - 91
+AL - 90
+Assets - 90
+Total - 90
+WarrantsIssuedForAcquisitionOfSensationalBrandsInc.Assets - 86
+RestrictedTotalAssets - 86
+SharesIssuedForTheSettlementOfDebt-total - 86
+SubtotalAssets - 85
+TotalAssetsToBeContributedToVICIProperties - 83
+TotalAssetsBeforeFundsHeldClients - 83
+AssetsOfConsolidatedVariableInterestEntitiesIncludedInTotalAssetsAboveAbstract - 83
+TotalAssetsExclusiveOfAssetsUnderVehiclePrograms - 83
+
+accounts payable:
+AccountsPayable - 97
+AccountsPayable1 - 94
+AccountsPayables - 94
+AccountsPayable3 - 94
+AccountsPayable2 - 94
+AcountsPayable - 93
+AccountPayable - 93
+AccountsPayable31 - 91
+PA - 90
+CO - 90
+AcountsPayable1 - 90
+AccountantsPayable - 88
+AccountsPayableNet - 88
+IncreaseDecreaseInAccountsPayable - 87
+IncreaseDecreaseInOtherAccountsPayable - 87
+
+accrued expenses:
+Accruedexpenses - 97
+AccruedExpenses - 97
+AcccruedExpenses - 94
+AccruedExpenses1 - 94
+Accrued_expenses - 94
+AccruedExpenses3 - 94
+AccruedExpense - 93
+AccruedExpenses11 - 91
+PE - 90
+Expenses - 90
+Expense - 90
+RU - 90
+EXPENSES - 90
+AccruedExpensesNet - 88
+RelatedPartyPayableAndAccruedExpenses - 87
