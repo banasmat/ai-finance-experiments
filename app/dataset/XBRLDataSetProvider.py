@@ -688,9 +688,10 @@ class XBRLDataSetProvider(object):
                     f.write("%s - %s\n" % (item[0], str(item[1])))
 
     @staticmethod
-    def get_data_set():
+    def get_data_set(dir_separator='\\'):
 
         res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
+        output_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_organized')
 
         for quarter_dir in reversed(os.listdir(res_dir)):
 
@@ -722,17 +723,10 @@ class XBRLDataSetProvider(object):
                             continue
                     df.loc[cik]['tag'] = val['value']
 
-                    print('VAL', val)
+                break
+                # print('VAL', val)
 
-
-            print(df.head())
-            quit()
-
-            tags = numbers['tag'].unique()
-
-            for tag in tags:
-                if 'revenue' == tag.lower():
-                    print(tag)
-            quit()
-
+            quarter_name = quarter_dir.rsplit(dir_separator, 1)[-1]
+            with open(os.path.join(output_dir, quarter_name + '.csv'), 'w') as f:
+                df.to_csv(f)
 
