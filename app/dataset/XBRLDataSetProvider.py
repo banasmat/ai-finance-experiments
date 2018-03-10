@@ -711,6 +711,8 @@ class XBRLDataSetProvider(object):
             df.index = subs['cik']
             numbers = numbers.merge(subs, on='adsh', how='left')
 
+            # i = 0
+
             for cik, row in df.iterrows():
                 print('CIK', cik)
                 for key, tags in XBRLDataSetProvider.titles.items():
@@ -723,10 +725,14 @@ class XBRLDataSetProvider(object):
                             continue
                     df.loc[cik]['tag'] = val['value']
 
-                break
+                # i = i+1
+                # if i > 10:
+                #     break
                 # print('VAL', val)
 
+            matrix = df.as_matrix()
+            print(matrix)
             quarter_name = quarter_dir.rsplit(dir_separator, 1)[-1]
-            with open(os.path.join(output_dir, quarter_name + '.csv'), 'w') as f:
-                df.to_csv(f)
+            with open(os.path.join(output_dir, quarter_name + '.npz'), 'w') as f:
+                np.save(f, matrix)
 
