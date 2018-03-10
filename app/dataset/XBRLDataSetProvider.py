@@ -720,11 +720,14 @@ class XBRLDataSetProvider(object):
                     for tag in tags:
                         try:
                             val = numbers.loc[(numbers['cik'] == cik) & (numbers['tag'] == tag)]
-                            break
+                            if val.shape[0] == 0:
+                                continue
+                            else:
+                                break
                         except KeyError:
                             continue
                     df.loc[cik]['tag'] = val['value']
-
+                break
                 # i = i+1
                 # if i > 10:
                 #     break
@@ -733,6 +736,6 @@ class XBRLDataSetProvider(object):
             matrix = df.as_matrix()
             print(matrix)
             quarter_name = quarter_dir.rsplit(dir_separator, 1)[-1]
-            with open(os.path.join(output_dir, quarter_name + '.npz'), 'w') as f:
-                np.save(f, matrix)
+            # with open(os.path.join(output_dir, quarter_name + '.npz'), 'w') as f:
+            np.save(os.path.join(output_dir, quarter_name), matrix)
 
