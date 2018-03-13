@@ -719,10 +719,12 @@ class XBRLDataSetProvider(object):
         for quarter_dir in os.listdir(res_dir):
 
             quarter_dir = os.path.join(res_dir, quarter_dir)
-            quarter_name = quarter_dir.rsplit(dir_separator, 1)[-1]
 
             if not os.path.isdir(quarter_dir):
                 continue
+
+            quarter_name = quarter_dir.rsplit(dir_separator, 1)[-1]
+            print('QUARTER', quarter_name)
 
             num_file = os.path.join(quarter_dir, 'num.txt')
             sub_file = os.path.join(quarter_dir, 'sub.txt')
