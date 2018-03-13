@@ -124,7 +124,7 @@ class XBRLDataSetProvider(object):
             # i = 0
 
             for i, cik in subs['cik'].iteritems():
-                print('CIK', cik)
+                # print('CIK', cik)
                 for fixed_tag, tags in xbrl_titles.titles.items():
                     val = 0
                     for tag in tags:
@@ -139,7 +139,7 @@ class XBRLDataSetProvider(object):
                             continue
 
                     if not np.isnan(val):
-                        df.loc[df.index == cik][fixed_tag] = val
+                        df[fixed_tag].loc[df.index == cik] = val
                     #
                     # all_data.loc[(all_data.index.get_level_values('quarter') == quarter_name)
                     #              & (all_data.index.get_level_values('cik') == cik), fixed_tag] = val
