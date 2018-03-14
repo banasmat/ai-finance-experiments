@@ -109,6 +109,10 @@ class XBRLDataSetProvider(object):
                 continue
 
             quarter_name = quarter_dir.rsplit(dir_separator, 1)[-1]
+            target_file_path = os.path.join(output_dir, quarter_name + '.csv')
+            if os.path.exists(target_file_path):
+                continue
+
             print('QUARTER', quarter_name)
 
             num_file = os.path.join(quarter_dir, 'num.txt')
@@ -146,7 +150,7 @@ class XBRLDataSetProvider(object):
 
                 # break
 
-            with open(os.path.join(output_dir, quarter_name + '.csv'), 'w') as f:
+            with open(target_file_path, 'w') as f:
                 df.to_csv(f)
             # break
 
