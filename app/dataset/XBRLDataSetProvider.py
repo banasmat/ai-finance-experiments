@@ -113,6 +113,10 @@ class XBRLDataSetProvider(object):
             if os.path.exists(target_file_path):
                 continue
 
+
+            with open(target_file_path, 'w') as f:
+                f.write('processing')
+
             print('QUARTER', quarter_name)
 
             num_file = os.path.join(quarter_dir, 'num.txt')
