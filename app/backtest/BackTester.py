@@ -1,5 +1,6 @@
 import backtrader as bt
 from app.backtest.RNNStrategy import RNNStrategy
+from app.backtest.ReinforcementStrategy import ReinforcementStrategy
 from app.backtest.PriceData import PriceData
 from app.dataset.RNNDatasetProvider import RNNDatasetProvider
 from app.keras.KerasRNN import KerasRNN
@@ -21,7 +22,8 @@ class BackTester(object):
         #     RNNStrategy,
         #     maperiod=[10])
 
-        self.cerebro.addstrategy(RNNStrategy)
+        # self.cerebro.addstrategy(RNNStrategy)
+        self.cerebro.addstrategy(ReinforcementStrategy)
 
         self.cerebro.broker.setcommission(commission=0.001)
 
