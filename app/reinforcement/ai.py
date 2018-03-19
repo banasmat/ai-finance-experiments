@@ -15,7 +15,7 @@ from torch.autograd import Variable
 # Creating the architecture of the Neural Network
 
 class Network(nn.Module):
-    
+
     def __init__(self, input_size, nb_action):
         super(Network, self).__init__()
         self.input_size = input_size
@@ -58,6 +58,7 @@ class Dqn():
         self.last_state = torch.Tensor(input_size).unsqueeze(0)
         self.last_action = 0
         self.last_reward = 0
+        self.brain_save_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'trading_brain.pth')
     
     def select_action(self, state):
         temperature=7
@@ -95,10 +96,10 @@ class Dqn():
     def save(self):
         torch.save({'state_dict': self.model.state_dict(),
                     'optimizer' : self.optimizer.state_dict(),
-                   }, 'last_brain.pth')
+                   }, self.brain_save_path)
     
     def load(self):
-        if os.path.isfile('last_brain.pth'):
+        if os.path.isfile(self.brain_save_path):
             print("=> loading checkpoint... ")
             checkpoint = torch.load('last_brain.pth')
             self.model.load_state_dict(checkpoint['state_dict'])

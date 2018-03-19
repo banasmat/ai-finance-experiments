@@ -1,6 +1,7 @@
 import backtrader as bt
 
 from app.reinforcement.ai import Dqn
+import matplotlib.pyplot as plt
 
 class ReinforcementStrategy(bt.Strategy):
     params = (
@@ -25,6 +26,7 @@ class ReinforcementStrategy(bt.Strategy):
         self.buycomm = None
 
         self.brain = Dqn(2,3,0.9)
+        self.brain.load()
         self.last_reward = 0
         self.last_value = self.broker.getvalue()
         self.scores = []
@@ -108,7 +110,16 @@ class ReinforcementStrategy(bt.Strategy):
 
         self.last_value = value
 
+        try:
+            self.data_close[1]
+        except IndexError:
+            print('FINISH')
+            self.stop()
 
-        # def stop(self):
-    #     self.log('(MA Period %2d) Ending Value %.4f' %
-    #              (self.params.maperiod, self.broker.getvalue()), doprint=True)
+    def stop(self):
+        # self.log('(MA Period %2d) Ending Value %.4f' %
+        #          (self.params.maperiod, self.broker.getvalue()), doprint=True)
+
+        self.brain.save()
+        plt.plot(self.scores)
+        plt.show()
