@@ -101,7 +101,7 @@ class Dqn():
     def load(self):
         if os.path.isfile(self.brain_save_path):
             print("=> loading checkpoint... ")
-            checkpoint = torch.load('last_brain.pth')
+            checkpoint = torch.load(self.brain_save_path)
             self.model.load_state_dict(checkpoint['state_dict'])
             self.optimizer.load_state_dict(checkpoint['optimizer'])
             print("done !")
