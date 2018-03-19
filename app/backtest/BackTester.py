@@ -5,6 +5,7 @@ from app.backtest.PriceData import PriceData
 from app.dataset.RNNDatasetProvider import RNNDatasetProvider
 from app.keras.KerasRNN import KerasRNN
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
 
@@ -48,12 +49,18 @@ class BackTester(object):
 
         self.cerebro.adddata(data, curr_1 + curr_2)
 
-        self.cerebro.broker.setcash(1000.0)
+        scores = []
+        rng = range(0,5)
+        for i in rng:
+            self.cerebro.broker.setcash(1000.0)
+            print('Starting Portfolio Value: %.2f' % self.cerebro.broker.getvalue())
 
-        print('Starting Portfolio Value: %.2f' % self.cerebro.broker.getvalue())
+            self.cerebro.run()
 
-        self.cerebro.run()
-
-        print('Final Portfolio Value: %.2f' % self.cerebro.broker.getvalue())
-
+            print('Final Portfolio Value: %.2f' % self.cerebro.broker.getvalue())
+            scores.append(self.cerebro.broker.getvalue())
         # self.cerebro.plot()
+
+
+        plt.plot(rng, scores)
+        plt.show()
