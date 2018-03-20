@@ -26,15 +26,16 @@ class ReinforcementStrategy(bt.Strategy):
         self.buyprice = None
         self.buycomm = None
 
-        self.brain = Dqn(6,3,0.9)
+        self.brain = Dqn(4,3,0.9)
         self.brain.load()
         self.last_reward = 0
         self.last_value = self.broker.getvalue()
         self.scores = []
 
-        self.sma = bt.indicators.MovingAverageSimple(self.datas[0], period=self.params.maperiod)
-        self.ema = bt.indicators.ExponentialMovingAverage(self.datas[0], period=25)
-        self.wma = bt.indicators.WeightedMovingAverage(self.datas[0], period=25)
+        self.sma_15 = bt.indicators.MovingAverageSimple(self.datas[0], period=15)
+        self.sma_50 = bt.indicators.MovingAverageSimple(self.datas[0], period=50)
+        # self.ema = bt.indicators.ExponentialMovingAverage(self.datas[0], period=25)
+        # self.wma = bt.indicators.WeightedMovingAverage(self.datas[0], period=25)
         # bt.indicators.WeightedMovingAverage(self.datas[0], period=25).subplot = True
         # bt.indicators.StochasticSlow(self.datas[0])
         # bt.indicators.MACDHisto(self.datas[0])
@@ -51,23 +52,23 @@ class ReinforcementStrategy(bt.Strategy):
         # Attention: broker could reject order if not enough cash
         if order.status in [order.Completed]:
             if order.isbuy():
-                self.log(
-                    'BUY EXECUTED, Price: %.4f, Cost: %.4f, Comm %.4f' %
-                    (order.executed.price,
-                     order.executed.value,
-                     order.executed.comm))
+                # self.log(
+                #     'BUY EXECUTED, Price: %.4f, Cost: %.4f, Comm %.4f' %
+                #     (order.executed.price,
+                #      order.executed.value,
+                #      order.executed.comm))
 
                 self.buyprice = order.executed.price
                 self.buycomm = order.executed.comm
 
                 self.last_reward = -0.1
 
-            else:  # Sell
-                self.log('SELL EXECUTED, Price: %.4f, Cost: %.4f, Comm %.4f' %
-                         (order.executed.price,
-                          order.executed.value,
-                          order.executed.comm))
-                pass
+            # else:  # Sell
+            #     self.log('SELL EXECUTED, Price: %.4f, Cost: %.4f, Comm %.4f' %
+            #              (order.executed.price,
+            #               order.executed.value,
+            #               order.executed.comm))
+            #     pass
 
             self.bar_executed = len(self)
 
@@ -114,7 +115,7 @@ class ReinforcementStrategy(bt.Strategy):
         if self.position:
             is_trade_opened = 1
 
-        last_signal = [self.data_close[0], self.data_predictions[0], self.sma[0], self.ema[0], self.wma[0], is_trade_opened]
+        last_signal = [self.data_close[0],self.sma_15[0], self.sma_50[0], is_trade_opened]
         action = self.brain.update(self.last_reward, last_signal)
 
         self.scores.append(self.brain.score())

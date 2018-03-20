@@ -64,7 +64,14 @@ class BackTester(object):
 
         with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'brain-scores.txt'), "r") as f:
             brain_scores = f.read().split(',')
+        
+        plt.subplot(2, 1, 1)
         plt.plot(brain_scores)
-        plt.show()
+        plt.title('Brain scores')
+
+        plt.subplot(2, 1, 2)
         plt.plot(rng, scores)
+        plt.xlabel('iterations')
+        plt.ylabel('Portfolio values')
+
         plt.show()
