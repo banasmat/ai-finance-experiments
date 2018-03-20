@@ -6,6 +6,7 @@ from app.dataset.RNNDatasetProvider import RNNDatasetProvider
 from app.keras.KerasRNN import KerasRNN
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 from app.dataset.PreProcessedDataProvider import PreProcessedDataProvider
 
@@ -61,6 +62,9 @@ class BackTester(object):
             scores.append(self.cerebro.broker.getvalue())
         # self.cerebro.plot()
 
-
+        with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'brain-scores.txt'), "r") as f:
+            brain_scores = f.read().split(',')
+        plt.plot(brain_scores)
+        plt.show()
         plt.plot(rng, scores)
         plt.show()
