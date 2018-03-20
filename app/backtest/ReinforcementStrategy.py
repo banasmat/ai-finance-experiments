@@ -13,8 +13,8 @@ class ReinforcementStrategy(bt.Strategy):
     def log(self, txt, dt=None, doprint=False):
         # Logging function for this strategy
         if self.params.printlog or doprint:
-            dt = dt or self.datas[0].datetime.date(0)
-            print('%s, %s' % (dt.isoformat(), txt))
+            dt = dt or self.datas[0].datetime
+            print('%s %s, %s' % (dt.date(0).isoformat(), dt.time(0).isoformat(), txt))
 
 
     def __init__(self):
@@ -26,22 +26,20 @@ class ReinforcementStrategy(bt.Strategy):
         self.buyprice = None
         self.buycomm = None
 
-        self.brain = Dqn(4,3,0.9)
+        self.brain = Dqn(10,3,0.9)
         self.brain.load()
         self.last_reward = 0
         self.last_value = self.broker.getvalue()
         self.scores = []
 
-        self.sma_15 = bt.indicators.MovingAverageSimple(self.datas[0], period=15)
-        self.sma_50 = bt.indicators.MovingAverageSimple(self.datas[0], period=50)
-        # self.ema = bt.indicators.ExponentialMovingAverage(self.datas[0], period=25)
-        # self.wma = bt.indicators.WeightedMovingAverage(self.datas[0], period=25)
-        # bt.indicators.WeightedMovingAverage(self.datas[0], period=25).subplot = True
-        # bt.indicators.StochasticSlow(self.datas[0])
-        # bt.indicators.MACDHisto(self.datas[0])
-        # rsi = bt.indicators.RSI(self.datas[0])
-        # bt.indicators.SmoothedMovingAverage(rsi, period=10)
-        # bt.indicators.ATR(self.datas[0]).plot = False
+        self.mas = bt.indicators.MovingAverageSimple(self.datas[0], period=15)
+        self.ema = bt.indicators.ExponentialMovingAverage(self.datas[0], period=25)
+        self.wma = bt.indicators.WeightedMovingAverage(self.datas[0], period=25)
+        self.ss = bt.indicators.StochasticSlow(self.datas[0])
+        self.mh = bt.indicators.MACDHisto(self.datas[0])
+        self.rsi = bt.indicators.RSI(self.datas[0])
+        self.sma = bt.indicators.SmoothedMovingAverage(self.rsi, period=10)
+        self.atr = bt.indicators.ATR(self.datas[0])
 
     def notify_order(self, order):
         if order.status in [order.Submitted, order.Accepted]:
@@ -115,7 +113,7 @@ class ReinforcementStrategy(bt.Strategy):
         if self.position:
             is_trade_opened = 1
 
-        last_signal = [self.data_close[0],self.sma_15[0], self.sma_50[0], is_trade_opened]
+        last_signal = [self.data_close[0], self.mas[0], self.ema[0], self.wma[0], self.ss[0], self.mh[0], self.rsi[0], self.sma[0], self.atr[0], is_trade_opened]
         action = self.brain.update(self.last_reward, last_signal)
 
         self.scores.append(self.brain.score())

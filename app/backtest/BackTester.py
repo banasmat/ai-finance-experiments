@@ -51,7 +51,7 @@ class BackTester(object):
         self.cerebro.adddata(data, curr_1 + curr_2)
 
         scores = []
-        rng = range(0,5)
+        rng = range(0, 5)
         for i in rng:
             self.cerebro.broker.setcash(1000.0)
             print('Starting Portfolio Value: %.2f' % self.cerebro.broker.getvalue())
@@ -64,7 +64,7 @@ class BackTester(object):
 
         with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'brain-scores.txt'), "r") as f:
             brain_scores = f.read().split(',')
-        
+
         plt.subplot(2, 1, 1)
         plt.plot(brain_scores)
         plt.title('Brain scores')
