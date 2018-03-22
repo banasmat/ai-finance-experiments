@@ -51,7 +51,7 @@ class BackTester(object):
         self.cerebro.adddata(data, curr_1 + curr_2)
 
         scores = []
-        rng = range(0, 5)
+        rng = range(0, 10)
         for i in rng:
             self.cerebro.broker.setcash(1000.0)
             print('Starting Portfolio Value: %.2f' % self.cerebro.broker.getvalue())

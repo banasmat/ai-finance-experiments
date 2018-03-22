@@ -1,4 +1,5 @@
 import backtrader as bt
+from termcolor import colored
 
 from app.reinforcement.ai import Dqn
 import matplotlib.pyplot as plt
@@ -10,11 +11,11 @@ class ReinforcementStrategy(bt.Strategy):
         ('printlog', True),
     )
 
-    def log(self, txt, dt=None, doprint=False):
+    def log(self, txt, dt=None, doprint=False, color='blue'):
         # Logging function for this strategy
         if self.params.printlog or doprint:
             dt = dt or self.datas[0].datetime
-            print('%s %s, %s' % (dt.date(0).isoformat(), dt.time(0).isoformat(), txt))
+            print(colored('%s %s, %s' % (dt.date(0).isoformat(), dt.time(0).isoformat(), txt), color))
 
 
     def __init__(self):
@@ -25,6 +26,8 @@ class ReinforcementStrategy(bt.Strategy):
         self.order = None
         self.buyprice = None
         self.buycomm = None
+
+        self.start_value = self.broker.getvalue()
 
         self.brain = Dqn(10,3,0.9)
         self.brain.load()
@@ -80,17 +83,22 @@ class ReinforcementStrategy(bt.Strategy):
         if not trade.isclosed:
             return
 
-        self.log('OPERATION PROFIT, GROSS %.4f, NET %.4f' %
-                 (trade.pnl, trade.pnlcomm))
-
         if trade.pnlcomm > 1:
+            color = 'green'
             self.last_reward = 0.5
         elif trade.pnlcomm > 0:
-            self.last_reward = 0.1
+            color = 'yellow'
+            self.last_reward = 0.3
         elif trade.pnlcomm < -1:
+            color = 'red'
             self.last_reward = -1
         else:
+            color = 'magenta'
             self.last_reward = -0.8
+
+
+        self.log('OPERATION PROFIT, GROSS %.4f, NET %.4f' %
+                 (trade.pnl, trade.pnlcomm), color=color)
 
     def _get_market_action(self, action):
 
@@ -124,26 +132,36 @@ class ReinforcementStrategy(bt.Strategy):
         if market_action is not None:
             self.order = market_action()
 
-
         value_delta = float("{0:.2f}".format(value - self.last_value))
         self.last_value = value
-        print(value_delta)
+        # print(value_delta)
 
         if value_delta > 0:
             self.last_reward = 0.2
         elif value_delta == 0:
             self.last_reward = -0.1
         else:
-            self.last_reward = -0.2
+            self.last_reward = -0.1
 
         try:
             self.data_close[1]
         except IndexError:
+
+            final_delta = self.broker.getvalue() - self.start_value
+
+            if final_delta > 0:
+                self.last_reward = 1
+            else:
+                self.last_reward = -1
+
+            action = self.brain.update(self.last_reward, last_signal)
+
             self.stop()
 
     def stop(self):
         # self.log('(MA Period %2d) Ending Value %.4f' %
         #          (self.params.maperiod, self.broker.getvalue()), doprint=True)
+
 
         self.brain.save()
         # plt.plot(self.scores)
