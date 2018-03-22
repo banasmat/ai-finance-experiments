@@ -113,7 +113,8 @@ class ReinforcementStrategy(bt.Strategy):
         if self.position:
             is_trade_opened = 1
 
-        last_signal = [self.data_close[0], self.mas[0], self.ema[0], self.wma[0], self.ss[0], self.mh[0], self.rsi[0], self.sma[0], self.atr[0], is_trade_opened]
+        value = self.broker.getvalue()
+        last_signal = [self.data_close[0], self.mas[0], self.ema[0], self.wma[0], self.ss[0], self.mh[0], self.rsi[0], self.sma[0], self.atr[0], value]
         action = self.brain.update(self.last_reward, last_signal)
 
         self.scores.append(self.brain.score())
@@ -123,15 +124,17 @@ class ReinforcementStrategy(bt.Strategy):
         if market_action is not None:
             self.order = market_action()
 
-        value = self.broker.getvalue()
-        # delta = value - self.last_value
-        #
-        # if delta > 0:
-        #     self.last_reward = 0.2
-        # else:
-        #     self.last_reward = -0.2
 
+        value_delta = float("{0:.2f}".format(value - self.last_value))
         self.last_value = value
+        print(value_delta)
+
+        if value_delta > 0:
+            self.last_reward = 0.2
+        elif value_delta == 0:
+            self.last_reward = -0.1
+        else:
+            self.last_reward = -0.2
 
         try:
             self.data_close[1]
