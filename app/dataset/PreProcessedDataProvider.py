@@ -43,10 +43,10 @@ class PreProcessedDataProvider(object):
 
         return prices
 
-    def get_price_records(self, symbol_1, symbol_2, usecols=('datetime', 'finished', 'open', 'high', 'low', 'close', 'volume'), gran='H1'):
-
-        col_indexes = []
+    def get_price_records(self, symbol_1, symbol_2, usecols=None, gran='H1'):
         all_cols=['datetime', 'finished', 'open', 'high', 'low', 'close', 'volume']
+        usecols = usecols or all_cols
+        col_indexes = []
         for col in usecols:
             col_indexes.append(all_cols.index(col))
 
