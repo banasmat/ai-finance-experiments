@@ -11,17 +11,17 @@ class ReinforcementStrategy(bt.Strategy):
         ('printlog', True),
     )
 
-    def log(self, txt, dt=None, doprint=False, color='blue'):
-        # Logging function for this strategy
-        if self.params.printlog or doprint:
-            dt = dt or self.datas[0].datetime
-            print(colored('%s %s, %s' % (dt.date(0).isoformat(), dt.time(0).isoformat(), txt), color))
+    # _nothing = 0
+    # _buy = 1
+    # _sell = 2
 
 
     def __init__(self):
         # Keep a reference to the "close" line in the data[0] dataseries
         self.data_close = self.datas[0].close
-        self.data_predictions = self.datas[0].predictions
+        self.data_low = self.datas[0].low
+        self.data_high = self.datas[0].high
+        # self.data_predictions = self.datas[0].predictions
         # To keep track of pending orders
         self.order = None
         self.buyprice = None
@@ -29,20 +29,32 @@ class ReinforcementStrategy(bt.Strategy):
 
         self.start_value = self.broker.getvalue()
 
-        self.brain = Dqn(10,3,0.9)
+        self.brain = Dqn(5,3,0.9)
         self.brain.load()
         self.last_reward = 0
         self.last_value = self.broker.getvalue()
         self.scores = []
 
-        self.mas = bt.indicators.MovingAverageSimple(self.datas[0], period=15)
-        self.ema = bt.indicators.ExponentialMovingAverage(self.datas[0], period=25)
-        self.wma = bt.indicators.WeightedMovingAverage(self.datas[0], period=25)
-        self.ss = bt.indicators.StochasticSlow(self.datas[0])
-        self.mh = bt.indicators.MACDHisto(self.datas[0])
-        self.rsi = bt.indicators.RSI(self.datas[0])
-        self.sma = bt.indicators.SmoothedMovingAverage(self.rsi, period=10)
-        self.atr = bt.indicators.ATR(self.datas[0])
+        self.actions = []
+
+        # self.last_ema = 0
+
+        # 1 the bladerunner trade
+        self.ema = bt.indicators.ExponentialMovingAverage(self.datas[0], period=20)
+
+        # 2 daily fibonacci pivot trade
+        # self.atr = bt.indicators.ATR(self.datas[0])
+        # self.fibPivot = bt.indicators.FibonacciPivotPoint(self.datas[0])
+
+
+
+        # self.mas = bt.indicators.MovingAverageSimple(self.datas[0], period=15)
+        # self.wma = bt.indicators.WeightedMovingAverage(self.datas[0], period=25)
+        # self.ss = bt.indicators.StochasticSlow(self.datas[0])
+        # self.mh = bt.indicators.MACDHisto(self.datas[0])
+        # self.rsi = bt.indicators.RSI(self.datas[0])
+        # self.sma = bt.indicators.SmoothedMovingAverage(self.rsi, period=10)
+
 
     def notify_order(self, order):
         if order.status in [order.Submitted, order.Accepted]:
@@ -53,22 +65,22 @@ class ReinforcementStrategy(bt.Strategy):
         # Attention: broker could reject order if not enough cash
         if order.status in [order.Completed]:
             if order.isbuy():
-                # self.log(
-                #     'BUY EXECUTED, Price: %.4f, Cost: %.4f, Comm %.4f' %
-                #     (order.executed.price,
-                #      order.executed.value,
-                #      order.executed.comm))
+                self.log(
+                    'BUY EXECUTED, Price: %.4f, Cost: %.4f, Comm %.4f' %
+                    (order.executed.price,
+                     order.executed.value,
+                     order.executed.comm))
 
                 self.buyprice = order.executed.price
                 self.buycomm = order.executed.comm
 
-                self.last_reward = -0.1
+                # self.last_reward = -0.1
 
-            # else:  # Sell
-            #     self.log('SELL EXECUTED, Price: %.4f, Cost: %.4f, Comm %.4f' %
-            #              (order.executed.price,
-            #               order.executed.value,
-            #               order.executed.comm))
+            else:  # Sell
+                self.log('SELL EXECUTED, Price: %.4f, Cost: %.4f, Comm %.4f' %
+                         (order.executed.price,
+                          order.executed.value,
+                          order.executed.comm))
             #     pass
 
             self.bar_executed = len(self)
@@ -119,23 +131,63 @@ class ReinforcementStrategy(bt.Strategy):
 
         is_trade_opened = 0
         if self.position:
+            # print(self.position)
+            # quit()
             is_trade_opened = 1
 
         value = self.broker.getvalue()
-        last_signal = [self.data_close[0], self.mas[0], self.ema[0], self.wma[0], self.ss[0], self.mh[0], self.rsi[0], self.sma[0], self.atr[0], value]
+        last_signal = [
+            self.data_close[0],
+            self.data_low[0],
+            self.data_high[0],
+            # self.mas[0],
+            self.ema[0],
+            # self.wma[0],
+            # self.ss[0],
+            # self.mh[0],
+            # self.rsi[0],
+            # self.sma[0],
+            # self.atr[0],
+            value
+        ]
         action = self.brain.update(self.last_reward, last_signal)
+
+        self.actions.append(action)
+        actions = list(set(self.actions[-12:]))
+
+        if len(actions) == 1 and actions[0] == 0:
+            self.last_reward = -0.2
+            return
+
+        try:
+            if actions[-1] == actions[0] and actions[0] != 0:
+                self.last_reward = -0.2
+        except IndexError:
+            pass
+
+        print(action)
+
+        # ema_delta = self.ema[0] - self.last_ema
+        # self.last_ema = self.ema[0]
+        #
+        # if ema_delta <= 0 and action == 1:
+        #     self.last_reward = -0.1
+        #
+        # if ema_delta > 0 and action == 2:
+        #     self.last_reward = -0.1
 
         self.scores.append(self.brain.score())
         with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'brain-scores.txt'), "a") as f:
             f.write("%.2f," % self.brain.score())
         market_action = self._get_market_action(action)
+        # print(action)
+        # print(market_action)
         if market_action is not None:
             self.order = market_action()
 
         value_delta = float("{0:.2f}".format(value - self.last_value))
         self.last_value = value
         # print(value_delta)
-
         if value_delta > 0:
             self.last_reward = 0.2
         elif value_delta == 0:
@@ -162,7 +214,10 @@ class ReinforcementStrategy(bt.Strategy):
         # self.log('(MA Period %2d) Ending Value %.4f' %
         #          (self.params.maperiod, self.broker.getvalue()), doprint=True)
 
-
         self.brain.save()
-        # plt.plot(self.scores)
-        # plt.show()
+
+    def log(self, txt, dt=None, doprint=False, color='blue'):
+        # Logging function for this strategy
+        if self.params.printlog or doprint:
+            dt = dt or self.datas[0].datetime
+            print(colored('%s %s, %s' % (dt.date(0).isoformat(), dt.time(0).isoformat(), txt), color))

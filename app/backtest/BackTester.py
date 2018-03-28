@@ -18,7 +18,7 @@ class BackTester(object):
     rnn_dataset_provider = RNNDatasetProvider()
     nn = KerasRNN()
 
-    def run(self, date_from, date_to, curr_1='EUR', curr_2='USD', gran='H1'):
+    def run(self, date_from, date_to, curr_1='EUR', curr_2='USD', gran='H1', iterations=10):
         #
         # strats = self.cerebro.optstrategy(
         #     RNNStrategy,
@@ -51,7 +51,7 @@ class BackTester(object):
         self.cerebro.adddata(data, curr_1 + curr_2)
 
         scores = []
-        rng = range(0, 10)
+        rng = range(0, iterations)
         for i in rng:
             self.cerebro.broker.setcash(1000.0)
             print('Starting Portfolio Value: %.2f' % self.cerebro.broker.getvalue())
