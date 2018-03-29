@@ -10,17 +10,15 @@ import app.dataset.xbrl_titles as xbrl_titles
 
 
 class XBRLDataSetProvider(object):
-
+    res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
 
     @staticmethod
     def extract_cik_numbers():
-        res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
-
         cik_map = {}
 
-        for quarter_dir in reversed(os.listdir(res_dir)):
+        for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
 
-            quarter_dir = os.path.join(res_dir, quarter_dir)
+            quarter_dir = os.path.join(XBRLDataSetProvider.res_dir, quarter_dir)
 
             if not os.path.isdir(quarter_dir):
                 continue
@@ -37,20 +35,32 @@ class XBRLDataSetProvider(object):
             pickle.dump(cik_map, f)
 
     @staticmethod
-    def organize_tags():
-        res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
+    def get_most_popular_tags():
+
         all_tags = pd.Series()
 
-        for quarter_dir in reversed(os.listdir(res_dir)):
+        for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
 
-            quarter_dir = os.path.join(res_dir, quarter_dir)
+            quarter_dir = os.path.join(XBRLDataSetProvider.res_dir, quarter_dir)
 
             if not os.path.isdir(quarter_dir):
                 continue
 
-            tag_file = os.path.join(quarter_dir, 'tag.txt')
-            tags = pd.read_csv(tag_file, sep='\t', encoding='utf-8', quoting=csv.QUOTE_NONE, usecols=['tag'])
-            all_tags = all_tags.append(tags)
+            num_file = os.path.join(quarter_dir, 'num.txt')
+            numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['tag'])
+            all_tags = all_tags.append(numbers)
+
+        all_tags = all_tags.groupby(['tag'])['tag'].count()
+        all_tags = all_tags.sort_values(ascending=True)
+        all_tags = all_tags[(all_tags >= 20000)].index.unique().tolist()
+        target_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'most_popular_tags.txt')
+        with open(target_file_path, 'w') as f:
+            for tag in all_tags:
+                f.write("%s\n" % tag)
+
+    @staticmethod
+    def organize_tags():
+        all_tags = XBRLDataSetProvider._get_all_tags()
 
         all_tags = all_tags['tag'].unique().tolist()
 
@@ -73,9 +83,25 @@ class XBRLDataSetProvider(object):
                     f.write("%s - %s\n" % (item[0], str(item[1])))
 
     @staticmethod
+    def _get_all_tags():
+
+        all_tags = pd.Series()
+
+        for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
+
+            quarter_dir = os.path.join(XBRLDataSetProvider.res_dir, quarter_dir)
+
+            if not os.path.isdir(quarter_dir):
+                continue
+
+            tag_file = os.path.join(quarter_dir, 'tag.txt')
+            tags = pd.read_csv(tag_file, sep='\t', encoding='utf-8', quoting=csv.QUOTE_NONE, usecols=['tag'])
+            all_tags = all_tags.append(tags)
+        return all_tags
+
+    @staticmethod
     def organize_data_set(dir_separator='\\'):
 
-        res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
         output_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_organized')
 
         # all_quarters = os.listdir(res_dir)
@@ -101,9 +127,9 @@ class XBRLDataSetProvider(object):
         # all_data = pd.DataFrame(index=index, columns=xbrl_titles.titles.keys())
         pd.options.mode.chained_assignment = None
 
-        for quarter_dir in os.listdir(res_dir):
+        for quarter_dir in os.listdir(XBRLDataSetProvider.res_dir):
 
-            quarter_dir = os.path.join(res_dir, quarter_dir)
+            quarter_dir = os.path.join(XBRLDataSetProvider.res_dir, quarter_dir)
 
             if not os.path.isdir(quarter_dir):
                 continue
