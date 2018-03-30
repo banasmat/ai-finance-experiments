@@ -11,6 +11,7 @@ import app.dataset.xbrl_titles as xbrl_titles
 
 class XBRLDataSetProvider(object):
     res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
+    most_popular_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'most_popular_tags.txt')
 
     @staticmethod
     def extract_cik_numbers():
@@ -53,10 +54,64 @@ class XBRLDataSetProvider(object):
         all_tags = all_tags.groupby(['tag'])['tag'].count()
         all_tags = all_tags.sort_values(ascending=True)
         all_tags = all_tags[(all_tags >= 20000)].index.unique().tolist()
-        target_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'most_popular_tags.txt')
-        with open(target_file_path, 'w') as f:
+
+        with open(XBRLDataSetProvider.most_popular_tags_file_path, 'w') as f:
             for tag in all_tags:
                 f.write("%s\n" % tag)
+
+
+    @staticmethod
+    def prepare_data_set_with_most_popular_tags(dir_separator='\\'):
+        all_tags = []
+        output_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_most_popular_tags')
+        with open(XBRLDataSetProvider.most_popular_tags_file_path, 'r') as f:
+            for tag in f:
+                all_tags.append(tag.strip())
+
+        pd.options.mode.chained_assignment = None
+
+        for quarter_dir in os.listdir(XBRLDataSetProvider.res_dir):
+
+            quarter_dir = os.path.join(XBRLDataSetProvider.res_dir, quarter_dir)
+
+            if not os.path.isdir(quarter_dir):
+                continue
+
+            quarter_name = quarter_dir.rsplit(dir_separator, 1)[-1]
+            target_file_path = os.path.join(output_dir, quarter_name + '.csv')
+            if os.path.exists(target_file_path):
+                continue
+
+            with open(target_file_path, 'w') as f:
+                f.write('processing')
+
+            print('QUARTER', quarter_name)
+
+            num_file = os.path.join(quarter_dir, 'num.txt')
+            sub_file = os.path.join(quarter_dir, 'sub.txt')
+
+            numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'tag', 'value'])
+            subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'cik', 'name'])
+            #
+            df = pd.DataFrame(index=subs['cik'], columns=all_tags)
+            df.fillna(0, inplace=True)
+            numbers = numbers.merge(subs, on='adsh', how='left')
+
+            # i = 0
+
+            for i, cik in subs['cik'].iteritems():
+                # print('CIK', cik)
+                for tag in all_tags:
+                    try:
+                        val = numbers.loc[(numbers['cik'] == cik) & (numbers['tag'] == tag)]['value'].mean()
+                    except KeyError:
+                        val = 0
+                    if not np.isnan(val):
+                        df[tag].loc[df.index == cik] = val
+
+            with open(target_file_path, 'w') as f:
+                df.to_csv(f)
+
 
     @staticmethod
     def organize_tags():
