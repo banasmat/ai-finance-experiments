@@ -37,7 +37,7 @@ class ReinforcementStrategy(bt.Strategy):
 
         self.actions = []
         self.datetimes = self.datas[0].datetime
-        self.last_day = self.datas[0].datetime
+        self.last_date = {"date": [{"day"}]}
 
         # self.last_ema = 0
 
@@ -125,16 +125,14 @@ class ReinforcementStrategy(bt.Strategy):
         return None
 
     def next(self):
-
-        if self.last_day.date(0) != self.datas[0].datetime.date(0):
-
+        if self.last_date != self.datas[0].datetime.date(0):
             if self.position:
                 # TODO refine penalty system. Should add penalty for every open position
                 penalty = self.position.size / 100
                 self.log("OVERNIGHT PENALTY: %.4f" % penalty, color='light_red')
                 self.broker.add_cash(-penalty)
 
-            self.last_day = self.datas[0].datetime
+            self.last_date = self.datas[0].datetime.date(0)
 
         # self.log('Close: %.4f - Prediction: %.4f' % (self.data_close[0], self.data_predictions[0]))
 
