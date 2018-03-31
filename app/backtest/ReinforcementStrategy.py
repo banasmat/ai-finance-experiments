@@ -129,7 +129,7 @@ class ReinforcementStrategy(bt.Strategy):
             if self.position:
                 # TODO refine penalty system. Should add penalty for every open position
                 penalty = self.position.size / 100
-                self.log("OVERNIGHT PENALTY: %.4f" % penalty, color='light_red')
+                self.log("OVERNIGHT PENALTY: %.4f" % penalty, color='white')
                 self.broker.add_cash(-penalty)
 
             self.last_date = self.datas[0].datetime.date(0)
