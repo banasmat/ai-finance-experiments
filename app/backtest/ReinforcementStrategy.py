@@ -29,7 +29,7 @@ class ReinforcementStrategy(bt.Strategy):
 
         self.start_value = self.broker.getvalue()
 
-        self.brain = Dqn(5,3,0.9)
+        self.brain = Dqn(3,3,0.9)
         self.brain.load()
         self.last_reward = 0
         self.last_value = self.broker.getvalue()
@@ -97,16 +97,16 @@ class ReinforcementStrategy(bt.Strategy):
 
         if trade.pnlcomm > 1:
             color = 'green'
-            self.last_reward = 0.5
+            # self.last_reward = 0.5
         elif trade.pnlcomm > 0:
             color = 'yellow'
-            self.last_reward = 0.3
+            # self.last_reward = 0.3
         elif trade.pnlcomm < -1:
             color = 'red'
-            self.last_reward = -1
+            # self.last_reward = -1
         else:
             color = 'magenta'
-            self.last_reward = -0.8
+            # self.last_reward = -0.8
 
 
         self.log('OPERATION PROFIT, GROSS %.4f, NET %.4f' %
@@ -129,52 +129,32 @@ class ReinforcementStrategy(bt.Strategy):
         if self.order:
             return
 
+        position_size = 0
         is_trade_opened = 0
         if self.position:
+            position_size = self.position.size
             # print(self.position)
             # quit()
             is_trade_opened = 1
 
         value = self.broker.getvalue()
         last_signal = [
+            position_size,
             self.data_close[0],
-            self.data_low[0],
-            self.data_high[0],
+            # self.data_low[0],
+            # self.data_high[0],
             # self.mas[0],
-            self.ema[0],
+            # self.ema[0],
             # self.wma[0],
             # self.ss[0],
             # self.mh[0],
             # self.rsi[0],
             # self.sma[0],
             # self.atr[0],
-            value
+            # value,
+            self.broker.get_cash()
         ]
         action = self.brain.update(self.last_reward, last_signal)
-
-        self.actions.append(action)
-        actions = list(set(self.actions[-12:]))
-
-        if len(actions) == 1 and actions[0] == 0:
-            self.last_reward = -0.2
-            return
-
-        try:
-            if actions[-1] == actions[0] and actions[0] != 0:
-                self.last_reward = -0.2
-        except IndexError:
-            pass
-
-        print(action)
-
-        # ema_delta = self.ema[0] - self.last_ema
-        # self.last_ema = self.ema[0]
-        #
-        # if ema_delta <= 0 and action == 1:
-        #     self.last_reward = -0.1
-        #
-        # if ema_delta > 0 and action == 2:
-        #     self.last_reward = -0.1
 
         self.scores.append(self.brain.score())
         with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'brain-scores.txt'), "a") as f:
@@ -185,16 +165,6 @@ class ReinforcementStrategy(bt.Strategy):
         if market_action is not None:
             self.order = market_action()
 
-        value_delta = float("{0:.2f}".format(value - self.last_value))
-        self.last_value = value
-        # print(value_delta)
-        if value_delta > 0:
-            self.last_reward = 0.2
-        elif value_delta == 0:
-            self.last_reward = -0.1
-        else:
-            self.last_reward = -0.1
-
         try:
             self.data_close[1]
         except IndexError:
@@ -204,9 +174,7 @@ class ReinforcementStrategy(bt.Strategy):
             if final_delta > 0:
                 self.last_reward = 1
             else:
-                self.last_reward = -1
-
-            action = self.brain.update(self.last_reward, last_signal)
+                self.last_reward = -1000
 
             self.stop()
 
