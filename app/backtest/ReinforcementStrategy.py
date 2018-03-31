@@ -36,6 +36,8 @@ class ReinforcementStrategy(bt.Strategy):
         self.scores = []
 
         self.actions = []
+        self.datetimes = self.datas[0].datetime
+        self.last_day = self.datas[0].datetime
 
         # self.last_ema = 0
 
@@ -123,6 +125,17 @@ class ReinforcementStrategy(bt.Strategy):
         return None
 
     def next(self):
+
+        if self.last_day.date(0) != self.datas[0].datetime.date(0):
+
+            if self.position:
+                # TODO refine penalty system. Should add penalty for every open position
+                penalty = self.position.size / 100
+                self.log("OVERNIGHT PENALTY: %.4f" % penalty, color='light_red')
+                self.broker.add_cash(-penalty)
+
+            self.last_day = self.datas[0].datetime
+
         # self.log('Close: %.4f - Prediction: %.4f' % (self.data_close[0], self.data_predictions[0]))
 
         # Check if an order is pending ... if yes, we cannot send a 2nd one
@@ -164,6 +177,15 @@ class ReinforcementStrategy(bt.Strategy):
         # print(market_action)
         if market_action is not None:
             self.order = market_action()
+
+        value_delta = float("{0:.2f}".format(value - self.last_value))
+        self.last_value = value
+        # print(value_delta)
+        # if value_delta > 0:
+        #     self.last_reward = 1
+        # else:
+        #     self.last_reward = -1000
+
 
         try:
             self.data_close[1]
