@@ -29,7 +29,7 @@ class ReinforcementStrategy(bt.Strategy):
 
         self.start_value = self.broker.getvalue()
 
-        self.brain = Dqn(3,3,0.9)
+        self.brain = Dqn(4,3,0.9)
         self.brain.load()
         self.last_reward = 0
         self.last_value = self.broker.getvalue()
@@ -39,7 +39,12 @@ class ReinforcementStrategy(bt.Strategy):
         self.datetimes = self.datas[0].datetime
         self.last_date = {"date": [{"day"}]}
 
+
+        self.i = 0
         # self.last_ema = 0
+
+        # Trend Strengch
+        self.di = bt.indicators.DirectionalIndicator(self.datas[0])
 
         # 1 the bladerunner trade
         self.ema = bt.indicators.ExponentialMovingAverage(self.datas[0], period=20)
@@ -118,13 +123,27 @@ class ReinforcementStrategy(bt.Strategy):
 
         if action == 0:
             return None
-        if action == 1 and not self.position: # and if not self.position:
+        if action == 1: #  and not self.position:
+            if self.position:
+                return self.close
             return self.buy
-        if action == 2 and self.position:
+        if action == 2: # and self.position:
+            if self.position:
+                return self.close
+
             return self.sell
         return None
 
     def next(self):
+
+        self.i = self.i+1
+
+        is_last_step = False
+        try:
+            self.data_close[1]
+        except IndexError:
+            is_last_step = True
+
         if self.last_date != self.datas[0].datetime.date(0):
             if self.position:
                 # TODO refine penalty system. Should add penalty for every open position
@@ -139,7 +158,7 @@ class ReinforcementStrategy(bt.Strategy):
         # Check if an order is pending ... if yes, we cannot send a 2nd one
         if self.order:
             return
-
+        # print(self.i)
         position_size = 0
         is_trade_opened = 0
         if self.position:
@@ -154,6 +173,7 @@ class ReinforcementStrategy(bt.Strategy):
             self.data_close[0],
             # self.data_low[0],
             # self.data_high[0],
+            self.di[0],
             # self.mas[0],
             # self.ema[0],
             # self.wma[0],
@@ -165,8 +185,19 @@ class ReinforcementStrategy(bt.Strategy):
             # value,
             self.broker.get_cash()
         ]
-        action = self.brain.update(self.last_reward, last_signal)
 
+        if is_last_step:
+            final_delta = self.broker.getvalue() - self.start_value
+
+            self.last_reward = final_delta
+            #
+            # if final_delta > 0:
+            #     self.last_reward = 1
+            # else:
+            #     self.last_reward = -1000
+
+        action = self.brain.update(self.last_reward, last_signal)
+        # print('action', action)
         self.scores.append(self.brain.score())
         with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'brain-scores.txt'), "a") as f:
             f.write("%.2f," % self.brain.score())
@@ -179,23 +210,13 @@ class ReinforcementStrategy(bt.Strategy):
         value_delta = float("{0:.2f}".format(value - self.last_value))
         self.last_value = value
         # print(value_delta)
+        self.last_reward = value_delta
         # if value_delta > 0:
         #     self.last_reward = 1
         # else:
         #     self.last_reward = -1000
 
-
-        try:
-            self.data_close[1]
-        except IndexError:
-
-            final_delta = self.broker.getvalue() - self.start_value
-
-            if final_delta > 0:
-                self.last_reward = 1
-            else:
-                self.last_reward = -1000
-
+        if is_last_step:
             self.stop()
 
     def stop(self):
