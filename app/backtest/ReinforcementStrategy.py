@@ -40,9 +40,6 @@ class ReinforcementStrategy(bt.Strategy):
         self.last_date = {"date": [{"day"}]}
 
 
-        self.i = 0
-        # self.last_ema = 0
-
         # Trend Strengch
         self.di = bt.indicators.DirectionalIndicator(self.datas[0])
 
@@ -136,8 +133,6 @@ class ReinforcementStrategy(bt.Strategy):
 
     def next(self):
 
-        self.i = self.i+1
-
         is_last_step = False
         try:
             self.data_close[1]
@@ -158,7 +153,7 @@ class ReinforcementStrategy(bt.Strategy):
         # Check if an order is pending ... if yes, we cannot send a 2nd one
         if self.order:
             return
-        # print(self.i)
+
         position_size = 0
         is_trade_opened = 0
         if self.position:
@@ -199,8 +194,8 @@ class ReinforcementStrategy(bt.Strategy):
         action = self.brain.update(self.last_reward, last_signal)
         # print('action', action)
         self.scores.append(self.brain.score())
-        with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'brain-scores.txt'), "a") as f:
-            f.write("%.2f," % self.brain.score())
+        # with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'brain-scores.txt'), "a") as f:
+        #     f.write("%.2f," % self.brain.score())
         market_action = self._get_market_action(action)
         # print(action)
         # print(market_action)
