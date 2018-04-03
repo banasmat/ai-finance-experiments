@@ -2,7 +2,6 @@ import backtrader as bt
 from termcolor import colored
 
 from app.reinforcement.ai import Dqn
-import matplotlib.pyplot as plt
 import os
 
 class ReinforcementStrategy(bt.Strategy):
@@ -10,11 +9,6 @@ class ReinforcementStrategy(bt.Strategy):
         ('maperiod', 15),
         ('printlog', True),
     )
-
-    # _nothing = 0
-    # _buy = 1
-    # _sell = 2
-
 
     def __init__(self):
         # Keep a reference to the "close" line in the data[0] dataseries
@@ -29,7 +23,7 @@ class ReinforcementStrategy(bt.Strategy):
 
         self.start_value = self.broker.getvalue()
 
-        self.brain = Dqn(4,3,0.9)
+        self.brain = Dqn(6,3,0.9)
         self.brain.load()
         self.last_reward = 0
         self.last_value = self.broker.getvalue()
@@ -43,14 +37,16 @@ class ReinforcementStrategy(bt.Strategy):
         # Trend Strengch
         self.di = bt.indicators.DirectionalIndicator(self.datas[0])
 
+
+        self.ema_20 = bt.indicators.ExponentialMovingAverage(self.datas[0], period=20)
+        self.ema_100 = bt.indicators.ExponentialMovingAverage(self.datas[0], period=100)
+
         # 1 the bladerunner trade
         self.ema = bt.indicators.ExponentialMovingAverage(self.datas[0], period=20)
 
         # 2 daily fibonacci pivot trade
         # self.atr = bt.indicators.ATR(self.datas[0])
         # self.fibPivot = bt.indicators.FibonacciPivotPoint(self.datas[0])
-
-
 
         # self.mas = bt.indicators.MovingAverageSimple(self.datas[0], period=15)
         # self.wma = bt.indicators.WeightedMovingAverage(self.datas[0], period=25)
@@ -169,6 +165,8 @@ class ReinforcementStrategy(bt.Strategy):
             # self.data_low[0],
             # self.data_high[0],
             self.di[0],
+            self.ema_20[0],
+            self.ema_100[0],
             # self.mas[0],
             # self.ema[0],
             # self.wma[0],
