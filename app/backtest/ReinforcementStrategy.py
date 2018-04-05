@@ -97,17 +97,14 @@ class ReinforcementStrategy(bt.Strategy):
 
         if trade.pnlcomm > 1:
             color = 'green'
-            # self.last_reward = 0.5
         elif trade.pnlcomm > 0:
             color = 'yellow'
-            # self.last_reward = 0.3
         elif trade.pnlcomm < -1:
             color = 'red'
-            # self.last_reward = -1
         else:
             color = 'magenta'
-            # self.last_reward = -0.8
-
+        self.last_reward = trade.pnlcomm
+        # print('setting', self.last_reward)
 
         self.log('OPERATION PROFIT, GROSS %.4f, NET %.4f' %
                  (trade.pnl, trade.pnlcomm), color=color)
@@ -130,10 +127,16 @@ class ReinforcementStrategy(bt.Strategy):
     def next(self):
 
         is_last_step = False
+
         try:
             self.data_close[1]
         except IndexError:
             is_last_step = True
+            final_delta = self.broker.getvalue() - self.start_value
+            if final_delta <= 0:
+                self.last_reward = -1000
+            else:
+                self.last_reward = 1
 
         if self.last_date != self.datas[0].datetime.date(0):
             if self.position:
@@ -179,17 +182,9 @@ class ReinforcementStrategy(bt.Strategy):
             self.broker.get_cash()
         ]
 
-        if is_last_step:
-            final_delta = self.broker.getvalue() - self.start_value
-
-            self.last_reward = final_delta
-            #
-            # if final_delta > 0:
-            #     self.last_reward = 1
-            # else:
-            #     self.last_reward = -1000
-
+        # print('saving', self.last_reward)
         action = self.brain.update(self.last_reward, last_signal)
+
         # print('action', action)
         self.scores.append(self.brain.score())
         # with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'brain-scores.txt'), "a") as f:
@@ -200,10 +195,12 @@ class ReinforcementStrategy(bt.Strategy):
         if market_action is not None:
             self.order = market_action()
 
+        self.last_reward = 0
+
         value_delta = float("{0:.2f}".format(value - self.last_value))
         self.last_value = value
-        # print(value_delta)
-        self.last_reward = value_delta
+
+        # self.last_reward = value_delta
         # if value_delta > 0:
         #     self.last_reward = 1
         # else:
