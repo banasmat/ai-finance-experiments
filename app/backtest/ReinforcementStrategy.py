@@ -23,7 +23,7 @@ class ReinforcementStrategy(bt.Strategy):
 
         self.start_value = self.broker.getvalue()
 
-        self.brain = Dqn(6,3,0.9)
+        self.brain = Dqn(8,3,0.9)
         self.brain.load()
         self.last_reward = 0
         self.last_value = self.broker.getvalue()
@@ -103,7 +103,11 @@ class ReinforcementStrategy(bt.Strategy):
             color = 'red'
         else:
             color = 'magenta'
-        self.last_reward = trade.pnlcomm
+
+        reward = trade.pnlcomm
+        if reward < 0:
+            reward = reward*100
+        self.last_reward = reward
         # print('setting', self.last_reward)
 
         self.log('OPERATION PROFIT, GROSS %.4f, NET %.4f' %
@@ -141,7 +145,7 @@ class ReinforcementStrategy(bt.Strategy):
         if self.last_date != self.datas[0].datetime.date(0):
             if self.position:
                 # TODO refine penalty system. Should add penalty for every open position
-                penalty = self.position.size / 100
+                penalty = self.position.size / 1000
                 self.log("OVERNIGHT PENALTY: %.4f" % penalty, color='white')
                 self.broker.add_cash(-penalty)
 
@@ -165,8 +169,8 @@ class ReinforcementStrategy(bt.Strategy):
         last_signal = [
             position_size,
             self.data_close[0],
-            # self.data_low[0],
-            # self.data_high[0],
+            self.data_low[0],
+            self.data_high[0],
             self.di[0],
             self.ema_20[0],
             self.ema_100[0],

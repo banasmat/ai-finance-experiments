@@ -61,7 +61,7 @@ class Dqn():
         self.brain_save_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'trading_brain.pth')
     
     def select_action(self, state):
-        temperature=7
+        temperature=50
         probs = F.softmax(self.model(Variable(state, volatile = True))*temperature)
         action = probs.multinomial()
         return action.data[0,0]
