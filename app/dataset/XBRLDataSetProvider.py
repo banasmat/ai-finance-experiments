@@ -68,9 +68,11 @@ class XBRLDataSetProvider(object):
             for tag in f:
                 all_tags.append(tag.strip())
 
+        all_tags = all_tags[-100:]
+
         pd.options.mode.chained_assignment = None
 
-        for quarter_dir in os.listdir(XBRLDataSetProvider.res_dir):
+        for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
 
             quarter_dir = os.path.join(XBRLDataSetProvider.res_dir, quarter_dir)
 
