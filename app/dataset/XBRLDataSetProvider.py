@@ -68,7 +68,7 @@ class XBRLDataSetProvider(object):
             for tag in f:
                 all_tags.append(tag.strip())
 
-        all_tags = all_tags[-100:]
+        # all_tags = all_tags[-100:]
 
         pd.options.mode.chained_assignment = None
 
@@ -92,7 +92,7 @@ class XBRLDataSetProvider(object):
             num_file = os.path.join(quarter_dir, 'num.txt')
             sub_file = os.path.join(quarter_dir, 'sub.txt')
 
-            numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'tag', 'value'])
+            numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'tag', 'value', 'qtrs', 'ddate'])
             subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'cik'])
             #
             df = pd.DataFrame(index=subs['cik'], columns=all_tags)
@@ -101,18 +101,26 @@ class XBRLDataSetProvider(object):
 
             print('num shape before prefiltering', numbers.shape)
             # Prefiltering
-            numbers = numbers.loc[numbers['tag'].isin(all_tags)]
+            numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
             print('num shape after prefiltering', numbers.shape)
-            # i = 0
 
             for i, cik in subs['cik'].iteritems():
+                if i % 10000 == 0:
+                    print("record: ", quarter_name, str(i))
+
                 # print('CIK', cik)
                 for tag in all_tags:
                     try:
                         row = numbers.loc[(numbers['cik'] == cik) & (numbers['tag'] == tag)]
-                        # Drop found values to reduce dataframe size
-                        numbers = numbers.drop(row.index)
-                        val = row['value'].mean()
+                        if row.shape[0] == 0:
+                            raise KeyError
+                        numbers.drop(index=row.index, inplace=True)
+                        row.index = row.pop('ddate').astype(int)
+                        row = row.loc[(row['qtrs'] == 1) | (row['qtrs'] == 0)]
+                        if(row.shape[0] == 0):
+                            raise KeyError
+                        val = row.loc[row.index.max()]
+                        val = val['value']
                     except KeyError:
                         val = 0
                     if not np.isnan(val):
