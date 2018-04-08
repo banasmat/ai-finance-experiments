@@ -122,8 +122,11 @@ class XBRLDataSetProvider(object):
                         #     raise KeyError
                         val = row.loc[row.index.max()]
                         val = val['value']
+                        if type(val) == pd.Series:
+                            val = val.iloc[0]
                     except KeyError:
                         val = 0
+                    print(val)
                     if not np.isnan(val):
                         df[tag].loc[df.index == cik] = val
 
