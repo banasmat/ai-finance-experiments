@@ -93,19 +93,26 @@ class XBRLDataSetProvider(object):
             sub_file = os.path.join(quarter_dir, 'sub.txt')
 
             numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'tag', 'value'])
-            subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'cik', 'name'])
+            subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'cik'])
             #
             df = pd.DataFrame(index=subs['cik'], columns=all_tags)
             df.fillna(0, inplace=True)
             numbers = numbers.merge(subs, on='adsh', how='left')
 
+            print('num shape before prefiltering', numbers.shape)
+            # Prefiltering
+            numbers = numbers.loc[numbers['tag'].isin(all_tags)]
+            print('num shape after prefiltering', numbers.shape)
             # i = 0
 
             for i, cik in subs['cik'].iteritems():
                 # print('CIK', cik)
                 for tag in all_tags:
                     try:
-                        val = numbers.loc[(numbers['cik'] == cik) & (numbers['tag'] == tag)]['value'].mean()
+                        row = numbers.loc[(numbers['cik'] == cik) & (numbers['tag'] == tag)]
+                        # Drop found values to reduce dataframe size
+                        numbers = numbers.drop(row.index)
+                        val = row['value'].mean()
                     except KeyError:
                         val = 0
                     if not np.isnan(val):
