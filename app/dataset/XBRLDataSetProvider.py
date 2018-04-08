@@ -100,8 +100,9 @@ class XBRLDataSetProvider(object):
             numbers = numbers.merge(subs, on='adsh', how='left')
 
             print('num shape before prefiltering', numbers.shape)
-            # Prefiltering
             numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
+            numbers: pd.DataFrame = numbers.loc[(numbers['qtrs'] == 1) | (numbers['qtrs'] == 0)]
+            numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(quarter_name[:4])]
             print('num shape after prefiltering', numbers.shape)
 
             for i, cik in subs['cik'].iteritems():
@@ -116,9 +117,9 @@ class XBRLDataSetProvider(object):
                             raise KeyError
                         numbers.drop(index=row.index, inplace=True)
                         row.index = row.pop('ddate').astype(int)
-                        row = row.loc[(row['qtrs'] == 1) | (row['qtrs'] == 0)]
-                        if(row.shape[0] == 0):
-                            raise KeyError
+                        # row = row.loc[(row['qtrs'] == 1) | (row['qtrs'] == 0)]
+                        # if(row.shape[0] == 0):
+                        #     raise KeyError
                         val = row.loc[row.index.max()]
                         val = val['value']
                     except KeyError:
