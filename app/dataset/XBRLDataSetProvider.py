@@ -68,6 +68,7 @@ class XBRLDataSetProvider(object):
             for tag in f:
                 all_tags.append(tag.strip())
 
+        # all_tags = sorted(all_tags)
         # all_tags = all_tags[-100:]
 
         pd.options.mode.chained_assignment = None
@@ -94,7 +95,7 @@ class XBRLDataSetProvider(object):
 
             numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'tag', 'value', 'qtrs', 'ddate'])
             subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'cik'])
-            #
+
             df = pd.DataFrame(index=subs['cik'], columns=all_tags)
             df.fillna(0, inplace=True)
             numbers = numbers.merge(subs, on='adsh', how='left')
@@ -105,30 +106,8 @@ class XBRLDataSetProvider(object):
             numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(quarter_name[:4])]
             print('num shape after prefiltering', numbers.shape)
 
-            for i, cik in subs['cik'].iteritems():
-                if i % 10000 == 0:
-                    print("record: ", quarter_name, str(i))
-
-                # print('CIK', cik)
-                for tag in all_tags:
-                    try:
-                        row = numbers.loc[(numbers['cik'] == cik) & (numbers['tag'] == tag)]
-                        if row.shape[0] == 0:
-                            raise KeyError
-                        numbers.drop(index=row.index, inplace=True)
-                        row.index = row.pop('ddate').astype(int)
-                        # row = row.loc[(row['qtrs'] == 1) | (row['qtrs'] == 0)]
-                        # if(row.shape[0] == 0):
-                        #     raise KeyError
-                        val = row.loc[row.index.max()]
-                        val = val['value']
-                        if type(val) == pd.Series:
-                            val = val.iloc[0]
-                    except KeyError:
-                        val = 0
-                    print(val)
-                    if not np.isnan(val):
-                        df[tag].loc[df.index == cik] = val
+            for i, row in numbers.iterrows():
+                df[row['tag']].loc[df.index == row['cik']] = row['value']
 
             with open(target_file_path, 'w') as f:
                 df.to_csv(f)
