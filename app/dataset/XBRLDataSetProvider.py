@@ -1,5 +1,5 @@
 from typing import List, Tuple
-
+import random
 import numpy as np
 import pandas as pd
 import os
@@ -73,6 +73,9 @@ class XBRLDataSetProvider(object):
 
         pd.options.mode.chained_assignment = None
 
+        example_cik = 1459200
+
+
         for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
 
             quarter_dir = os.path.join(XBRLDataSetProvider.res_dir, quarter_dir)
@@ -85,8 +88,8 @@ class XBRLDataSetProvider(object):
             if os.path.exists(target_file_path):
                 continue
 
-            with open(target_file_path, 'w') as f:
-                f.write('processing')
+            # with open(target_file_path, 'w') as f:
+            #     f.write('processing')
 
             print('QUARTER', quarter_name)
 
@@ -94,23 +97,36 @@ class XBRLDataSetProvider(object):
             sub_file = os.path.join(quarter_dir, 'sub.txt')
 
             numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'tag', 'value', 'qtrs', 'ddate'])
-            subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'cik'])
+            subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'cik', 'fp'])
 
-            df = pd.DataFrame(index=subs['cik'], columns=all_tags)
-            df.fillna(0, inplace=True)
+            random_cik = random.choice(subs['cik'].tolist())
+
             numbers = numbers.merge(subs, on='adsh', how='left')
-
-            print('num shape before prefiltering', numbers.shape)
-            numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
-            numbers: pd.DataFrame = numbers.loc[(numbers['qtrs'] == 1) | (numbers['qtrs'] == 0)]
-            numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(quarter_name[:4])]
-            print('num shape after prefiltering', numbers.shape)
-
-            for i, row in numbers.iterrows():
-                df[row['tag']].loc[df.index == row['cik']] = row['value']
-
             with open(target_file_path, 'w') as f:
-                df.to_csv(f)
+                numbers = numbers.loc[(numbers.cik == example_cik)]
+                quarter_year = int(quarter_name[:4])
+
+                if(quarter_name[5:6] == '1'):
+                    quarter_year = quarter_year-1
+
+                numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(str(quarter_year))]
+                numbers.to_csv(f)
+
+            # print('num shape before prefiltering', numbers.shape)
+            # numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
+            # numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
+            # numbers: pd.DataFrame = numbers.loc[(numbers['qtrs'].isin([0,4]))]
+            # numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(quarter_name[:4])]
+            # print('num shape after prefiltering', numbers.shape)
+            #
+            # df = pd.DataFrame(index=numbers['cik'], columns=numbers['tag'].unique().tolist())
+            # df.fillna(0, inplace=True)
+            #
+            # for i, row in numbers.iterrows():
+            #     df[row['tag']].loc[df.index == row['cik']] = row['value']
+            #
+            # with open(target_file_path, 'w') as f:
+            #     df.to_csv(f)
 
 
     @staticmethod
