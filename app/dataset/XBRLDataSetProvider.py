@@ -95,13 +95,14 @@ class XBRLDataSetProvider(object):
 
             num_file = os.path.join(quarter_dir, 'num.txt')
             sub_file = os.path.join(quarter_dir, 'sub.txt')
+            tag_file = os.path.join(quarter_dir, 'tag.txt')
 
             numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'tag', 'value', 'qtrs', 'ddate'])
             subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'cik', 'fp'])
-
-            random_cik = random.choice(subs['cik'].tolist())
+            tags = pd.read_csv(tag_file, sep='\t', encoding='ISO-8859-1', usecols=['tag', 'custom', 'version', 'tlabel', 'abstract'])
 
             numbers = numbers.merge(subs, on='adsh', how='left')
+            numbers = numbers.merge(tags, on='tag', how='left')
             with open(target_file_path, 'w') as f:
                 numbers = numbers.loc[(numbers.cik == example_cik)]
                 quarter_year = int(quarter_name[:4])
@@ -110,7 +111,7 @@ class XBRLDataSetProvider(object):
                     quarter_year = quarter_year-1
 
                 numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(str(quarter_year))]
-                numbers.to_csv(f)
+                numbers.to_csv(f, index=False)
 
             # print('num shape before prefiltering', numbers.shape)
             # numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
