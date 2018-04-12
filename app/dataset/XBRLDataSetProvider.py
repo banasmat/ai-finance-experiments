@@ -12,6 +12,7 @@ import app.dataset.xbrl_titles as xbrl_titles
 class XBRLDataSetProvider(object):
     res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
     most_popular_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'most_popular_tags.txt')
+    common_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'common_tags.txt')
 
     @staticmethod
     def extract_cik_numbers():
@@ -34,6 +35,35 @@ class XBRLDataSetProvider(object):
 
         with open(cik_file_path, 'wb') as f:
             pickle.dump(cik_map, f)
+
+    @staticmethod
+    def get_common_tags():
+        all_tags = pd.Series()
+
+        for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
+
+            quarter_dir = os.path.join(XBRLDataSetProvider.res_dir, quarter_dir)
+
+            if not os.path.isdir(quarter_dir):
+                continue
+            print(quarter_dir)
+            num_file = os.path.join(quarter_dir, 'num.txt')
+            tag_file = os.path.join(quarter_dir, 'tag.txt')
+            numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['tag'])
+            tags = pd.read_csv(tag_file, sep='\t', encoding='ISO-8859-1', usecols=['tag', 'custom', 'abstract'], engine='python', error_bad_lines=False)
+            numbers = numbers.merge(tags, on='tag', how='left')
+
+            numbers = numbers.loc[numbers['custom'] == 0]
+            numbers = numbers.loc[numbers['abstract'] == 0]
+            all_tags = all_tags.append(numbers)
+
+        all_tags = all_tags.groupby(['tag'])['tag'].count()
+        all_tags = all_tags.sort_values(ascending=True)
+        all_tags = all_tags.index.unique().tolist()
+
+        with open(XBRLDataSetProvider.common_tags_file_path, 'w') as f:
+            for tag in all_tags:
+                f.write("%s\n" % tag)
 
     @staticmethod
     def get_most_popular_tags():
@@ -99,7 +129,7 @@ class XBRLDataSetProvider(object):
 
             numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'tag', 'value', 'qtrs', 'ddate'])
             subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'cik', 'fp'])
-            tags = pd.read_csv(tag_file, sep='\t', encoding='ISO-8859-1', usecols=['tag', 'custom', 'version', 'tlabel', 'abstract'])
+            tags = pd.read_csv(tag_file, sep='\t', encoding='ISO-8859-1', usecols=['tag', 'iord', 'custom', 'version', 'tlabel', 'abstract'])
 
             numbers = numbers.merge(subs, on='adsh', how='left')
             numbers = numbers.merge(tags, on='tag', how='left')
@@ -111,7 +141,7 @@ class XBRLDataSetProvider(object):
                     quarter_year = quarter_year-1
 
                 numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(str(quarter_year))]
-                numbers.to_csv(f, index=False)
+                numbers.to_csv(f, index=False, columns=['adsh', 'tag', 'iord', 'ddate', 'qtrs', 'value', 'fp', 'version', 'custom', 'abstract', 'tlabel'])
 
             # print('num shape before prefiltering', numbers.shape)
             # numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
