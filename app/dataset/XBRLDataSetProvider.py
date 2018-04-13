@@ -38,7 +38,7 @@ class XBRLDataSetProvider(object):
 
     @staticmethod
     def get_common_tags():
-        all_tags = pd.Series()
+        all_tags = pd.DataFrame()
 
         for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
 
@@ -49,21 +49,30 @@ class XBRLDataSetProvider(object):
             print(quarter_dir)
             num_file = os.path.join(quarter_dir, 'num.txt')
             tag_file = os.path.join(quarter_dir, 'tag.txt')
-            numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['tag'])
+            sub_file = os.path.join(quarter_dir, 'sub.txt')
+            numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['tag', 'adsh'])
             tags = pd.read_csv(tag_file, sep='\t', encoding='ISO-8859-1', usecols=['tag', 'custom', 'abstract'], engine='python', error_bad_lines=False)
+            subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'fp'])
             numbers = numbers.merge(tags, on='tag', how='left')
+            numbers = numbers.merge(subs, on='adsh', how='left')
+
 
             numbers = numbers.loc[numbers['custom'] == 0]
             numbers = numbers.loc[numbers['abstract'] == 0]
+            numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
+
+
+            print('adsh len', len(numbers['adsh'].unique()))
+
             all_tags = all_tags.append(numbers)
 
         all_tags = all_tags.groupby(['tag'])['tag'].count()
         all_tags = all_tags.sort_values(ascending=True)
-        all_tags = all_tags.index.unique().tolist()
+        #all_tags = all_tags.index.unique().tolist()
 
         with open(XBRLDataSetProvider.common_tags_file_path, 'w') as f:
-            for tag in all_tags:
-                f.write("%s\n" % tag)
+            for tag, count in all_tags.iteritems():
+                f.write("%s - %d\n" % (tag, count))
 
     @staticmethod
     def get_most_popular_tags():
@@ -117,7 +126,8 @@ class XBRLDataSetProvider(object):
             target_file_path = os.path.join(output_dir, quarter_name + '.csv')
             if os.path.exists(target_file_path):
                 continue
-
+            if quarter_name[5:6] == '1':
+                continue
             # with open(target_file_path, 'w') as f:
             #     f.write('processing')
 
@@ -134,7 +144,8 @@ class XBRLDataSetProvider(object):
             numbers = numbers.merge(subs, on='adsh', how='left')
             numbers = numbers.merge(tags, on='tag', how='left')
             with open(target_file_path, 'w') as f:
-                numbers = numbers.loc[(numbers.cik == example_cik)]
+                # numbers = numbers.loc[(numbers.cik == example_cik)]
+                numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
                 quarter_year = int(quarter_name[:4])
 
                 if(quarter_name[5:6] == '1'):

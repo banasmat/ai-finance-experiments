@@ -18,5 +18,5 @@ from multiprocessing import Process
 # XBRLDataSetProvider.extract_cik_numbers()
 # XBRLDataSetProvider.organize_tags()
 # XBRLDataSetProvider.get_most_popular_tags()
-XBRLDataSetProvider.get_common_tags()
-# XBRLDataSetProvider.prepare_data_set_with_most_popular_tags()
+# XBRLDataSetProvider.get_common_tags()
+XBRLDataSetProvider.prepare_data_set_with_most_popular_tags()
