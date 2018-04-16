@@ -107,13 +107,12 @@ class XBRLDataSetProvider(object):
             for tag in f:
                 all_tags.append(tag.strip())
 
-        # all_tags = sorted(all_tags)
+        all_tags = sorted(all_tags)
         # all_tags = all_tags[-100:]
 
         pd.options.mode.chained_assignment = None
 
-        example_cik = 1459200
-
+        # example_cik = 1459200
 
         for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
 
@@ -143,32 +142,58 @@ class XBRLDataSetProvider(object):
 
             numbers = numbers.merge(subs, on='adsh', how='left')
             numbers = numbers.merge(tags, on='tag', how='left')
-            with open(target_file_path, 'w') as f:
-                # numbers = numbers.loc[(numbers.cik == example_cik)]
-                numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
-                quarter_year = int(quarter_name[:4])
-
-                if(quarter_name[5:6] == '1'):
-                    quarter_year = quarter_year-1
-
-                numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(str(quarter_year))]
-                numbers.to_csv(f, index=False, columns=['adsh', 'tag', 'iord', 'ddate', 'qtrs', 'value', 'fp', 'version', 'custom', 'abstract', 'tlabel'])
-
-            # print('num shape before prefiltering', numbers.shape)
-            # numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
-            # numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
-            # numbers: pd.DataFrame = numbers.loc[(numbers['qtrs'].isin([0,4]))]
-            # numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(quarter_name[:4])]
-            # print('num shape after prefiltering', numbers.shape)
             #
-            # df = pd.DataFrame(index=numbers['cik'], columns=numbers['tag'].unique().tolist())
-            # df.fillna(0, inplace=True)
-            #
-            # for i, row in numbers.iterrows():
-            #     df[row['tag']].loc[df.index == row['cik']] = row['value']
+            # print(numbers['tag'])
+            # quit()
             #
             # with open(target_file_path, 'w') as f:
-            #     df.to_csv(f)
+            #     # numbers = numbers.loc[(numbers.cik == example_cik)]
+            #     numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
+            #     quarter_year = int(quarter_name[:4])
+            #
+            #     if(quarter_name[5:6] == '1'):
+            #         quarter_year = quarter_year-1
+            #
+            #     numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(str(quarter_year))]
+            #     numbers.to_csv(f, index=False, columns=['adsh', 'tag', 'iord', 'ddate', 'qtrs', 'value', 'fp', 'version', 'custom', 'abstract', 'tlabel'])
+
+            print('num shape before prefiltering', numbers.shape)
+            numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
+            numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
+            numbers: pd.DataFrame = numbers.loc[(numbers['qtrs'].isin([0,4]))]
+            numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(quarter_name[:4])]
+            print('num shape after prefiltering', numbers.shape)
+
+            ciks = numbers['cik'].sort_values(ascending=True).unique()
+
+            numbers.sort_values(by=['tag', 'cik'], ascending=True, inplace=True)
+
+            df = pd.DataFrame(index=ciks, columns=all_tags)
+            df.fillna(0, inplace=True)
+
+            from datetime import datetime
+            now = datetime.now()
+            print('all tags len', len(all_tags))
+            i = 0
+            for tag in all_tags:
+
+                i = i+1
+                later = datetime.now()
+                print(i)
+                print('seconds elapsed', (later - now).total_seconds())
+                now = later
+
+
+                for cik in ciks:
+                    vals = numbers.loc[(numbers.tag == tag) & (numbers.cik == cik)]
+                    numbers.drop(index=vals.index, inplace=True)
+                    if len(vals) > 0:
+                        val = vals.nlargest(1, 'ddate')
+                        df[tag].loc[df.index == cik] = val['value']
+
+            #TODO 1 file for 1 year
+            with open(target_file_path, 'w') as f:
+                df.to_csv(f)
 
 
     @staticmethod
