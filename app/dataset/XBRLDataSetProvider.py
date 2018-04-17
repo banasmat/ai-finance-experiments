@@ -72,7 +72,8 @@ class XBRLDataSetProvider(object):
 
         with open(XBRLDataSetProvider.common_tags_file_path, 'w') as f:
             for tag, count in all_tags.iteritems():
-                f.write("%s - %d\n" % (tag, count))
+                # f.write("%s - %d\n" % (tag, count))
+                f.write("%s\n" % tag)
 
     @staticmethod
     def get_most_popular_tags():
@@ -103,12 +104,13 @@ class XBRLDataSetProvider(object):
     def prepare_data_set_with_most_popular_tags(dir_separator='\\'):
         all_tags = []
         output_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_most_popular_tags')
-        with open(XBRLDataSetProvider.most_popular_tags_file_path, 'r') as f:
+        # with open(XBRLDataSetProvider.most_popular_tags_file_path, 'r') as f:
+        with open(XBRLDataSetProvider.common_tags_file_path, 'r') as f:
             for tag in f:
                 all_tags.append(tag.strip())
 
+        all_tags = all_tags[-500:]
         all_tags = sorted(all_tags)
-        # all_tags = all_tags[-100:]
 
         pd.options.mode.chained_assignment = None
 
@@ -161,16 +163,16 @@ class XBRLDataSetProvider(object):
             numbers = numbers.merge(subs, on='adsh', how='left')
             numbers = numbers.merge(tags, on='tag', how='left')
 
-            with open(target_file_path, 'w') as f:
-                # numbers = numbers.loc[(numbers.cik == example_cik)]
-                numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
-                quarter_year = int(quarter_name[:4])
-
-                if(quarter_name[5:6] == '1'):
-                    quarter_year = quarter_year-1
-
-                numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(str(quarter_year))]
-                numbers.to_csv(f, index=False, columns=['adsh', 'tag', 'iord', 'ddate', 'qtrs', 'value', 'fp', 'version', 'custom', 'abstract', 'tlabel'])
+            # with open(target_file_path, 'w') as f:
+            #     # numbers = numbers.loc[(numbers.cik == example_cik)]
+            #     numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
+            #     quarter_year = int(quarter_name[:4])
+            #
+            #     if(quarter_name[5:6] == '1'):
+            #         quarter_year = quarter_year-1
+            #
+            #     numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(str(quarter_year))]
+            #     numbers.to_csv(f, index=False, columns=['adsh', 'tag', 'iord', 'ddate', 'qtrs', 'value', 'fp', 'version', 'custom', 'abstract', 'tlabel'])
 
             # print('num shape before prefiltering', numbers.shape)
             numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
