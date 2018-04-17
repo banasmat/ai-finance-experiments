@@ -113,8 +113,12 @@ class XBRLDataSetProvider(object):
         pd.options.mode.chained_assignment = None
 
         # example_cik = 1459200
+        quarters = list(reversed(os.listdir(XBRLDataSetProvider.res_dir)))
 
-        for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
+        processed_year = None
+        next_year = None
+
+        for i, quarter_dir in enumerate(quarters):
 
             quarter_dir = os.path.join(XBRLDataSetProvider.res_dir, quarter_dir)
 
@@ -122,15 +126,29 @@ class XBRLDataSetProvider(object):
                 continue
 
             quarter_name = quarter_dir.rsplit(dir_separator, 1)[-1]
-            target_file_path = os.path.join(output_dir, quarter_name + '.csv')
-            if os.path.exists(target_file_path):
+            current_year = quarter_name[:4]
+            try:
+                next_year = quarters[i+1].rsplit(dir_separator, 1)[-1][:4]
+            except KeyError:
+                next_year = None
+            target_file_path = os.path.join(output_dir, current_year + '.csv')
+
+            if processed_year != current_year and os.path.exists(target_file_path):
                 continue
-            if quarter_name[5:6] == '1':
-                continue
-            # with open(target_file_path, 'w') as f:
-            #     f.write('processing')
+
+            if next_year == current_year:
+                processed_year = current_year
+                with open(target_file_path, 'w') as f:
+                    f.write('processing')
 
             print('QUARTER', quarter_name)
+
+            # if os.path.exists(target_file_path) and last_year != current_year:
+            #     print('cont')
+            #     continue
+
+            # if quarter_name[5:6] == '1':
+            #     continue
 
             num_file = os.path.join(quarter_dir, 'num.txt')
             sub_file = os.path.join(quarter_dir, 'sub.txt')
@@ -142,27 +160,24 @@ class XBRLDataSetProvider(object):
 
             numbers = numbers.merge(subs, on='adsh', how='left')
             numbers = numbers.merge(tags, on='tag', how='left')
-            #
-            # print(numbers['tag'])
-            # quit()
-            #
-            # with open(target_file_path, 'w') as f:
-            #     # numbers = numbers.loc[(numbers.cik == example_cik)]
-            #     numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
-            #     quarter_year = int(quarter_name[:4])
-            #
-            #     if(quarter_name[5:6] == '1'):
-            #         quarter_year = quarter_year-1
-            #
-            #     numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(str(quarter_year))]
-            #     numbers.to_csv(f, index=False, columns=['adsh', 'tag', 'iord', 'ddate', 'qtrs', 'value', 'fp', 'version', 'custom', 'abstract', 'tlabel'])
 
-            print('num shape before prefiltering', numbers.shape)
+            with open(target_file_path, 'w') as f:
+                # numbers = numbers.loc[(numbers.cik == example_cik)]
+                numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
+                quarter_year = int(quarter_name[:4])
+
+                if(quarter_name[5:6] == '1'):
+                    quarter_year = quarter_year-1
+
+                numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(str(quarter_year))]
+                numbers.to_csv(f, index=False, columns=['adsh', 'tag', 'iord', 'ddate', 'qtrs', 'value', 'fp', 'version', 'custom', 'abstract', 'tlabel'])
+
+            # print('num shape before prefiltering', numbers.shape)
             numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
             numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
             numbers: pd.DataFrame = numbers.loc[(numbers['qtrs'].isin([0,4]))]
             numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(quarter_name[:4])]
-            print('num shape after prefiltering', numbers.shape)
+            # print('num shape after prefiltering', numbers.shape)
 
             ciks = numbers['cik'].sort_values(ascending=True).unique()
 
@@ -179,10 +194,9 @@ class XBRLDataSetProvider(object):
 
                 i = i+1
                 later = datetime.now()
-                print(i)
-                print('seconds elapsed', (later - now).total_seconds())
+                # print(i)
+                # print('seconds elapsed', (later - now).total_seconds())
                 now = later
-
 
                 for cik in ciks:
                     vals = numbers.loc[(numbers.tag == tag) & (numbers.cik == cik)]
@@ -191,10 +205,9 @@ class XBRLDataSetProvider(object):
                         val = vals.nlargest(1, 'ddate')
                         df[tag].loc[df.index == cik] = val['value']
 
-            #TODO 1 file for 1 year
-            with open(target_file_path, 'w') as f:
-                df.to_csv(f)
-
+            if next_year != current_year:
+                with open(target_file_path, 'w') as f:
+                    df.to_csv(f)
 
     @staticmethod
     def organize_tags():
