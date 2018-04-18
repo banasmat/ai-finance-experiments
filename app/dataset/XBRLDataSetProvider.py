@@ -178,21 +178,20 @@ class XBRLDataSetProvider(object):
             numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
             numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
             numbers: pd.DataFrame = numbers.loc[(numbers['qtrs'].isin([0,4]))]
-            numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(quarter_name[:4])]
+            # numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(quarter_name[:4])]
+            numbers: pd.DataFrame = numbers.loc[(numbers['ddate'].astype(str).str.startswith(current_year)) | numbers['ddate'].astype(str).str.startswith(str(int(current_year)-1))]
             # print('num shape after prefiltering', numbers.shape)
 
             ciks = numbers['cik'].sort_values(ascending=True).unique()
-
+            # ciks = [7623]
             numbers.sort_values(by=['tag', 'cik'], ascending=True, inplace=True)
 
             df = pd.DataFrame(index=ciks, columns=all_tags)
             df.fillna(0, inplace=True)
 
-            # FIXME values not saving... test with 1 cik
-
             from datetime import datetime
             now = datetime.now()
-            print('all tags len', len(all_tags))
+
             i = 0
             for tag in all_tags:
 
@@ -203,11 +202,14 @@ class XBRLDataSetProvider(object):
                 now = later
 
                 for cik in ciks:
-                    vals = numbers.loc[(numbers.tag == tag) & (numbers.cik == cik)]
+                    cik_vals = numbers.loc[numbers.cik == cik]
+                    if cik_vals.shape[0] == 0:
+                        continue
+                    vals = cik_vals.loc[(numbers.tag == tag)]
                     numbers.drop(index=vals.index, inplace=True)
-                    if len(vals) > 0:
+                    if vals.shape[0] > 0:
                         val = vals.nlargest(1, 'ddate')
-                        df[tag].loc[df.index == cik] = val['value']
+                        df[tag].loc[df.index == cik] = val['value'].mean()
 
             if next_year != current_year:
                 with open(target_file_path, 'w') as f:
