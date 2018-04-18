@@ -188,6 +188,8 @@ class XBRLDataSetProvider(object):
             df = pd.DataFrame(index=ciks, columns=all_tags)
             df.fillna(0, inplace=True)
 
+            # FIXME values not saving... test with 1 cik
+
             from datetime import datetime
             now = datetime.now()
             print('all tags len', len(all_tags))
