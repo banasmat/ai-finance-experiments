@@ -117,9 +117,6 @@ class XBRLDataSetProvider(object):
         # example_cik = 1459200
         quarters = list(reversed(os.listdir(XBRLDataSetProvider.res_dir)))
 
-        processed_year = None
-        next_year = None
-
         for i, quarter_dir in enumerate(quarters):
 
             quarter_dir = os.path.join(XBRLDataSetProvider.res_dir, quarter_dir)
@@ -129,20 +126,15 @@ class XBRLDataSetProvider(object):
 
             quarter_name = quarter_dir.rsplit(dir_separator, 1)[-1]
             current_year = quarter_name[:4]
-            try:
-                next_year = quarters[i+1].rsplit(dir_separator, 1)[-1][:4]
-            except KeyError:
-                next_year = None
+
             lock_file_path = os.path.join(output_dir, 'lock_' + quarter_name + '.lock')
             target_file_path = os.path.join(output_dir, current_year + '.csv')
 
-            if processed_year != current_year and os.path.exists(lock_file_path):
+            if os.path.exists(lock_file_path):
                 continue
 
-            if next_year == current_year:
-                processed_year = current_year
-                with open(lock_file_path, 'w') as f:
-                    f.write('processing')
+            with open(lock_file_path, 'w') as f:
+                f.write('processing')
 
             print('QUARTER', quarter_name)
 
@@ -165,7 +157,7 @@ class XBRLDataSetProvider(object):
             print('num shape after prefiltering', numbers.shape)
 
             ciks = numbers['cik'].sort_values(ascending=True).unique()
-
+            
             # numbers: pd.DataFrame = numbers.loc[numbers['cik'].isin(ciks)]
             # print('num shape after prefiltering ciks', numbers.shape)
             numbers.sort_values(by=['tag', 'cik'], ascending=True, inplace=True)

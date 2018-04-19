@@ -9,7 +9,7 @@ if __name__ == '__main__':
     for i in range(0,num_proc):
         processes.append(Process(target=XBRLDataSetProvider.prepare_data_set_with_most_popular_tags))
         processes[i].start()
-        time.sleep(5)
+        time.sleep(20)
 
     for i in range(0,num_proc):
         processes[i].join()
