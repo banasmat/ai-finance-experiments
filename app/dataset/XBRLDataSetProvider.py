@@ -146,13 +146,6 @@ class XBRLDataSetProvider(object):
 
             print('QUARTER', quarter_name)
 
-            # if os.path.exists(target_file_path) and last_year != current_year:
-            #     print('cont')
-            #     continue
-
-            # if quarter_name[5:6] == '1':
-            #     continue
-
             num_file = os.path.join(quarter_dir, 'num.txt')
             sub_file = os.path.join(quarter_dir, 'sub.txt')
             tag_file = os.path.join(quarter_dir, 'tag.txt')
@@ -164,50 +157,32 @@ class XBRLDataSetProvider(object):
             numbers = numbers.merge(subs, on='adsh', how='left')
             numbers = numbers.merge(tags, on='tag', how='left')
 
-            # with open(target_file_path, 'w') as f:
-            #     # numbers = numbers.loc[(numbers.cik == example_cik)]
-            #     numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
-            #     quarter_year = int(quarter_name[:4])
-            #
-            #     if(quarter_name[5:6] == '1'):
-            #         quarter_year = quarter_year-1
-            #
-            #     numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(str(quarter_year))]
-            #     numbers.to_csv(f, index=False, columns=['adsh', 'tag', 'iord', 'ddate', 'qtrs', 'value', 'fp', 'version', 'custom', 'abstract', 'tlabel'])
-
             print('num shape before prefiltering', numbers.shape)
             numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
             numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
             numbers: pd.DataFrame = numbers.loc[(numbers['qtrs'].isin([0,4]))]
-            # numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(quarter_name[:4])]
             numbers: pd.DataFrame = numbers.loc[(numbers['ddate'].astype(str).str.startswith(current_year)) | numbers['ddate'].astype(str).str.startswith(str(int(current_year)-1))]
             print('num shape after prefiltering', numbers.shape)
 
             ciks = numbers['cik'].sort_values(ascending=True).unique()
 
+            # numbers: pd.DataFrame = numbers.loc[numbers['cik'].isin(ciks)]
+            # print('num shape after prefiltering ciks', numbers.shape)
             numbers.sort_values(by=['tag', 'cik'], ascending=True, inplace=True)
 
             df = pd.DataFrame(index=ciks, columns=all_tags)
             df.fillna(0, inplace=True)
 
-            from datetime import datetime
-            now = datetime.now()
-
-            i = 0
             for tag in all_tags:
 
-                i = i+1
-                later = datetime.now()
-                # print(i)
-                # print('seconds elapsed', (later - now).total_seconds())
-                now = later
+                tag_vals = numbers.loc[numbers.tag == tag]
 
                 for cik in ciks:
-                    cik_vals = numbers.loc[numbers.cik == cik]
+                    cik_vals = tag_vals.loc[tag_vals.cik == cik]
                     if cik_vals.shape[0] == 0:
                         continue
-                    vals = cik_vals.loc[(numbers.tag == tag)]
-                    numbers.drop(index=vals.index, inplace=True)
+                    vals = cik_vals.loc[(cik_vals.tag == tag)]
+                    # numbers.drop(index=vals.index, inplace=True)
                     if vals.shape[0] > 0:
                         val = vals.nlargest(1, 'ddate')
                         df[tag].loc[df.index == cik] = val['value'].mean()
