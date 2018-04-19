@@ -133,14 +133,15 @@ class XBRLDataSetProvider(object):
                 next_year = quarters[i+1].rsplit(dir_separator, 1)[-1][:4]
             except KeyError:
                 next_year = None
+            lock_file_path = os.path.join(output_dir, 'lock_' + quarter_name + '.lock')
             target_file_path = os.path.join(output_dir, current_year + '.csv')
 
-            if processed_year != current_year and os.path.exists(target_file_path):
+            if processed_year != current_year and os.path.exists(lock_file_path):
                 continue
 
             if next_year == current_year:
                 processed_year = current_year
-                with open(target_file_path, 'w') as f:
+                with open(lock_file_path, 'w') as f:
                     f.write('processing')
 
             print('QUARTER', quarter_name)
@@ -174,16 +175,16 @@ class XBRLDataSetProvider(object):
             #     numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(str(quarter_year))]
             #     numbers.to_csv(f, index=False, columns=['adsh', 'tag', 'iord', 'ddate', 'qtrs', 'value', 'fp', 'version', 'custom', 'abstract', 'tlabel'])
 
-            # print('num shape before prefiltering', numbers.shape)
+            print('num shape before prefiltering', numbers.shape)
             numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
             numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
             numbers: pd.DataFrame = numbers.loc[(numbers['qtrs'].isin([0,4]))]
             # numbers: pd.DataFrame = numbers.loc[numbers['ddate'].astype(str).str.startswith(quarter_name[:4])]
             numbers: pd.DataFrame = numbers.loc[(numbers['ddate'].astype(str).str.startswith(current_year)) | numbers['ddate'].astype(str).str.startswith(str(int(current_year)-1))]
-            # print('num shape after prefiltering', numbers.shape)
+            print('num shape after prefiltering', numbers.shape)
 
             ciks = numbers['cik'].sort_values(ascending=True).unique()
-            # ciks = [7623]
+
             numbers.sort_values(by=['tag', 'cik'], ascending=True, inplace=True)
 
             df = pd.DataFrame(index=ciks, columns=all_tags)
@@ -211,9 +212,13 @@ class XBRLDataSetProvider(object):
                         val = vals.nlargest(1, 'ddate')
                         df[tag].loc[df.index == cik] = val['value'].mean()
 
-            if next_year != current_year:
-                with open(target_file_path, 'w') as f:
-                    df.to_csv(f)
+            df = df[(df.T != 0).any()]
+            header = True
+            if os.path.exists(target_file_path):
+                header = False
+
+            with open(target_file_path, 'a') as f:
+                df.to_csv(f, header=header)
 
     @staticmethod
     def organize_tags():
