@@ -11,6 +11,7 @@ import app.dataset.xbrl_titles as xbrl_titles
 
 class XBRLDataSetProvider(object):
     res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
+    xbrl_dataset_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset')
     most_popular_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'most_popular_tags.txt')
     common_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'common_tags.txt')
 
@@ -157,7 +158,7 @@ class XBRLDataSetProvider(object):
             print('num shape after prefiltering', numbers.shape)
 
             ciks = numbers['cik'].sort_values(ascending=True).unique()
-            
+
             # numbers: pd.DataFrame = numbers.loc[numbers['cik'].isin(ciks)]
             # print('num shape after prefiltering ciks', numbers.shape)
             numbers.sort_values(by=['tag', 'cik'], ascending=True, inplace=True)
@@ -317,3 +318,14 @@ class XBRLDataSetProvider(object):
 
         # tensor = all_data.values.reshape((len(all_quarters), len(all_ciks), all_data.shape[1]))
         # np.save(os.path.join(output_dir, 'xbrl_data'), tensor)
+
+    @staticmethod
+    def xbrl_statistical_analysis():
+
+        for year_file in reversed(os.listdir(XBRLDataSetProvider.xbrl_dataset_dir)):
+            if year_file[0] == '.':
+                continue
+            with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_dir, year_file), 'r') as f:
+                df = pd.read_csv(f)
+                print(df.describe())
+                quit()
