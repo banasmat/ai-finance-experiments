@@ -327,5 +327,14 @@ class XBRLDataSetProvider(object):
                 continue
             with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_dir, year_file), 'r') as f:
                 df = pd.read_csv(f)
-                print(df.describe())
+                # print(df.describe())
+
+                # nulls_summary = pd.DataFrame(df.isnull().any(), columns=['Nulls'])
+                # nulls_summary['Num_of_nulls [qty]'] = pd.DataFrame(df.isnull().sum())
+                # nulls_summary['Num_of_nulls [%]'] = round((df.isnull().mean() * 100), 2)
+                # print(nulls_summary)
+
+                print('non zeros [qty]', df.astype(bool).sum(axis=0))
+                print('non zeros [%]', round((df.astype(bool).sum(axis=0)/df.shape[0] * 100), 2))
+
                 quit()
