@@ -326,7 +326,8 @@ class XBRLDataSetProvider(object):
             if year_file[0] == '.':
                 continue
             with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_dir, year_file), 'r') as f:
-                df = pd.read_csv(f)
+                print('YEAR', year_file[0:4])
+                df: pd.DataFrame = pd.read_csv(f)
                 # print(df.describe())
 
                 # nulls_summary = pd.DataFrame(df.isnull().any(), columns=['Nulls'])
@@ -334,7 +335,8 @@ class XBRLDataSetProvider(object):
                 # nulls_summary['Num_of_nulls [%]'] = round((df.isnull().mean() * 100), 2)
                 # print(nulls_summary)
 
-                print('non zeros [qty]', df.astype(bool).sum(axis=0))
-                print('non zeros [%]', round((df.astype(bool).sum(axis=0)/df.shape[0] * 100), 2))
+                # print('non zeros [qty]', df.astype(bool).sum(axis=0))
+                non_zero_perc: pd.Series = round((df.astype(bool).sum(axis=0)/df.shape[0] * 100), 2)
+                # print('non zeros [%]', non_zero_perc)
+                print('non zeros above 90 [%]', non_zero_perc.loc[non_zero_perc >= 70])
 
-                quit()
