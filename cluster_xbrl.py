@@ -46,11 +46,37 @@ cols = [
 # Importing the dataset
 dataset_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset', '2017.csv')
 dataset = pd.read_csv(dataset_path, usecols=cols)
+dataset.fillna(0, inplace=True)
+# dataset = dataset.transpose() # 'rotate' 90 degrees
+print(dataset)
+# cor = dataset.corr() # Correlation of columns
+#
+# sns.heatmap(cor, square=True) # Plot the correlation as heat map
+# plt.subplots_adjust(bottom=0.2, top=1, left=0.07, right=0.87)
+# plt.show()
 
-dataset = dataset.transpose() # 'rotate' 90 degrees
+wh1 = dataset
 
-cor = dataset.corr() # Correlation of columns
+ss = StandardScaler()
+ss.fit_transform(wh1)
 
-sns.heatmap(cor, square=True) # Plot the correlation as heat map
-plt.subplots_adjust(bottom=0.2, top=1, left=0.07, right=0.87)
+def doKmeans(X, nclust=2):
+    model = KMeans(nclust)
+    model.fit(X)
+    clust_labels = model.predict(X)
+    cent = model.cluster_centers_
+    return (clust_labels, cent)
+
+clust_labels, cent = doKmeans(wh1, 5)
+kmeans = pd.DataFrame(clust_labels)
+wh1.insert((wh1.shape[1]),'kmeans',kmeans)
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+scatter = ax.scatter(wh1.index,wh1['NetIncomeLoss'],
+                     c=kmeans[0],s=50)
+ax.set_title('K-Means Clustering')
+ax.set_xlabel('CIK')
+ax.set_ylabel('NetIncomeLoss')
+plt.colorbar(scatter)
 plt.show()
