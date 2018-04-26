@@ -14,6 +14,7 @@ class XBRLDataSetProvider(object):
     xbrl_dataset_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset')
     most_popular_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'most_popular_tags.txt')
     common_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'common_tags.txt')
+    company_list_dir = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'company_list')
 
     @staticmethod
     def extract_cik_numbers():
@@ -322,6 +323,15 @@ class XBRLDataSetProvider(object):
     @staticmethod
     def get_all_ciks_map():
         all_ciks = pd.DataFrame()
+
+        all_companies = pd.DataFrame()
+
+        for company_list in os.listdir(XBRLDataSetProvider.company_list_dir):
+            companies = pd.read_csv(os.path.join(XBRLDataSetProvider.company_list_dir, company_list), usecols=["Symbol", "Name", "industry"]) # "LastSale","MarketCap","IPOyear","Sector",
+            all_companies = all_companies.append(companies)
+
+        print(all_companies)
+        quit()
 
         for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
 
