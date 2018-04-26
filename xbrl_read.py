@@ -20,4 +20,5 @@ from multiprocessing import Process
 # XBRLDataSetProvider.get_most_popular_tags()
 # XBRLDataSetProvider.get_common_tags()
 # XBRLDataSetProvider.prepare_data_set_with_most_popular_tags()
-XBRLDataSetProvider.xbrl_statistical_analysis()
+# XBRLDataSetProvider.xbrl_statistical_analysis()
+XBRLDataSetProvider.get_all_ciks_map()

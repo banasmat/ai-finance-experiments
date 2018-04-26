@@ -320,6 +320,27 @@ class XBRLDataSetProvider(object):
         # np.save(os.path.join(output_dir, 'xbrl_data'), tensor)
 
     @staticmethod
+    def get_all_ciks_map():
+        all_ciks = pd.DataFrame()
+
+        for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
+
+            quarter_dir = os.path.join(XBRLDataSetProvider.res_dir, quarter_dir)
+
+            if not os.path.isdir(quarter_dir):
+                continue
+
+            sub_file = os.path.join(quarter_dir, 'sub.txt')
+            subs = pd.read_csv(sub_file, sep='\t', encoding='utf-8', quoting=csv.QUOTE_NONE, usecols=['cik', 'name'])
+
+            all_ciks = all_ciks.append(subs)
+            all_ciks.drop_duplicates('cik', inplace=True)
+
+        all_ciks.sort_values('name', inplace=True)
+        with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv'), 'w') as f:
+            all_ciks.to_csv(f, index=False)
+
+    @staticmethod
     def xbrl_statistical_analysis():
 
         for year_file in reversed(os.listdir(XBRLDataSetProvider.xbrl_dataset_dir)):
