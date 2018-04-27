@@ -323,15 +323,11 @@ class XBRLDataSetProvider(object):
     @staticmethod
     def get_all_ciks_map():
         all_ciks = pd.DataFrame()
-
         all_companies = pd.DataFrame()
 
         for company_list in os.listdir(XBRLDataSetProvider.company_list_dir):
             companies = pd.read_csv(os.path.join(XBRLDataSetProvider.company_list_dir, company_list), usecols=["Symbol", "Name", "industry"]) # "LastSale","MarketCap","IPOyear","Sector",
             all_companies = all_companies.append(companies)
-
-        print(all_companies)
-        quit()
 
         for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
 
@@ -347,6 +343,25 @@ class XBRLDataSetProvider(object):
             all_ciks.drop_duplicates('cik', inplace=True)
 
         all_ciks.sort_values('name', inplace=True)
+        all_companies.sort_values('Name', inplace=True)
+
+        all_ciks['name_copy'] = all_ciks['name']
+        all_companies['name_copy'] = all_companies['Name']
+
+        def __clean_name(name):
+            return name.lower().replace(',', '').replace('.', '').replace('\'', '')
+
+        all_ciks['name_copy'] = all_ciks['name_copy'].apply(lambda name: __clean_name(name))
+        all_companies['name_copy'] = all_companies['name_copy'].apply(lambda name: __clean_name(name))
+
+        print('all ciks', all_ciks.shape)
+        print('all companies', all_companies.shape)
+
+        all_ciks = all_ciks.merge(all_companies, on='name_copy', how='left')
+        all_ciks = all_ciks.drop('Name', axis=1)
+        all_ciks = all_ciks.drop('name_copy', axis=1)
+        # print(all_ciks.head(20))
+        print('ciks with symbols', all_ciks.loc[~pd.isnull(all_ciks['Symbol'])].shape)
         with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv'), 'w') as f:
             all_ciks.to_csv(f, index=False)
 
