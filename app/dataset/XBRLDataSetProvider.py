@@ -389,7 +389,6 @@ class XBRLDataSetProvider(object):
 
     @staticmethod
     def append_prices_to_dataset():
-        fetcher = OandaHistoryPriceFetcher()
         ciks_map = pd.read_csv(os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv'))
         ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
 
@@ -398,23 +397,43 @@ class XBRLDataSetProvider(object):
         for year_file in reversed(os.listdir(XBRLDataSetProvider.xbrl_dataset_dir)):
             if year_file[0] == '.':
                 continue
-            with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_dir, year_file), 'r') as f:
+
+            year_file_path = os.path.join(XBRLDataSetProvider.xbrl_dataset_dir, year_file)
+            with open(year_file_path, 'r') as f:
                 year = year_file[0:4]
                 print('YEAR', year)
                 df: pd.DataFrame = pd.read_csv(f, index_col=0)
 
-                if 'StockPrice' not in df.columns:
-                    df['StockPrice'] = pd.Series()
+                # print('duplicates', df.index.duplicated().shape)
+
+                # df = df[~df.index.duplicated()]
+
+                if 'Stock_Price' not in df.columns:
+                    df['Stock_Price'] = pd.Series()
 
                 df_filtered = df.loc[df.index.isin(ciks_map['cik'])]
 
                 df_filtered['cik'] = df_filtered.index
                 df_filtered = df_filtered.merge(ciks_map, how='left', on='cik')
 
-                for cik, row in df_filtered.iterrows():
-                    if pd.isnull(row['StockPrice']):
+                for i, row in df_filtered.iterrows():
+
+                    if pd.isnull(row['Stock_Price']):
                         date_from = (int(year), 1, 1)
                         date_to = (int(year), 12, 31)
-                        price_data = quandl_stocks(row['symbol'], date_from, date_to, gran='yearly')
-                        print(price_data)
-                    quit()
+                        price_data = quandl_stocks(row['symbol'], date_from, date_to, gran='monthly')
+
+                        close_col_name = None
+
+                        for col in price_data.columns:
+                            if col[-5:] == 'Close':
+                                close_col_name = col
+                                break
+                        if close_col_name is None:
+                            raise LookupError("No Close column returned for symbol: " + row['symbol'])
+                        else:
+                            yearly_price = price_data[close_col_name].mean()
+                            df.loc[row['cik'], 'Stock_Price'] = yearly_price
+
+            with open(year_file_path, 'w') as f:
+                df.to_csv(f)
