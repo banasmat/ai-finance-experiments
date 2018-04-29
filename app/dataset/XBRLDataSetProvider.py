@@ -1,5 +1,3 @@
-from typing import List, Tuple
-import random
 import numpy as np
 import pandas as pd
 import os
@@ -7,6 +5,7 @@ import pickle
 import csv
 from fuzzywuzzy import process
 import app.dataset.xbrl_titles as xbrl_titles
+from app.live_update.quandl_price_fetcher import quandl_stocks
 
 
 class XBRLDataSetProvider(object):
@@ -360,8 +359,10 @@ class XBRLDataSetProvider(object):
         all_ciks = all_ciks.merge(all_companies, on='name_copy', how='left')
         all_ciks = all_ciks.drop('Name', axis=1)
         all_ciks = all_ciks.drop('name_copy', axis=1)
+        all_ciks['symbol'] = all_ciks['Symbol']
+        all_ciks = all_ciks.drop('Symbol', axis=1)
         # print(all_ciks.head(20))
-        print('ciks with symbols', all_ciks.loc[~pd.isnull(all_ciks['Symbol'])].shape)
+        print('ciks with symbols', all_ciks.loc[~pd.isnull(all_ciks['symbol'])].shape)
         with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv'), 'w') as f:
             all_ciks.to_csv(f, index=False)
 
@@ -386,3 +387,34 @@ class XBRLDataSetProvider(object):
                 # print('non zeros [%]', non_zero_perc)
                 print('non zeros above 90 [%]', non_zero_perc.loc[non_zero_perc >= 70])
 
+    @staticmethod
+    def append_prices_to_dataset():
+        fetcher = OandaHistoryPriceFetcher()
+        ciks_map = pd.read_csv(os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv'))
+        ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
+
+        pd.options.mode.chained_assignment = None
+
+        for year_file in reversed(os.listdir(XBRLDataSetProvider.xbrl_dataset_dir)):
+            if year_file[0] == '.':
+                continue
+            with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_dir, year_file), 'r') as f:
+                year = year_file[0:4]
+                print('YEAR', year)
+                df: pd.DataFrame = pd.read_csv(f, index_col=0)
+
+                if 'StockPrice' not in df.columns:
+                    df['StockPrice'] = pd.Series()
+
+                df_filtered = df.loc[df.index.isin(ciks_map['cik'])]
+
+                df_filtered['cik'] = df_filtered.index
+                df_filtered = df_filtered.merge(ciks_map, how='left', on='cik')
+
+                for cik, row in df_filtered.iterrows():
+                    if pd.isnull(row['StockPrice']):
+                        date_from = (int(year), 1, 1)
+                        date_to = (int(year), 12, 31)
+                        price_data = quandl_stocks(row['symbol'], date_from, date_to, gran='yearly')
+                        print(price_data)
+                    quit()
