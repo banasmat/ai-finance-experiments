@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import time
 import os
 import pickle
 import csv
@@ -389,6 +390,9 @@ class XBRLDataSetProvider(object):
 
     @staticmethod
     def append_prices_to_dataset():
+
+        #FIXME this should be saving data after every quandl request. There will be errors.
+
         ciks_map = pd.read_csv(os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv'))
         ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
 
@@ -419,6 +423,7 @@ class XBRLDataSetProvider(object):
                 for i, row in df_filtered.iterrows():
 
                     if pd.isnull(row['Stock_Price']):
+                        time.sleep(1)
                         date_from = (int(year), 1, 1)
                         date_to = (int(year), 12, 31)
                         price_data = quandl_stocks(row['symbol'], date_from, date_to, gran='monthly')
@@ -434,6 +439,7 @@ class XBRLDataSetProvider(object):
                         else:
                             yearly_price = price_data[close_col_name].mean()
                             df.loc[row['cik'], 'Stock_Price'] = yearly_price
+                            print(row['name'], ':', yearly_price)
 
             with open(year_file_path, 'w') as f:
                 df.to_csv(f)
