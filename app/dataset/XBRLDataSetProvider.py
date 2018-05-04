@@ -427,7 +427,12 @@ class XBRLDataSetProvider(object):
                     time.sleep(1)
                     date_from = (int(year), 1, 1)
                     date_to = (int(year), 12, 31)
-                    price_data = quandl_stocks(row['symbol'], date_from, date_to, gran='monthly')
+                    try:
+                        price_data = quandl_stocks(row['symbol'], date_from, date_to, gran='monthly')
+                    except ValueError:
+                        #FIXME why ValueError is thrown
+                        print('ValueError occured', row['cik'], '-', row['name'])
+                        continue
 
                     close_col_name = None
 
