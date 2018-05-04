@@ -4,7 +4,6 @@ import time
 import os
 import pickle
 import csv
-from fuzzywuzzy import process
 import app.dataset.xbrl_titles as xbrl_titles
 from app.live_update.quandl_price_fetcher import quandl_stocks
 
@@ -191,6 +190,9 @@ class XBRLDataSetProvider(object):
 
     @staticmethod
     def organize_tags():
+
+        from fuzzywuzzy import process
+
         all_tags = XBRLDataSetProvider._get_all_tags()
 
         all_tags = all_tags['tag'].unique().tolist()
@@ -391,8 +393,6 @@ class XBRLDataSetProvider(object):
     @staticmethod
     def append_prices_to_dataset():
 
-        #FIXME this should be saving data after every quandl request. There will be errors.
-
         ciks_map = pd.read_csv(os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv'))
         ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
 
@@ -403,43 +403,46 @@ class XBRLDataSetProvider(object):
                 continue
 
             year_file_path = os.path.join(XBRLDataSetProvider.xbrl_dataset_dir, year_file)
-            with open(year_file_path, 'r') as f:
-                year = year_file[0:4]
-                print('YEAR', year)
-                df: pd.DataFrame = pd.read_csv(f, index_col=0)
+            f = open(year_file_path, 'r')
 
-                # print('duplicates', df.index.duplicated().shape)
+            year = year_file[0:4]
+            print('YEAR', year)
+            df: pd.DataFrame = pd.read_csv(f, index_col=0)
 
-                # df = df[~df.index.duplicated()]
+            # print('duplicates', df.index.duplicated().shape)
 
-                if 'Stock_Price' not in df.columns:
-                    df['Stock_Price'] = pd.Series()
+            # df = df[~df.index.duplicated()]
 
-                df_filtered = df.loc[df.index.isin(ciks_map['cik'])]
+            if 'Stock_Price' not in df.columns:
+                df['Stock_Price'] = pd.Series()
 
-                df_filtered['cik'] = df_filtered.index
-                df_filtered = df_filtered.merge(ciks_map, how='left', on='cik')
+            df_filtered = df.loc[df.index.isin(ciks_map['cik'])]
 
-                for i, row in df_filtered.iterrows():
+            df_filtered['cik'] = df_filtered.index
+            df_filtered = df_filtered.merge(ciks_map, how='left', on='cik')
 
-                    if pd.isnull(row['Stock_Price']):
-                        time.sleep(1)
-                        date_from = (int(year), 1, 1)
-                        date_to = (int(year), 12, 31)
-                        price_data = quandl_stocks(row['symbol'], date_from, date_to, gran='monthly')
+            for i, row in df_filtered.iterrows():
 
-                        close_col_name = None
+                if pd.isnull(row['Stock_Price']):
+                    time.sleep(1)
+                    date_from = (int(year), 1, 1)
+                    date_to = (int(year), 12, 31)
+                    price_data = quandl_stocks(row['symbol'], date_from, date_to, gran='monthly')
 
-                        for col in price_data.columns:
-                            if col[-5:] == 'Close':
-                                close_col_name = col
-                                break
-                        if close_col_name is None:
-                            raise LookupError("No Close column returned for symbol: " + row['symbol'])
-                        else:
-                            yearly_price = price_data[close_col_name].mean()
-                            df.loc[row['cik'], 'Stock_Price'] = yearly_price
-                            print(row['name'], ':', yearly_price)
+                    close_col_name = None
 
-            with open(year_file_path, 'w') as f:
-                df.to_csv(f)
+                    for col in price_data.columns:
+                        if col[-5:] == 'Close':
+                            close_col_name = col
+                            break
+                    if close_col_name is None:
+                        raise LookupError("No Close column returned for symbol: " + row['symbol'])
+                    else:
+                        yearly_price = price_data[close_col_name].mean()
+                        df.loc[row['cik'], 'Stock_Price'] = yearly_price
+                        print(row['cik'], '-', row['name'], ':', yearly_price)
+                        # Saving every request result to file
+                        f.close()
+                        f = open(year_file_path, 'w')
+                        df.to_csv(f)
+                        f.close()
