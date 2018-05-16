@@ -110,7 +110,7 @@ class XBRLDataSetProvider(object):
             for tag in f:
                 all_tags.append(tag.strip())
 
-        all_tags = all_tags[-500:]
+        all_tags = all_tags[-2320:]
         all_tags = sorted(all_tags)
 
         pd.options.mode.chained_assignment = None
