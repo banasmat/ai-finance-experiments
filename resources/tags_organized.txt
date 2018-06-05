@@ -1,935 +1,340 @@
 
-'revenue':[
-'Revenue',0
-'Revenues',
-'Revenue1',
-'ElectricalConstructionRevenue',
-'ShippingAndInstallationRevenue',
-'OperatingLeaseAndOtherPropertyRevenue',
-'DiagnosticServiceRevenue',
-'OperatingRevenues',
-'RevenuesTitleInsuranceAbstract',
-'SalesRevenueAncillaryServices',
-'OtherRevenue',
-'AirfreightRevenue',
-'CustomsBrokerageAndOtherServicesRevenue',
-'OceanFreightAndOceanServicesRevenue',
-'FairValueOfRevenueEquipmentTraded'],
+revenue:
+Revenue - 100
+Revenues - 93
+Revenue1 - 93
+Periodoverprioryearperiodpercentchangeintotalrevenues - 90
+RevenuesFromCustomers - 90
+IncreaseDecreaseInUnearnedPassengerRevenues - 90
+OtherCorrespondentBankingRelatedRevenue - 90
+AnnualRevenueSeasonalTrendForPeriodLowerPercentageRange - 90
+TopFiveCustomersByPercentRevenue - 90
+RevenueFromSubLeaseAgreement - 90
+RevenuefromCondominiumUnits - 90
+PercentageOfSalesRevenue - 90
+GovernmentSubsidyOfElectricityRevenueRecognized - 90
+DeferredRevenueZeroFiveEightThreeZerodZerobtqHMdRKOnen - 90
+DeferredRevenueZeroThreeFiveNineZeroZeroRlLgTwoLkOnecslM - 90
 
-'cost of goods sold':[
-'CostOfGoodsSold',
-'CostOfGoodsSold1',
-'CostOfGoodsGold',
-'CostOfGoodsSoldNet',
-'CostOfGoodsSoldnet',
-'NetCostOfGoodsSold',
-'DistributionSalesCostOfGoodsSold',
-'IncreaseDecreaseInDeferredCostOfGoodsSold',
-'DepreciationCostOfGoodsSold',
-'RestructuringChargesUnderCostOfGoodsSold',
-'EquipmentTransferredToCostOfGoodsSold',
-'MobilityProductsCostOfGoodsSold',
-'LifestyleSegmentCostOfGoodsSold',
-'ProductAndOtherCostOfGoodsSold',
-'EnergyTechnologyCostOfGoodsSold'],
+cost of goods sold:
+CostOfGoodsSold - 91
+Cost - 90
+CostOfGoodsSold3 - 88
+CostOfGoodsSold2 - 88
+CostOfGoodsSold1 - 88
+CostOfGoodsSold4 - 88
+NumberOfIdentifiedAndRecordedOut-Of-PeriodTaxErrors - 86
+AcceleratedAmortization-Cost - 86
+CostOfGoodsGold - 85
+NetCostOfGoodsSold - 83
+CostOfGoodsSoldnet - 83
+CostOfGoodsSoldNet - 83
+DepreciationCostOfGoodsSold - 82
+WeatherDerivativeGainsRecognizedInCostOfGoodsSold - 82
+RebateOnBulkPurchasesReducingCostOfGoodsSold - 82
 
-'gross profit':[
-'GrossProfit',
-'GrossProfit1',
-'GrossProfit2',
-'GrossProfits',
-'IT',
-'FI',
-'ProductGrossProfit',
-'ServicesGrossProfit',
-'LeaseContractsGrossProfit',
-'LicenseGrossProfit',
-'MaintenanceGrossProfit',
-'RentalAndRoyaltyGrossProfit',
-'RealEstateLoansGrossProfit',
-'IncreaseDecreaseDeferredGrossProfit',
-'SystemsGrossProfit'],
+revenue:
+Revenue - 100
+Revenue1 - 93
+Revenues - 93
+EntityWideRevenueMajorProgramNumber - 90
+RevenueRecognitionGiftCardBreakage - 90
+RelatedPartyCommercialPrintingRevenue - 90
+DeferredTaxAssetsRoyaltyRevenue - 90
+GrossMethodRevenue - 90
+ManagementServiceAndLicensingFeesRevenue - 90
+RevenueFromCalifornia - 90
+DomesticRevenueGovernmentalRebates - 90
+DeferredGrantAndOtherRevenueCurrent - 90
+LostRevenuesDueToUnusualOrInfrequentEvent - 90
+AggregateExpectedRevenue - 90
+UnearnedRevenueAndAdvancedServiceFees - 90
 
-'selling, general and admin':[
-'StockbasedCompensationsellingGeneralAndAdmin',
-'SellingGeneralAndAdministrative',
-'OtherSellingGeneralAndAdministrativeExpense',
-'RelatedPartyTransactionSellingGeneralAndAdministrativeExpensesFromTransactionsWithRelatedParty',
-'SellingGeneralAndAdministrativeExpenseAbstract',
-'SellingGeneralAndAdministrativeExpensesMember',
-'SellingGeneralandAdministrativeExpenseAmortization',
-'SellingGeneralAndAdministrativeExpenseRelatedParty',
-'SellingGeneralandAdministrativeExpenseasaPercentageofNetSales',
-'SellingGeneralAndAdministrativeExpenseExcludingDirectSellingCosts',
-'SellingGeneralAndAdministrativeExpensePercentToSales',
-'DepreciationAndAmortizationSellingGeneralAndAdministrative',
-'SellingGeneralAndAdministrativeExpensesExcludingDepreciationAmortizationStockBasedCompensationAndPreopeningCosts',
-'SellingGeneralAndAdministrativeExpensesNetPercentage',
-'SellingGeneralandAdministrativeExpensePortionAttributabletoSegments'],
+cost of goods sold:
+CostOfGoodsSold - 91
+Cost - 90
+CostOfGoodsSold3 - 88
+CostOfGoodsSold1 - 88
+CostOfGoodsSold4 - 88
+CostOfGoodsSold2 - 88
+NumberOfIdentifiedAndRecordedOut-Of-PeriodTaxErrors - 86
+AcceleratedAmortization-Cost - 86
+CostOfGoodsGold - 85
+CostOfGoodsSoldnet - 83
+CostOfGoodsSoldNet - 83
+NetCostOfGoodsSold - 83
+FiniteLivedIntangibleAssetsAmortizationExpenseExcludingCostOfGoodsSold - 82
+LifestyleSegmentCostOfGoodsSold - 82
+DeferredTaxLiabilitiesCostOfGoodsSold - 82
 
-'research and development':[
-'ResearchAndDevelopment',
-'Research',
-'Development',
-'ResearchAndDevelopmentNet',
-'ResearchAndDevelopmentFees',
-'ResearchAndDevelopmentCost',
-'ResearchAmpDevelopment',
-'DeferredTaxAssetsInProcessResearchAndDevelopment',
-'PaymentsToAcquireInProcessResearchAndDevelopment',
-'AcquiredInProcessResearchandDevelopment',
-'TaxIncentiveCreditsResearchAndDevelopment',
-'IssuanceOfCommonStockForResearchAndDevelopment',
-'AcquiredInProcessResearchAndDevelopment',
-'PurchasedInProcessResearchAndDevelopment',
-'IncreaseDecreaseInAccruedResearchAndDevelopment'],
+gross profit:
+GrossProfit - 96
+GrossProfit1 - 92
+GrossProfit2 - 92
+GrossProfits - 92
+ProductGrossProfit - 86
+WeldingMetallurgyGrossProfit - 86
+MaintenanceGrossProfit - 86
+ServicesandOtherGrossProfit - 86
+PercentageOnGrossProfit - 86
+ContractGrossProfit - 86
+DistributionGrossProfit - 86
+ReductionInGrossProfit - 86
+RatioOfOperatingExpensesToGrossProfit - 86
+Adjustmenttogrossprofit - 86
+LeaseContractsGrossProfit - 86
 
-'interest':[
-'Interest',0
-'Interest1',
-'CollateralDepositDisbursementsRelatedToInterestRateSwap',
-'NonCashInterestExpense',
-'IncomeBeforeEquityInterestAndExtraordinaryLoss',
-'Cashpaidforinterestcashflow',
-'SubsidiaryDividendsToNoncontrollingInterests',
-'IncomeBeforeInterestExpenseAndTaxes',
-'ScheduleofinterestandincometaxespaidAbstract',
-'IncreaseDecreaseInInterestAndTaxesPayable',
-'AmortizationOfSubordinatedDeferrableInterestDebentures',
-'AccruedInterestOnFinancingObligation',
-'Contingentinterestpaymentfordebenture',
-'InterestExpenseAndAmortizationOfDeferredFinancingCostsThirdParty',
-'InterestPaidDeemedLandlordFinancing'],
+selling, general and admin:
+StockbasedCompensationsellingGeneralAndAdmin - 83
+SellingGeneralAndAdministration - 77
+SellingGeneralAndAdministrative - 77
+RelatedPartyTransactionSellingGeneralAndAdministrativeExpensesCreditsSubtotalFromTransactionsWithRelatedParty - 76
+DepreciationAndAccretionExpenseRecordedInSellingGeneralAndAdministrativeExpense - 76
+RelatedPartyTransactionSellingGeneralAndAdministrativeExpensesReimbursedFromToRelatedParty - 76
+EquityMethodInvestmentSummarizedOperationsOnSellingGeneralAndAdministrativeExpenses - 76
+RestructuringChargesRecordedInSellingGeneralAndAdministrativeExpenses - 76
+IncreaseDecreaseInSellingGeneralAndAdministrativeExpenseDueToAccrualAdjustment - 76
+SellingGeneralandAdministrativeExpenseAmortization - 76
+AllocatedShareBasedCompensationExpenseSellingGeneralAndAdministrativeExpense - 76
+IncreaseDecreaseInSellingGeneralAndAdministrativeExpensesDueToChangeInForeignCurrencyRate - 76
+SellingGeneralandAdministrativeExpensePortionAttributabletoSegments - 76
+RevisiontoPreviouslyMisclassifiedCustomerRelatedIntangibleAssetAmortizationEffectofRevisiononSellingGeneralandAdministrativeExpenses - 76
+DecreaseToSellingGeneralAndAdministrativeExpenses - 76
 
-'depreciation':[
-'Depreciation',0
-'Depreciation1',
-'Depreciation2',
-'Deprecation',
-'Depreciations',
-'Depreciation3',
-'Inventorywritedownnetofdepreciation',
-'GeneralAndAdministrativeExpenseExcludingDepreciation',
-'Depreciationandamortizationexcludingdepreciationoncommunicationequipment',
-'DepreciationDepletionAmortizationAndAccretionIncludingDiscontinuedOperations',
-'DE',
-'AccumulatedDepreciationDepletionAndAmortizationSaleOfPropertyPlantAndEquipment1',
-'AccumulatedDepreciationDepletionAndAmortizationPropertyPlantAndEquipment',
-'AccumulatedDepreciationDepletionAndAmortizationPropertyPlantAndEquipmentPeriodIncreaseDecrease',
-'CostOfServicesDepreciation'],
+research and development:
+ResearchAndDevelopment - 96
+ResearchAndDevelopment1 - 94
+ResearchAndDevelopmentNet - 90
+Development - 90
+Research - 90
+ResearchAndDevelopmentCost - 88
+ResearchAndDevelopmentFund - 88
+ResearchAndDevelomentNet - 88
+ResearchAndDevelopmentFees - 88
+ResearchAmpDevelopment - 87
+EffectiveIncomeTaxRateReconciliationBenefitExpenseResearchAndDevelopment - 86
+ImpaimentOfInProcessResearchAndDevelopment - 86
+TaxCreditCarryforwardStateResearchAndDevelopment - 86
+CapitalizationInProcessOfResearchAndDevelopment - 86
+RevenueReceivedFromCollaborationAgreementOffsettoResearchandDevelopment - 86
 
-'operating profit':[
-'IN',
-'NG',
-'PE',
-'IT',
-'FI',
-'Operating',
-'FinancialServicesOperatingProfit',
-'OperatingProfitLoss',
-'OperatingProfitNetPercentage',
-'ReconciliationOfOperatingProfitLossFromSegmentsToConsolidatedAbstract',
-'OperatingRights',
-'Racing',
-'OperatingPropertiesNet',
-'TransferFromInvestmentInUnconsolidatedJointVenturesToOperatingProperties',
-'Transferfromoperatingpropertiestoliabilitiesofrealestateassetsheldforsale'],
+interest:
+Interest - 100
+Interest3 - 94
+InterestI - 94
+Interest1 - 94
+Interest2 - 94
+PercentOfInterestRateSwapToGuarantee - 90
+EconomicInterestPercentageOfPrimaryRights - 90
+InterestExpenseLoansFromOtherFederalHomeLoanBanks - 90
+PotentialAdditionalSharesIssuableForAccruedInterestPayable - 90
+AccruedInterestOnNotesReceivableFromRelatedParty - 90
+EconomicInterestinThreePropertiesReceivedbyCoVenturerPercent - 90
+NoncontrollingInterestDecreaseFromDeconsolidationOther - 90
+LgCapitalFundingLlcBearingInterestPerAnnum - 90
+LossOnModificationOfNonControllingInterest - 90
+NoncontrollingInterestOfAcquiredSubsidiary - 90
 
-'gain (loss) sale assets':[
-'Assets',
-'Loss',
-'WarrantsIssuedForAcquisitionOfSensationalBrandsInc.Assets',
-'ProceedsFromMaturitiesOfInvestmentSecuritiesAvailable-For-Sale',
-'AccretionOfNetDiscountsOnSecuritiesAvailable-For-Sale',
-'PaymentsForImprovementOfRealEstateHeld-For-Sale',
-'GainLossOnSaleAssets',
-'GainLossOnSaleOfAssets',
-'GainLossonSaleofAssets',
-'GainLossOnSaleofAssets',
-'GainLossOnSaleOfAssets1',
-'GainLossOnSalesOfAssets',
-'GainLossOnSaleAndWrite-DownOfOtherRealEstateAndRepossessedAssets',
-'GainLossOnSaleOfAssets11',
-'Assets1'],
+depreciation:
+Depreciation - 100
+Depreciation2 - 96
+Depreciations - 96
+Depreciation4 - 96
+Depreciation1 - 96
+Depreciation3 - 96
+Deprecation - 96
+InDepreciation - 92
+CostOfGoodsAndServicesSoldDepreciationAmortizationAndWarranty - 90
+ScheduleOfDepreciationOfOtherAssetsAndExpensesZeroFiveTwoFourSevenSevenZeroqdsvTwoEightvGSixJgG - 90
+GrossAssetsRecordedUnderTheLeaseAndAssociatedAccumulatedDepreciation - 90
+ReconciliationOfIncomeFromBookBasisToTaxBasisDepreciationBookBasis - 90
+OfficeEquipmentNetOfDepreciation - 90
+GasGatheringTransportationMarketingAndProcessingDepreciationAmortizationAndImpairment - 90
+DepreciationContinuedAndDiscontinuedOperations - 90
 
-'other':[
-'Other',0
-'Other2',
-'Others',
-'DeferredChargesAndOtherAssets',
-'FeesAndCommissionsOtherAffiliates',
-'OperatingLeaseAndOtherPropertyRevenue',
-'AdvancePaymentsAndOthersRelatedParties',
-'CustomersOtherthanStarbucksMember',
-'TradeandOtherReceivables',
-'OtherRevenue',
-'CostOfCustomsBrokerageAndOtherServices',
-'CustomsBrokerageAndOtherServicesRevenue',
-'AboveMarketLeasesandOtherLiabilities',
-'RestructuringChargesAndOtherCosts',
-'OtherLongTermAssets'],
+operating profit:
+OperatingProfit - 97
+Operating - 90
+TotalCombinedSegmentOperatingProfit - 87
+PercentageOfNetRevenueAndOperatingProfit - 87
+BusinessAcquisitionProFormaOperatingProfit - 87
+StrategicTransactionCostsExcludedFromOperatingProfit - 87
+PercentageOfEquityEarningsToOperatingProfit - 87
+PreTaxChargesGainsInOperatingProfit - 87
+BookPublishingOperatingProfit - 87
+EquityMethodInvestmentSummarizedFinancialInformationOperatingProfit - 87
+SegmentReportingInformationIntersegmentOperatingProfit - 87
+BusinessAcquisitionProFormaInformationOperatingProfit - 87
+BusinessAcquisitionsProFormaOperatingProfit - 87
+RestructuringChargesIncludedInOperatingProfit - 87
+PercentageChangeInSegmentOperatingProfit - 87
 
-'income before tax':[
-'IncomeBeforeTaxes',
-'NetIncomeBeforeTax',
-'ComprehensiveIncomeBeforeTax',
-'TotalComprehensiveIncomeBeforeTax',
-'NetRealizedGainLossIncludedInNetIncomeBeforeTax',
-'OtherComprehensiveIncomeBeforeTax',
-'DefinedBenefitPlanAccumulatedOtherComprehensiveIncomeBeforeTax',
-'OtherComprehensiveIncomeLossAmortizationOfNetUnrealizedHoldingLossesToIncomeBeforeTax',
-'Othercomprehensiveincomelossderivativesqualifyingashedgesreclassificationadjustmentsinnetincomebeforetax',
-'ChangesInOtherThanTemporaryImpairmentLossesRecognizedInOtherComprehensiveIncomeBeforeTax',
-'OtherComprehensiveIncomeAmortizationOfUnrealizedHoldingGainLossPreviouslyRecognizedInOtherComprehensiveIncomeBeforeTax',
-'OtherComprehensiveIncomeLossReclassificationAdjustmentIncludedInNetIncomeBeforeTax',
-'PortionOfLossRecognizedInOtherComprehensiveIncomeBeforeTax',
-'OtherThanTemporaryImpairmentReclassificationAdjustmentForLossesIncludedInNetIncomeBeforeTax',
-'ReclassificationAdjustmentForCreditRelatedOttiIncludedInNetIncomeBeforeTax'],
+gain (loss) sale assets:
+Loss - 90
+Asset - 90
+Assets - 90
+GrossUnrealizedGainsMbsAvailable-For-Sale - 86
+AccretionOfNetDiscountsOnSecuritiesAvailable-For-Sale - 86
+CommitmentToPurchaseSecuritiesAvailable-For-Sale - 86
+ReimbursementFromSubsidiaryForPurchasesOfInvestmentSecuritiesAvailable-For-Sale - 86
+ProceedsFromMaturitiesOfInvestmentSecuritiesAvailable-For-Sale - 86
+Sale-LeasebackTransactionDeferredGainCurrentPortion - 86
+MinimumInvestmentOfRisk-Weighted-Assets - 86
+PaymentsForImprovementOfRealEstateHeld-For-Sale - 86
+GrossUnrealizedLossesMbsAvailable-For-Sale - 86
+Sale-LeasebackTransactionDeferredGainNoncurrentPortion - 86
+MaximumInvestmentOfRisk-Weighted-Assets - 86
+WarrantsIssuedForAcquisitionOfSensationalBrandsInc.Assets - 86
 
-'income taxes paid':[
-'IncomeTaxesPaid',
-'IncomeTaxesPaids',
-'Taxes',
-'IncomeTaxPaid',
-'IncomeTaxesPaidNet',
-'InterestAndIncomeTaxesPaid',
-'DisposalGroupIncomeTaxesPaid',
-'IncreaseDecreaseInIncomeTaxesPaid',
-'AMTIncreaseDecreaseInIncomeTaxesPaid',
-'IncomeTaxes',
-'IncomeTax1',
-'TaxesPaid1',
-'IncomeTaxesPaidOther',
-'IncomeTaxesPaidState',
-'IncomeTax'],
+other:
+Other - 100
+Others - 91
+Other2 - 91
+Other6 - 91
+Other1 - 91
+Other7 - 91
+Other5 - 91
+Other4 - 91
+Other3 - 91
+CurrentStateandOtherTaxExpenseBenefit - 90
+LoanTransferedtoOtherAssets - 90
+AccruedLiabilitiesOtherThanInterest - 90
+ConsultingAndOtherIncomeRelatedParty - 90
+DeferredGrantAndOtherRevenueCurrent - 90
+OtherGuarantees - 90
 
-'net earnings':[
-'NetEarnings',
-'NetEarnings1',
-'NetEarning',
-'IN',
-'AR',
-'NG',
-'Ar',
-'Net',
-'Earnings',
-'InterestExpense-Net',
-'DuetoAshfordInc.net',
-'ContributionsfromtheWilliamsCompaniesInc.net',
-'Long-TermCoreInventory-Net',
-'FilmAndTelevisionCosts-Net',
-'Retained-Earnings-Other'],
+income before tax:
+IncomeBeforeTax - 94
+Income - 90
+IncomeBeforeTaxes - 88
+IncomeTaxReconciliationU.S.TaxonNonU.S.Income - 86
+AccumulatedOtherComprehensiveIncomeLossCumulativeChangesInNetGainLossFromCashFlowHedgesEffectPre-Tax - 86
+AccumulatedOtherComprehensiveIncomeLossPensionAndOtherPostretirementBenefitPlansPre-Tax - 86
+IncomeBeforeTaxes3 - 86
+NetIncomeBeforeTax - 86
+IncomeBeforeTaxes2 - 86
+AccumulatedOtherComprehensiveIncomeLossAvailable-For-SaleSecuritiesAdjustmentPre-Tax - 86
+IncomeBeforeTaxes1 - 86
+SeedProcessingAndSalesIncomeBeforeTax - 85
+CorporateAndAdministrativeIncomeBeforeTax - 85
+Erroreffectonincomebeforetax - 85
+LawnGardenPetAndOtherIncomeBeforeTax - 85
 
-'cash and short-term investments':[
-'Cash',
-'Investments',
-'Investment',
-'Investments1',
-'TransferFromRealEstateUnderDevelopmentToCo-Investments',
-'Investmentsbs',
-'InvestmentsIn',
-'InvestmentsBS',
-'Investment1',
-'ShortTermInvestments',
-'ChangeInShortTermInvestments',
-'IncreaseDecreaseOfRestrictedCashAndShortTermInvestments',
-'IncreaseDecreaseInRestrictedCashAndShortTermInvestments',
-'DecreaseIncreaseInRestrictedCashAndShortTermInvestments',
-'CostShortTermInvestments'],
+income taxes paid:
+IncomeTaxesPaid - 94
+IncomeTaxesPaids - 91
+Taxes - 90
+Income - 90
+IncomeTaxPaid - 87
+IncomeTaxReconciliationU.S.TaxonNonU.S.Income - 86
+AccrualForTaxesOtherThanIncomeTaxesCurrentIncludingSalesandV.A.T.Taxes - 86
+IncomeTaxesPaidNet - 86
+Estimatedfederalincometaxespaid - 85
+DiscontinuedOperationIncomeTaxesPaid - 85
+DisposalGroupIncomeTaxesPaid - 85
+InterestPaidandIncomeTaxesPaid - 85
+AMTIncreaseDecreaseInIncomeTaxesPaid - 85
+InterestAndIncomeTaxesPaid - 85
+IncreaseDecreaseInIncomeTaxesPaid - 85
 
-'total inventory':[
-'TotalInventory',
-'InventoryTotal',
-'AL',
-'IN',
-'OR',
-'VE',
-'Inventory',
-'Total',
-'Inventory1',
-'Inventorys',
-'SharesIssuedForTheSettlementOfDebt-total',
-'TotalInventoryAtNetRealizableValueAcquiredDuringYear',
-'TotalInventories',
-'BusinessAcquisitionPurchasePriceAllocationCurrentAssetsInventoryTotal',
-'LotInventory'],
+net earnings:
+NetEarnings - 96
+NetEarnings1 - 92
+Ar - 90
+Earning - 90
+Net - 90
+DuetoAshfordInc.net - 86
+ProFormaNetEarnings - 86
+FilmAndTelevisionCosts-Net - 86
+Sched2CashFlowNetEarnings - 86
+Retained-Earnings-Other - 86
+Long-TermCoreInventory-Net - 86
+InterestExpense-Net - 86
+ContributionsfromtheWilliamsCompaniesInc.net - 86
+BusinessCombinationNetEarningsOfAcquiredEntityIncludedInPurchasePriceAdjustment - 83
+IncomeLossFromContinuingOperationsBeforeEquityInNetEarningsOfSubsidiaries - 83
 
-'total receivables, net':[
-'Total',
-'Receivables',
-'Receivable',
-'Net',
-'ContributionsfromtheWilliamsCompaniesInc.net',
-'SharesIssuedForTheSettlementOfDebt-total',
-'TotalReceivable',
-'ReceivablesNet',
-'OtherReceivablesNet',
-'Total1',
-'Tradereceivablesnet',
-'NotesReceivablesNet',
-'TradeReceivablesNet',
-'ContractReceivablesNet',
-'NoteReceivableNet'],
+cash and short-term investments:
+CashAndShortTermInvestments - 93
+CashAndShorttermInvestments - 93
+Cash - 90
+Investment - 90
+Investments - 90
+Term - 90
+Investments1 - 86
+TransferFromRealEstateUnderDevelopmentToCo-Investments - 86
+DeferredTaxAssetsTaxCreditCarryforwardsLong-Term - 86
+Short-TermBorrowingArrangementsFromNumberOfFinancialInstitution - 86
+FairValueOfPlanAssetsAllocationPercentageOfCashAndShortTermInvestments - 84
+DefinedBenefitPlanTargetAllocationPercentageOfCashAndShortTermInvestments - 84
+PlansAssetsInvestedInCashAndShortTermInvestments - 84
+DefinedBenefitPlanTargetAllocationPercentageOfAssetsCashAndShortTermInvestments - 83
+Investmentsbs - 83
 
-'prepaid expenses':[
-'PrepaidExpenses',
-'PrepaidExpenses3',
-'PrepaidExpenses1',
-'PrepaidExpense',
-'PA',
-'ID',
-'Expenses',
-'Expense',
-'PrepaidExpense1',
-'Prepaid',
-'EXPENSES',
-'Re',
-'IncreaseDecreaseInReceivablesAndPrepaidExpenses',
-'ReceivablesAndPrepaidExpenses',
-'IncreaseDecreaseinInventoriesandPrepaidExpenses'],
+total inventory:
+TotalInventory - 97
+TotalInventory1 - 93
+InventoryTotal - 92
+Inventory - 90
+Total - 90
+TotalInventoryNet - 88
+TotalInventorynet - 88
+RawMaterialsAsPercentageOfTotalInventory - 87
+Inventorys - 86
+Inventory1 - 86
+SharesIssuedForTheSettlementOfDebt-total - 86
+InventoryTotaled - 86
+Totalinventories - 84
+TotalInventorySupportingHeliservicio - 84
+Totalinventorybeforeprogresspayments - 84
 
-'other current assets, total':[
-'Assets',
-'Other',
-'Total',
-'Current',
-'Rent',
-'OtherNoncurrentAssetsTotal',
-'WarrantsIssuedForAcquisitionOfSensationalBrandsInc.Assets',
-'RecoverablePostretirementBenefits-Current',
-'IncreaseDecreaseinPrepaidExpenseandOtherCurrentAssetsTotal',
-'CurrentAssets',
-'CurrentAsset',
-'Total1',
-'OtherCurrentAssets',
-'NetAssets',
-'NETASSETS'],
+total receivables, net:
+Receivable - 90
+Net - 90
+Total - 90
+Receivables - 90
+SharesIssuedForTheSettlementOfDebt-total - 86
+ContributionsfromtheWilliamsCompaniesInc.net - 86
+ReceivablesTotal - 82
+TotalReceivable - 81
+LoanReceivablesNet - 80
+TotalLoansReceivableNet - 80
+NetReceivable - 79
+IncomeTaxReceivablesTotal - 79
+NotesReceivableTotal - 79
+TotalFinanceReceivablesNet - 79
+TradeReceivablesNet - 78
 
-'total current assets':[
-'Totalcurrentassets',
-'TotalCurrentAssets',
-'TOTALCURRENTASSETS',
-'TotalCurrentAssets1',
-'Assets',
-'Total',
-'Current',
-'Rent',
-'TotalNoncurrentAssets',
-'TotalNoncurrent_Assets',
-'DepositCapitalLeaseNon-Current',
-'WarrantsIssuedForAcquisitionOfSensationalBrandsInc.Assets',
-'RecoverablePostretirementBenefits-Current',
-'SharesIssuedForTheSettlementOfDebt-total',
-'TotalOtherCurrentAssets'],
+prepaid expenses:
+PrepaidExpenses - 97
+PrepaidExpenses1 - 94
+PrepaidExpenses3 - 94
+PrepaidExpense - 93
+Repaid - 90
+Expense - 90
+Prepaid - 90
+Expenses - 90
+PrepaidExpense1 - 90
+Re - 90
+NetPrepaidExpenses - 88
+DeferredTaxAssetsLiabilitiesNetPrepaidExpenses - 87
+IssuanceOfCommonStockWarrantsForPrepaidExpenses - 87
+StockIssuedForServicesRecordAsPrepaidExpenses - 87
+MarginDepositsAndOtherPrepaidExpenses - 87
 
-'property/plant/equipment':[
-'PropertyPlantEquipment',
-'PropertyPlantAndEquipment',
-'Equipment',
-'PropertyPlantEquipmentNet',
-'GainLossOnSaleOfPropertyPlantEquipment',
-'PropertyAndEquipment',
-'NonCashGainLossOnsaleofpropertyplantequipment',
-'GainLossOnInvestmentsAndDispositionOfPropertyPlantEquipment',
-'GainLossOnInvoluntaryConversionOfPropertyPlantEquipment',
-'GainLossOnDispositionOfAdministrativePropertyPlantEquipment',
-'NetGainLossOnSaleOfPropertyPlantEquipment',
-'DepreciationandGainLossonDispositionofPropertyPlantEquipment',
-'GainLossOnSpecificSaleOfPropertyPlantEquipment',
-'GainLossOnSaleOrWritedownOfPropertyPlantEquipment',
-'GainLossOnSaleOfIdlePropertyPlantEquipment'],
-
-'goodwill, net':[
-'GoodwillNet',
-'Goodwill',
-'Net',
-'ContributionsfromtheWilliamsCompaniesInc.net',
-'Long-TermCoreInventory-Net',
-'FilmAndTelevisionCosts-Net',
-'PropertyPlantAndEquipmentAndInvestmentsOtherAndGoodwillNet',
-'IntangibleAssetsLiabilitiesandGoodwillNet',
-'IntangibleAssetsAndGoodwillNet',
-'IntangibleAssetsIncludingGoodwillNet',
-'GoodwillNetOfCashAcquired',
-'IntangibleAssetsNetExcludingGoodwillOne',
-'Goodwill1',
-'GoodwillLineItems',
-'Goodwill3'],
-
-'intangibles, net':[
-'Intangibles',
-'IntangiblesNet',
-'IN',
-'NG',
-'Net',
-'ContributionsfromtheWilliamsCompaniesInc.net',
-'Long-TermCoreInventory-Net',
-'FilmAndTelevisionCosts-Net',
-'CoreDepositIntangiblesNet',
-'BelowMarketLeaseContractIntangiblesNet',
-'FranchiseAgreementsAndOtherIntangiblesNet',
-'CoreDepositAndOtherAmortizableIntangiblesNet',
-'BelowmarketLeaseIntangiblesNet',
-'AcquiredCurriculumAndTechnologyIntangiblesNet',
-'RealEstateInvestmentPropertyAndLeaseIntangiblesNet'],
-
-'long-term investments':[
-'LongTermInvestments',
-'LongTermInvestment',
-'Investments',
-'Investment',
-'InvestmentsLongTerm',
-'PaymentsForProceedsFromLongtermInvestments',
-'PaymentsToAcquireLongtermInvestments',
-'ProceedsFromMaturitiesPrepaymentsAndCallsOfLongtermInvestments',
-'ProceedsFromSaleOfLongtermInvestments',
-'IncreaseDecreaseInLongtermInvestments',
-'ProceedsfromDivestitureofBusinessandSaleofLongtermInvestments',
-'Investments1',
-'PayableForPurchaseOfLongTermInvestments',
-'PrepaymentsForPurchaseOfLongTermInvestments',
-'PaymentsForAdvancesToAcquireLongTermInvestments'],
-
-'other assets':[
-'OtherAssets',
-'OtherAssets1',
-'OtherAssets3',
-'OtherAssets2',
-'AssetsOther',
-'OtherAsset',
-'OtherAssts',
-'Assets',
-'Other',
-'OtherAssetsBS',
-'OtherAssetsCF',
-'OtherAssetsNc',
-'OfOtherAssets',
-'DeferredChargesAndOtherAssets',
-'IncreaseDecreaseInAccruedLiabilitiesAndOtherAssets'],
-
-'total assets':[
-'Totalassets',
-'TotalAssets',
-'TotalAssets1',
-'AssetsTotal',
-'AL',
-'Assets',
-'Total',
-'WarrantsIssuedForAcquisitionOfSensationalBrandsInc.Assets',
-'RestrictedTotalAssets',
-'SharesIssuedForTheSettlementOfDebt-total',
-'SubtotalAssets',
-'TotalAssetsToBeContributedToVICIProperties',
-'TotalAssetsBeforeFundsHeldClients',
-'AssetsOfConsolidatedVariableInterestEntitiesIncludedInTotalAssetsAboveAbstract',
-'TotalAssetsExclusiveOfAssetsUnderVehiclePrograms'],
-
-'accounts payable':[
-'AccountsPayable',
-'AccountsPayable1',
-'AccountsPayables',
-'AccountsPayable3',
-'AccountsPayable2',
-'AcountsPayable',
-'AccountPayable',
-'AccountsPayable31',
-'PA',
-'CO',
-'AcountsPayable1',
-'AccountantsPayable',
-'AccountsPayableNet',
-'IncreaseDecreaseInAccountsPayable',
-'IncreaseDecreaseInOtherAccountsPayable'],
-
-'accrued expenses':[
-'Accruedexpenses',
-'AccruedExpenses',
-'AcccruedExpenses',
-'AccruedExpenses1',
-'Accrued_expenses',
-'AccruedExpenses3',
-'AccruedExpense',
-'AccruedExpenses11',
-'PE',
-'Expenses',
-'Expense',
-'RU',
-'EXPENSES',
-'AccruedExpensesNet',
-'RelatedPartyPayableAndAccruedExpenses'],
-
-'short-term debt':[
-'ShortTermDebt',
-'DE',
-'OR',
-'Debt',
-'Short-TermLoansFromRelatedPartiesCurrent',
-'Short-TermNoteReceivableReserveAmount',
-'Short-TermEarn-OutLiability',
-'ProceedsFromOtherShortTermDebt',
-'ProceedsFromShortTermDebt',
-'RepaymentsOfOtherShortTermDebt',
-'RepaymentsOfShortTermDebt',
-'ReductionsOfLongTermAndShortTermDebt',
-'ShortTermDebtnet',
-'ValueOfWarrantsIssuedWithShortTermDebt',
-'LineOfCreditShortTermDebt'],
-
-'long-term debt due':[
-'Debt',
-'Long-TermDebtRelatedPartyNetOfCurrentPortion',
-'Long-TermPortionOfCustomerAccountsReceivableVieBalance',
-'Long-TermLiability-Note-Payable-RelatedParty',
-'Long-TermLineOfCreditWithRelatedPartyAccruedInterest',
-'Long-TermLineOfCreditWithRelatedPartyUnamortizedDiscount',
-'Long-TermCoreInventoryDeposit',
-'Long-TermIncentiveProgramExpenseInGeneralAndAdministrativeExpense',
-'Long-TermLineOfCreditWithRelatedPartyAmortizedDiscount',
-'Long-termDebtDueAfterOneYearFinancialProducts',
-'Long-termDebtDueAfterOneYearMachineryAndEngines',
-'Long-termDebtDueWithinOneYearFinancialProducts',
-'LongTermDebt',
-'LongtermDebt',
-'LongTermDebtNet'],
-
-'other current liabilities':[
-'OtherCurrentLiabilities',
-'OtherCurrentLiablities',
-'Liabilities',
-'Other',
-'OtherNoncurrentLiabilities',
-'Current',
-'Rent',
-'Othercurrenttaxliabilities',
-'OtherNonCurrentLiabilities',
-'TotalOtherCurrentLiabilities',
-'IncreaseDecreaseInOtherCurrentLiabilities',
-'AccruedExpensesAndOtherCurrentLiabilities',
-'IncreaseDecreaseInAccruedCompensationAccruedExpensesAndOtherCurrentLiabilities',
-'IncreaseDecreaseInAccruedToolSetsAndOtherCurrentLiabilities',
-'IncreaseDecreaseinAccruedLiabilitiesandOtherCurrentLiabilities'],
-
-'total current liabilities':[
-'TotalCurrentLiabilities',
-'TOTALCURRENTLIABILITIES',
-'TotalCurrentLiabilities1',
-'TotalCurrentLiabilties',
-'CurrentLiabilitiesTotal',
-'Liabilities',
-'Total',
-'Current',
-'Rent',
-'TotalNoncurrentLiabilities',
-'TotalOtherCurrentLiabilities',
-'Liabilities1',
-'NoncashOrPartNoncashAcquisitionTotalCurrentLiabilities',
-'RecoverablePostretirementBenefits-Current',
-'SharesIssuedForTheSettlementOfDebt-total'],
-
-'long-term debt':[
-'LongTermDebt',
-'LongtermDebt',
-'DE',
-'NG',
-'Debt',
-'LongTermDebts',
-'DebtLongTerm',
-'Long-TermDebtRelatedPartyNetOfCurrentPortion',
-'AmountOfVieIncludedInCurrentPortionOfLong-TermDebt',
-'Long-TermPortionOfCustomerAccountsReceivableVieBalance',
-'IncreaseDecreaseLong-TermDebt',
-'DiscountOnLong-TermDebt',
-'InterestAddedPrincipalBalancesLong-TermDebt',
-'Long-TermLiability-Note-Payable-RelatedParty',
-'Long-TermLineOfCreditWithRelatedPartyAccruedInterest'],
-
-'deferred income tax':[
-'DeferredIncomeTax',
-'Deferred',
-'DeferredIncomeTaxes',
-'Deferredincometaxes',
-'GainLossOnTranslationOfForeignCurrencyDenominatedDeferredIncomeTax',
-'DeferredIncome',
-'ChangeInComprehensiveIncomeNetOfDeferredIncomeTax',
-'AccumulatedOtherComprehensiveIncomeLossDeferredIncomeTax',
-'AccumulatedOtherComprehensiveLossDeferredIncomeTax',
-'OtherNetUnrealizedGainsOnInvestmentSecuritiesNetOfDeferredIncometax',
-'NegativePlanAmendmentNetOfDeferredIncomeTax',
-'CumulativeEffectOfInitialAdoptionOfAsc32010NetOfDeferredIncomeTax',
-'CumulativeEffectOfInitialAdoptionOfAsc94420NetOfDeferredIncomeTax',
-'UnrecognizedLossNetFromDefineBenefitPlansDeferredIncomeTax',
-'ProvisionReversalOfProvisionForDeferredIncomeTax'],
-
-'minority interest':[
-'MinorityInterest',
-'MinorityInterest1',
-'MinorityInterests',
-'MinorityInterest2',
-'Interest',
-'MinorityInterestOne',
-'PaymentsOfDividendsMinorityInterest',
-'PaymentOfSpecialDividendMinorityInterest',
-'EquityChangeAdjustmentsToAdditionalPaidInCapitalReallocationOfMinorityInterest',
-'BusinessAcquisitionMinorityInterest',
-'AcquisitionOfMinorityInterest',
-'InvestmentInMinorityInterest',
-'PaymentsToAcquireMinorityInterest',
-'PaymentsOfDividendsAndDistributionsMinorityInterest',
-'Paymentsofdividendsandredemptionsminorityinterest'],
-
-'other liabilities':[
-'OtherLiabilities',
-'OtherLiabilities1',
-'OtherLiabilites',
-'LiabilitiesOther',
-'OfOtherLiabilities',
-'Liabilities',
-'Other',
-'OtherTaxLiabilities',
-'AllOtherLiabilities',
-'VIEOtherLiabilities',
-'OtherTaxliabilities',
-'OtherLiabilitiesNet',
-'AboveMarketLeasesandOtherLiabilities',
-'AccruedLiabilitiesAndOtherLiabilities',
-'DeferredCreditsAndOtherLiabilities'],
-
-'total liabilities':[
-'TotalLiabilities',
-'TOTALLIABILITIES',
-'LiabilitiesTotal',
-'Liabilities',
-'Total',
-'SubTotalLiabilities',
-'SubtotalLiabilities',
-'RestrictedTotalLiabilities',
-'SharesIssuedForTheSettlementOfDebt-total',
-'LiabilitiesOfConsolidatedViesIncludedInTotalLiabilitiesAbstract',
-'Totalliabilitiesnotsubjecttocompromise',
-'TotalLiabilitiesExclusiveOfLiabilitiesUnderVehiclePrograms',
-'TotalLiabilitiesAndStockholdersEquityDeficitAbstract',
-'AdoptionOfNewGuidanceOnConsolidationOfCertainVariableInterestEntitiesIncreaseInTotalLiabilities',
-'TotalLiabilitiesAndShareholders'],
-
-'preferred stock':[
-'Preferredstock',
-'PreferredStock',
-'PreferredAStock',
-'PreferredBStock',
-'Preferredstock1',
-'PreferredCStock',
-'Preferredstock2',
-'PreferredStockA',
-'PreferredStockB',
-'Preferred',
-'N5PreferredStock',
-'Re',
-'OfferingCostsOffsetAgainstRedeemablePreferredStock',
-'ConversionOfCustomerDepositFromRelatedPartyToPreferredStock',
-'AdditionalPaidInCapitalPreferredStock'],
-
-'common stock':[
-'CommonStock',
-'Commonstock',
-'CommonStockT',
-'CommonStock1',
-'Commonstock1',
-'CommonStock2',
-'CO',
-'Common',
-'CommonStocksT',
-'PaymentsforConversionofCommonStock',
-'AccruedPurchaseOfCommonStock',
-'AdditionalPaidInCapitalCommonStock',
-'DividendsCommonStock',
-'PaymentsForRepurchaseOfCommonStock',
-'PaymentsOfDividendsCommonStock'],
-
-'additional paid in capital':[
-'AdditionalPaidInCapital',
-'AdditionalPaidinCapital',
-'AdditionalPaidInCapital1',
-'AdditionalPaidInCapital2',
-'AdditionalPaidinCapitals',
-'AdditionalPaidInCapital3',
-'AdditionalPaidInCapital4',
-'AdditionalPaidInCapital5',
-'AdditionalPaidInCapitals',
-'Capital',
-'AdditonalPaidInCapital1',
-'AdditonalPaidInCapital2',
-'AdditonalPaidInCapital3',
-'AdditionPaidInCapital',
-'AdditionalPaidInCapitalBcf'],
-
-'retained earnings':[
-'RetainedEarnings',
-'Retained-Earnings-Other',
-'Earnings',
-'RetainedEarningsEnd',
-'CumulativeAdjustmentToRetainedEarnings',
-'ApicDeficitReclassifiedToRetainedEarnings',
-'FundingDividendsDeclaredToRetainedEarnings',
-'AdjustmentsToAdditionalPaidInCapitalAndRetainedEarnings',
-'CumulativeRetrospectiveAdjustmentToRetainedEarnings',
-'RestrictedRetainedEarnings',
-'StockholdersEquityExcludingRetainedEarnings',
-'TransferFromRetainedEarnings',
-'ConversionOfMinorityInterestPurchaseToRetainedEarnings',
-'VariableInterestEntityRetainedEarnings',
-'DividendEquivalentSharesAddedToRestrictedStockUnitsRetainedEarnings'],
-
-'treasury stock-common':[
-'Common',
-'PaymentsforRepurchaseofpreferredstockandwarrantissuedtotheU.S.Treasury',
-'Stock-BasedCompensationExpenseAbstract',
-'DistributionOfSurgivisionInc.Stock',
-'Stock-BasedCompensationAttributedtoDeferredFinancingCosts',
-'Compensation-interestexpenses-Stock-basedcompensatin',
-'Developmentcosts-Stock-basedcompensation',
-'SellingGeneralandAdministration-Stock-basedCompensatino',
-'CommonStockInTreasury',
-'TreasuryStockCommonValue',
-'TreasuryStock1',
-'TreasuryStock2',
-'TreasuryStocks',
-'TreasuryStockCommonShares',
-'TreasuryStockCommonMember'],
-
-'other equity':[
-'OtherEquity',
-'OtherEquity1',
-'EquityOther',
-'Equity',
-'Other',
-'IT',
-'PaymentsForRepurchaseOfOtherEquity',
-'ProceedsFromOtherEquity',
-'TreasuryStockAndOtherEquity',
-'CompensationExpensesPaidWithOptionsAndOtherEquity',
-'TotalBiomMatrixScientificGroupInc.Equity',
-'Retained-Earnings-Other',
-'IncomeLossfromOtherEquityMethodInvestments',
-'ProceedsFromShareBasedAwardsAndOtherEquityTransactions',
-'OtherEquityMethodInvestmentsMember'],
-
-'total shareholders equity':[
-'TotalShareholdersEquity',
-'TOTALSHAREHOLDERSEQUITY1',
-'Equity',
-'Total',
-'TotalWcuiShareholdersEquity',
-'TotalBiomMatrixScientificGroupInc.Equity',
-'SharesIssuedForTheSettlementOfDebt-total',
-'TotalCommonShareholdersEquity',
-'TotalShareholdersEquityMember',
-'TotalParentShareholdersEquity',
-'ShareholdersEquity',
-'TotalShareholdersEquityDeficit',
-'TotalShareholdersEquityIncludingTreasuryStock',
-'OtherShareholdersEquity',
-'TotalShareholdersEquityAttributableToParentMember'],
-
-'total liabilities and shareholders equity':[
-'TotalLiabilitiesAndShareholdersEquity',
-'TotalLiabilitiesAndShareholdersEquity1',
-'TotalLiabilitiesShareholdersEquity',
-'Liabilities',
-'Equity',
-'TotalLiabilitiesAndShareholders',
-'TotalLiabilitiesAndStocholdersEquity',
-'TotalLiabilitiesAndShareholdersDeficit',
-'ShareholdersEquity',
-'TotalLiabilities',
-'TOTALLIABILITIES',
-'TotalLiabilitiesAndStockholdersEquity',
-'Liabilities1',
-'TotalLiabilitiesAndStockholderEquity',
-'TotalLiabilitiesandSe'],
-
-'net income':[
-'NetIncome',
-'Netincome',
-'IN',
-'NC',
-'CO',
-'NetIncome1',
-'NetIncome2',
-'Netincome1',
-'NetIncome3',
-'NetIncome4',
-'NetIncome5',
-'Net',
-'InterestExpense-Net',
-'EquityBeforeNetIncome',
-'PredecessorsNetIncome'],
-
-'amortization':[
-'Amortization',0
-'StraightLineRentExpenseBelowMarketGroundLeaseAndAmortizationOfIntangibleAssets',
-'AmortizationandImpairmentofIntangibleAssets',
-'AmortizationOfAcquiredIntangibleAssets1',
-'CostofServicesAmortizationofDVDContentAssets',
-'CostofServicesAmortizationofStreamingContentAssets',
-'AmortizationOfDeferredLeaseIncentives',
-'AccretionOfFdicLossShareReceivableNetOfAmortizationOfFdicClawbackPayable',
-'AmortizationOfInvestmentSecurities',
-'AmortizationOfPremiumOnPurchasedLoanPools',
-'AmortizationOfSubordinatedDeferrableInterestDebentures',
-'Depreciationandamortizationexcludingdepreciationoncommunicationequipment',
-'InterestExpenseAndAmortizationOfDeferredFinancingCostsThirdParty',
-'DepreciationDepletionAmortizationAndAccretionIncludingDiscontinuedOperations',
-'OR'],
-
-'total cash from operating activities':[
-'Total',
-'Operating',
-'TotalCashFlowsFromOperatingActivities',
-'OperatingActivities',
-'NetCashFromOperatingActivities',
-'TotalProceedsFromOperatingActivities',
-'TotalOtherOperatingActivities',
-'TotalCash',
-'CashFlowsFromOperatingActivities',
-'OtherCashFlowsFromOperatingActivities',
-'ProfitLossFromOperatingActivities',
-'ProceedsFromOperatingActivities',
-'Total1',
-'CashFlowsFromOperationgActivities',
-'SecurityGainsNetAdjustmentsToReconcileNetIncomeToNetCashFromOperatingActivities'],
-
-'capital expenditures':[
-'CapitalExpenditures',
-'Capitalexpenditures',
-'CapitalExpenditure',
-'Capital',
-'CapitalExpendituresNet',
-'NetCapitalExpenditures',
-'IncreaseDecreaseinAccruedCapitalExpenditures',
-'ChangeInAccruedCapitalExpenditures',
-'ChangesInAccruedExpensesRelatedToCapitalExpenditures',
-'IncreaseDecreaseInAccruedCapitalExpenditures',
-'PaymentsForFinancedCapitalExpenditures',
-'AccrualAssociatedWithConstructionAndCapitalExpenditures',
-'ChangeInAccrualsOrLiabilitiesForCapitalExpenditures',
-'NoncashorPartNoncashAccruedCapitalExpenditures',
-'ChangeinLiabilityforCapitalExpenditures'],
-
-'other investing cash flow items':[
-'Cash',
-'Other',
-'OtherInvesting',
-'InvestingCashFlows',
-'CashFlow',
-'Other2',
-'CashFlowsInvesting',
-'Others',
-'VestingAxis',
-'Cash1',
-'Cash2',
-'Cash3',
-'Fines',
-'OtherInvestment',
-'CashFlowsFromInvestingActivitiesOther'],
-
-'total cash from investing activities':[
-'Total',
-'TotalCashFlowsFromInvestingActivities',
-'InvestingActivities',
-'TotalNoncashInvestingActivities',
-'TotalNonCashInvestingActivities',
-'CashFlowFromInvestingActivities',
-'TotalCash',
-'Non-CashInvestingActivities',
-'CashFlowsFromInvestingActivities',
-'Total1',
-'ProceedsFromInvestingActivities',
-'DepositsFromInvestingActivities',
-'NonCashInvestingActivities',
-'Otherinvestingactivities',
-'NoncashInvestingActivities'],
-
-'cash dividends paid':[
-'CashDividendsPaid',
-'CashDividendPaid',
-'Cash',
-'Dividends',
-'Dividend',
-'CashDividendsRepaid',
-'NoncashDividendsPaid',
-'CommonStockIssuedForConsultingServicesNon-Cash',
-'NoncashDividendPaid',
-'CashDividend',
-'Dividendsd',
-'DividendsPaid',
-'CashDividends',
-'Dividends1',
-'Dividendspaid'],
-
-'issuance retirement of stock, net':[
-'Issuance',
-'InterestExpense-Net',
-'DuetoAshfordInc.net',
-'Stock-BasedCompensationAttributedtoDeferredFinancingCosts',
-'Compensation-interestexpenses-Stock-basedcompensatin',
-'SellingGeneralandAdministration-Stock-basedCompensatino',
-'RetirementOfStock',
-'IssuanceFor',
-'RetirementOfDebt',
-'RepaymentOfStock',
-'ReGen',
-'DebtRetirement',
-'Insurance',
-'DebtRetirementCost',
-'RetirementOfAssets'],
-
-'issuance retirement of debt, net':[
-'Debt',
-'Issuance',
-'InterestExpense-Net',
-'DuetoAshfordInc.net',
-'RetirementOfDebt',
-'IssuanceForSettlementOfDebtAmount',
-'LossOnRetirementOfDebtOne',
-'IssuanceFor',
-'ReGen',
-'RepaymentOfDebt',
-'DebtRetirement',
-'IssuanceForSettlementOfDebtShares',
-'Insurance',
-'LossOnRetirementOfDebt',
-'RetirementOfAssets'],
-
-'total cash from financing activities':[
-'Total',
-'TotalCashFlowsFromFinancingActivities',
-'FinancingActivities',
-'TotalNoncashFinancingActivities',
-'TotalNonCashFinancingActivities',
-'Totalnoncashfinancingactivities',
-'TotalNoncashfinancingactivities',
-'CashFlowFromFinancingActivities',
-'Cashflowfromfinancingactivities',
-'TotalCash',
-'CashFlowsFromFinancingActivities',
-'Total1',
-'GainLossFromFinancingActivities',
-'NonCashFinancingActivities',
-'OtherFinancingActivities'],
-
-'net change in cash':[
-'NetChangeInCash',
-'NETCHANGEINCASH',
-'Cash',
-'Net',
-'ContributionsfromtheWilliamsCompaniesInc.net',
-'CommonStockIssuedForConsultingServicesNon-Cash',
-'In-ProcessResearchAndDevelopment',
-'CommonStockAndPaid-In-CapitalSharesMember',
-'ChangeInCash',
-'Cash1',
-'Cash2',
-'Cash3',
-'ChangesIn',
-'ChangeInCash4',
-'ChangeInCash3',
+other current assets, total:
+OtherCurrentAssetsTotal - 92
+Rent - 90
+Asset - 90
+Total - 90
+Current - 90
+Assets - 90
+Other - 90
+OtherNoncurrentAssetsTotal - 87
+ComprehensiveIncomeLossNetOfTaxAttributableToNoncontrollingInterest-Other - 86
+WarrantsIssuedForAcquisitionOfSensationalBrandsInc.Assets - 86
+RecoverablePostretirementBenefits-Current - 86
+CurrentAssets1 - 84
+CurrentAsset - 83
+BusinessCombinationOtherCurrentAssetsTotal - 83
+IncreaseDecreaseinPrepaidExpenseandOtherCurrentAssetsTotal - 83

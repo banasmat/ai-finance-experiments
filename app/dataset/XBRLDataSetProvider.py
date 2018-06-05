@@ -189,13 +189,53 @@ class XBRLDataSetProvider(object):
                 df.to_csv(f, header=header)
 
     @staticmethod
+    def preorganize_tags():
+
+        all_tags = XBRLDataSetProvider._get_all_tags()
+
+        target_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'tags_preorganized.txt')
+
+        results = {}
+
+        for title in xbrl_titles.titles:
+
+            _title = title
+
+            to_replace = ['of', 'gross', 'net', 'and', 'gain', 'loss', 'total', 'other', 'current', 'from', 'in']
+            for rep in to_replace:
+                _title = ' ' + _title + ' '
+                _title = _title.replace(' ' + rep + ' ', ' ')
+                _title = _title.replace(',', ' ')
+                _title = _title.replace('/', ' ')
+                _title = _title.replace('(', ' ')
+                _title = _title.replace(')', ' ')
+                _title = _title.replace('-', ' ')
+
+            keywords = _title.split(' ')
+            keywords = list(filter(None, keywords))
+
+            results[title] = []
+
+            for keyword in keywords:
+                print(keyword)
+                for tag in all_tags:
+                    print(tag)
+                    if keyword in str(tag):
+                        results[title].append(tag)
+
+        with open(target_file_path, 'w') as f:
+            for title, keywords in results.items():
+                f.write("\n%s:[\n" % title)
+                for item in keywords:
+                    f.write("    '%s',\n" % item)
+                f.write("]\n")
+
+    @staticmethod
     def organize_tags():
 
         from fuzzywuzzy import process
 
         all_tags = XBRLDataSetProvider._get_all_tags()
-
-        all_tags = all_tags['tag'].unique().tolist()
 
         # target_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'tags.txt')
         #
@@ -205,10 +245,10 @@ class XBRLDataSetProvider(object):
 
         target_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'tags_organized.txt')
 
-        for title in xbrl_titles.titles.keys():
+        for title in xbrl_titles.titles:
 
             title = title.replace('&', 'and')
-
+            print(title)
             result = process.extract(title, all_tags, limit=15)
             with open(target_file_path, 'a') as f:
                 f.write("\n%s:\n" % title)
@@ -218,7 +258,7 @@ class XBRLDataSetProvider(object):
     @staticmethod
     def _get_all_tags():
 
-        all_tags = pd.Series()
+        all_tags = []
 
         for quarter_dir in reversed(os.listdir(XBRLDataSetProvider.res_dir)):
 
@@ -227,9 +267,12 @@ class XBRLDataSetProvider(object):
             if not os.path.isdir(quarter_dir):
                 continue
 
-            tag_file = os.path.join(quarter_dir, 'tag.txt')
-            tags = pd.read_csv(tag_file, sep='\t', encoding='utf-8', quoting=csv.QUOTE_NONE, usecols=['tag'])
-            all_tags = all_tags.append(tags)
+            num_file = os.path.join(quarter_dir, 'num.txt')
+            tags = pd.read_csv(num_file, sep='\t', encoding='utf-8', quoting=csv.QUOTE_NONE, usecols=['tag'])
+
+            all_tags = all_tags + tags['tag'].tolist()
+            all_tags = list(set(all_tags))
+
         return all_tags
 
     @staticmethod
