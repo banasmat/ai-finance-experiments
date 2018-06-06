@@ -338,3 +338,632 @@ CurrentAssets1 - 84
 CurrentAsset - 83
 BusinessCombinationOtherCurrentAssetsTotal - 83
 IncreaseDecreaseinPrepaidExpenseandOtherCurrentAssetsTotal - 83
+
+total current assets:
+Totalcurrentassets - 95
+TotalCurrentAssets - 95
+TOTALCURRENTASSETS - 95
+TotalCurrentAssets1 - 92
+Rent - 90
+Asset - 90
+Total - 90
+Current - 90
+Assets - 90
+VieTotalCurrentAssets - 88
+TotalNoncurrentAssets - 88
+TotalNonCurrentAssets - 88
+TotalNoncurrent_Assets - 86
+DepositCapitalLeaseNon-Current - 86
+CumulativeEffectOfChangeOnTotalCurrentAssets - 86
+
+property/plant/equipment:
+PropertyPlantEquipment - 96
+NETPROPERTYPLANTEQUIPMENT - 90
+Equipment - 90
+PropertyPlantEquipmentNet - 90
+PropertyPlantAndEquipment - 90
+Plant - 90
+GAFIPropertyPlantEquipment - 88
+PropertyPlantAndEquipment1 - 88
+GainLossOnSpecificSaleOfPropertyPlantEquipment - 86
+GainLossOnSaleOfPropertyPlantEquipment - 86
+GainLossOnPurchaseOfPropertyPlantEquipment - 86
+GainLossOnDemolitionOfPropertyPlantEquipment - 86
+PaymentstoDisposeofPropertyPlantEquipment - 86
+DeferredTaxAssetsPropertyPlantEquipment - 86
+GainLossOnInvestmentsAndDispositionOfPropertyPlantEquipment - 86
+
+goodwill, net:
+GoodwillNet - 92
+GoodWill - 90
+Net - 90
+Goodwill - 90
+GoodwillNet1 - 88
+GoodwillNet2 - 88
+FilmAndTelevisionCosts-Net - 86
+Long-TermCoreInventory-Net - 86
+ContributionsfromtheWilliamsCompaniesInc.net - 86
+IntangibleAssetsAndLiabilitiesExcludingGoodwillNet - 83
+PropertyPlantEquipmentAndIntangibleAssetsExcludingGoodwillNet - 83
+PropertyPlantAndEquipmentAndIntangibleAssetsIncludingGoodwillNet - 83
+PropertyPlantAndEquipmentAndInvestmentsOtherAndGoodwillNet - 83
+RecastBalancesGoodwillNet - 83
+ImpairmentofIntangibleAssetsExcludingGoodwillNet - 83
+
+intangibles, net:
+Intangibles - 95
+IntangiblesNet - 93
+Net - 90
+IntangibleNet - 90
+FilmAndTelevisionCosts-Net - 86
+Long-TermCoreInventory-Net - 86
+ContributionsfromtheWilliamsCompaniesInc.net - 86
+FCCLicensesAndOtherIntangiblesNet - 84
+EquipmentAndIntangiblesNet - 84
+BelowMarketLeaseContractIntangiblesNet - 84
+CoreDepositAndOtherAmortizableIntangiblesNet - 84
+OtherAssetsAndIntangiblesNet - 84
+CoreDepositIntangiblesNet - 84
+TradenamesAndOtherIntangiblesNet - 84
+AcquiredCurriculumAndTechnologyIntangiblesNet - 84
+
+long-term investments:
+LongTermInvestments - 95
+LongTermInvestments1 - 93
+LongTermInvestment - 92
+InvestmentsLongTerm - 90
+Investment - 90
+Investments - 90
+Term - 90
+LongTermInvestmentCost - 88
+InvestmentIncomeOtherLong-TermInvestments - 88
+IncreaseDecreaseInOtherLongTermInvestments - 86
+AssetsDesignatedToClosedBlockOtherLongTermInvestments - 86
+NonCashPurchaseofLongTermInvestments - 86
+Long-TermDebtMaturitiesRepaymentsInYearThree - 86
+DeferredTaxAssetsLongTermInvestments - 86
+Investments1 - 86
+
+other assets:
+OtherAssets - 96
+OtherAssets4 - 92
+Otherassets1 - 92
+OtherAssets3 - 92
+OtherAssets1 - 92
+OtherAssets2 - 92
+AssetsOther - 91
+OtherAssts - 91
+OtherAsset - 91
+Asset - 90
+Assets - 90
+Other - 90
+OtherAssetsBS - 88
+ReclassificationOfLandDevelopmentLoanToOtherAssets - 86
+SpinOffReductionReceivablesAndOtherAssets - 86
+
+total assets:
+TotalAssets - 96
+Totalassets - 96
+TOTALASSETS - 96
+Totalassets2 - 92
+Totalassets4 - 92
+TotalAssets4 - 92
+TotalAssets2 - 92
+Totalassets3 - 92
+Totalassets1 - 92
+TotalAssets1 - 92
+TotalAssets3 - 92
+TotalAsset - 91
+AssetsTotal - 91
+Asset - 90
+Total - 90
+
+accounts payable:
+AccountsPayable - 97
+AccountsPayable2 - 94
+AccountsPayable3 - 94
+AccountsPayable1 - 94
+AccountsPayable7 - 94
+Accountspayable2 - 94
+AccountsPayables - 94
+AccountPayable - 93
+AccountsPayble - 93
+AcountsPayable - 93
+AccountsPayableRd - 91
+AccountsPayable31 - 91
+AccountPayable1 - 90
+AcountsPayable1 - 90
+AccountantsPayable - 88
+
+accrued expenses:
+Accruedexpenses - 97
+AccruedExpenses - 97
+AccruedExpenses1 - 94
+AccruedExpenses3 - 94
+Accrued_expenses - 94
+AcccruedExpenses - 94
+AccruedExpense - 93
+AccruedExpenses11 - 91
+AccruedRDExpenses - 91
+Accrued - 90
+Expense - 90
+Expenses - 90
+AccruedRDExpenses1 - 88
+AccruedExpensesNet - 88
+AccruedVatExpenses - 88
+
+short-term debt:
+ShortTermDebt - 93
+Debt - 90
+Term - 90
+EquityToTotalCapitalizationRatioExcludingShort-TermDebt - 87
+Short-TermPortionOfUnfavorableContractValues - 86
+Short-TermBorrowingsAndFederalFundsPurchase - 86
+Short-TermLoansFromRelatedPartiesCurrent - 86
+Short-TermDebtAverageInterestRate - 86
+DeferredTaxAssetsTaxCreditCarryforwardsLong-Term - 86
+TransferOfLong-TermFhlbAdvanceToShort-Term - 86
+Short-TermDebtIncludingRelatedPartyDebt - 86
+Short-TermDebtAverageInterestRateDuringPeriod - 86
+LessImputedInterest-Debt - 86
+Short-TermInvestmentsFairValueDisclosure - 86
+LiabilitiesHeldForSaleDiscontinuedOperations-Debt - 86
+
+long-term debt due:
+Debt - 90
+Term - 90
+Long-TermDebtMaturitiesRepaymentsInYearThree - 86
+Long-TermDebtMaturitiesRepaymentsOfPrincipalInYearSix - 86
+Long-TermDebtMaturitiesRepaymentsOfPrincipalAfterYearThree - 86
+Long-TermDebtIncludingFinalFeeCurrentMaturities - 86
+Long-TermLiabilitiesFromDiscontinuedOperationsGuarantorFianancialStatements - 86
+Long-TermDebtMaturitiesRepaymentsOfPrincipalAfterYearSix - 86
+Long-TermDebtFiveYearMaturities - 86
+Long-TermAdvanceCommitmentsExpiredUnexercised - 86
+Long-TermDebtTotalFuturePrincipalAndFinalFeePayments - 86
+Long-TermIncentiveProgramExpenseInGeneralAndAdministrativeExpense - 86
+Long-TermAssetsFromDiscontinuedOperations - 86
+Long-TermDebtExcludingCurrentMaturitiesNetOfDebtClassifiedAsLiabilitiesSubjectToCompromise - 86
+Long-TermEnvironmentalLiability - 86
+
+other current liabilities:
+OtherCurrentLiabilities - 96
+OtherCurrentLiabilities1 - 94
+OtherCurrentLiablities - 94
+CurrentLiabilitiesOther - 91
+Othercurrenttaxliabilities - 90
+OtherNonCurrentLiabilities - 90
+Rent - 90
+AllOtherCurrentLiabilities - 90
+OtherNoncurrentLiabilities - 90
+Current - 90
+Liabilities - 90
+Other - 90
+OtherNoncurrentLiabilities1 - 88
+OthersNoncurrentLiabilities - 88
+OtherOtherCurrentLiabilities - 87
+
+total current liabilities:
+TotalCurrentLiabilities - 96
+TOTALCURRENTLIABILITIES - 96
+TotalCurrentLiabilities1 - 94
+TotalCurrentLiabilties - 94
+CurrentLiabilitiesTotal - 91
+Rent - 90
+TotalNoncurrentLiabilities - 90
+Total - 90
+Current - 90
+Liabilities - 90
+TotalCurrentLiabilitiesNotes - 87
+TotalOtherCurrentLiabilities - 87
+ScheduleICondensedFinancialInformationOfParentTotalCurrentLiabilities - 86
+ProvisionForGratuityIncludedInTotalCurrentLiabilities - 86
+Liabilities1 - 86
+
+long-term debt:
+LongTermDebt - 92
+Debt - 90
+Term - 90
+LongTermDebt1 - 89
+LongTermDebt5 - 89
+LongtermDebt1 - 89
+LongTermDebt3 - 89
+LongTermDebt4 - 89
+LongTermDebts - 89
+LongTermDebt2 - 89
+DebtLongTerm - 87
+IncreaseDecreaseInCurrentPortionOfLong-TermDebt - 86
+Long-TermDebtMaturitiesRepaymentsInYearThree - 86
+Long-TermDebtMaturitiesRepaymentsOfPrincipalInYearSix - 86
+Long-TermDebtMaturitiesRepaymentsOfPrincipalAfterYearThree - 86
+
+deferred income tax:
+DeferredIncomeTax - 94
+Income - 90
+Deferred - 90
+Deferredincometaxes - 89
+DeferredIncomeTaxes - 89
+IncomeTaxReconciliationU.S.TaxonNonU.S.Income - 86
+AccumulatedOtherComprehensiveIncomeLossCumulativeChangesInNetGainLossFromCashFlowHedgesEffectPre-Tax - 86
+AccumulatedOtherComprehensiveIncomeLossPensionAndOtherPostretirementBenefitPlansPre-Tax - 86
+AccumulatedOtherComprehensiveIncomeLossAvailable-For-SaleSecuritiesAdjustmentPre-Tax - 86
+DeferredIncome - 85
+ProvisionReversalOfProvisionForDeferredIncomeTax - 85
+AvailableForSaleNetUnrealizedGainLossNetOfDeferredIncomeTax - 85
+UnrecognizedDeferredIncomeTax - 85
+IncomeTaxEffectsAllocatedDirectlyToEquityDeferredIncomeTax - 85
+FederalStateAndOtherDeferredIncomeTax - 85
+
+minority interest:
+MinorityInterest - 97
+MinorityInterests - 94
+MinorityInterest1 - 94
+MinorityInterest2 - 94
+Interest - 90
+MinorityInterestOne - 89
+AdjustmentsToAdditionalPaidInCapitalPurchaseOfMinorityInterest - 87
+PaymentsOfDividendsToNonredeemableMinorityInterest - 87
+OwnershipPercentageByParentIncludingMinorityInterest - 87
+ReclassifyMinorityInterest - 87
+IncomeLossFromContinuingOperationsBeforeIncomeAndMinorityInterest - 87
+IncreaseDecreaseOfEquityAndLiabilityDueToChangeInMinorityInterest - 87
+HexavestEquityMethodInvestmentSummarizedFinancialInformationMinorityInterest - 87
+EstimatedProceedsFromSaleOfPropertyHeldForSalePortionAttributabletoMinorityInterest - 87
+PercentageOfComprehensiveIncomeLossInMinorityInterest - 87
+
+other liabilities:
+OtherLiabilities - 97
+OtherLiabilities1 - 94
+OtherLiabilites - 94
+OtherLiabilities2 - 94
+OtherLiabilitie - 94
+LiabilitiesOther - 92
+Liabilities - 90
+Other - 90
+OtherLiabilitiesNet - 89
+OtherTaxLiabilities - 89
+AllOtherLiabilities - 89
+OtherLiabilitiesVIE - 89
+OtherTaxliabilities - 89
+OtherLiabilitiesCof - 89
+AccruedUnderwritingExpensesAndOtherLiabilities - 87
+
+total liabilities:
+TOTALLIABILITIES - 97
+TotalLiabilities - 97
+TotalLiabilities2 - 94
+TotalLiabilities3 - 94
+TotalLiabilities1 - 94
+LiabilitiesTotal - 92
+Total - 90
+Liabilities - 90
+SubTotalLiabilities - 89
+LiabilitiesTotal1 - 89
+AsReportedTotalLiabilities - 87
+ContributedTotalLiabilities - 87
+ReinsuranceTransactionIncreaseinTotalLiabilities - 87
+FairvalueliabilitiesMeasuredOnRecurringBasisTotalLiabilities - 87
+SouthStarPercentageOfTotalLiabilities - 87
+
+preferred stock:
+PreferredStock - 97
+Preferredstock - 97
+Preferredstock1 - 93
+PreferredCStock - 93
+PreferredStockA - 93
+PreferredStock2 - 93
+PreferredAStock - 93
+Preferredstock2 - 93
+PreferredBStock - 93
+PreferredStockB - 93
+Stock - 90
+Preferred - 90
+N5PreferredStock - 90
+Re - 90
+NoncashConversionOfInterestPayableToPreferredStock - 87
+
+common stock:
+CommonStock - 96
+Commonstock1 - 92
+CommonStock2 - 92
+CommonStockT - 92
+CommonStocks - 92
+CommonStock1 - 92
+Stock - 90
+Common - 90
+CommonStocksT - 88
+ConversionOfAccruedExpensesIntoCommonStock - 86
+SeriesBConvertiblePreferredSharesIntoSharesOfCommonStock - 86
+PercentageOfIssuanceOfCommonStock - 86
+WeightedAverageNumberOfShareOutstandingBasicAndDilutedPuttableCommonStock - 86
+OutstandingSharesFullyPaidNonassessableCommonStock - 86
+AccountsPayableObligationsSettledWithCommonStock - 86
+
+additional paid in capital:
+AdditionalPaidinCapital - 94
+AdditionalPaidInCapital - 94
+AdditionalPaidInCapital5 - 92
+AdditionalPaidInCapitals - 92
+AdditionalPaidInCapital2 - 92
+AdditionalPaidinCapital2 - 92
+AdditionalPaidInCapital4 - 92
+AdditionalPaidInCapital3 - 92
+AdditionalPaidInCapital1 - 92
+AdditionalPaidinCapital1 - 92
+AdditionalPaidinCapitals - 92
+Capital - 90
+Additional - 90
+AdditonalPaidInCapital2 - 90
+AdditonalPaidInCapital3 - 90
+
+retained earnings:
+RetainedEarnings - 97
+Retained-Earnings-Other - 95
+RetainedEarning - 94
+Earning - 90
+RetainedEarningsEnd - 89
+PercentageOfRetainedEarnings - 87
+CumulativeRetrospectiveAdjustmentToRetainedEarnings - 87
+ShareRepurchaseAllocatedToRetainedEarnings - 87
+ContingentlyTaxableRetainedEarnings - 87
+MergerAdjustRetainedEarnings - 87
+IncreaseInRetainedEarnings - 87
+SumOfCapitalStockAdditionalCapitalAndRetainedEarnings - 87
+Newaccountingpronouncementimpacttoretainedearnings - 87
+BusinessAcquisitionAssetsAndLiabilitiesAcquiredCreditToRetainedEarnings - 87
+CumulativeStockRepurchasePriceAllocatedToRetainedEarnings - 87
+
+treasury stock-common:
+Stock - 90
+Common - 90
+Compensation-interestexpenses-Stock-basedcompensatin - 86
+Stock-basedCompensationAcquisitionRelated - 86
+PaymentsforRepurchaseofpreferredstockandwarrantissuedtotheU.S.Treasury - 86
+Stock-BasedResearchAndDevelopmentExpense - 86
+PercentageofSharesheldbyU.S.Treasury - 86
+Stock-BasedCompensationAttributedtoDeferredFinancingCosts - 86
+DistributionOfSurgivisionInc.Stock - 86
+SellingGeneralandAdministration-Stock-basedCompensatino - 86
+Stock-BasedGeneralAndAdministrativeExpense - 86
+Developmentcosts-Stock-basedcompensation - 86
+TreasuryStocks - 84
+TreasuryStock2 - 84
+TreasuryStockCommonValue - 84
+
+other equity:
+Otherequity - 96
+OtherEquity - 96
+OtherEquity1 - 92
+EquityOther - 91
+UIT - 90
+Equity - 90
+Other - 90
+TreasuryStockAndOtherEquity - 86
+CompensationExpensesPaidWithOptionsAndOtherEquity - 86
+Retained-Earnings-Other - 86
+ProceedsFromOtherEquity - 86
+PaymentsForRepurchaseOfOtherEquity - 86
+TotalBiomMatrixScientificGroupInc.Equity - 86
+ComprehensiveIncomeLossNetOfTaxAttributableToNoncontrollingInterest-Other - 86
+ProceedsFromRepurchaseOfOtherEquity - 86
+
+total shareholders equity:
+TotalShareholdersEquity - 96
+TOTALSHAREHOLDERSEQUITY1 - 94
+Total - 90
+Equity - 90
+TotalWcuiShareholdersEquity - 88
+BusinessCombinationCashConsiderationpaidtoJCIInc.shareholders - 86
+SharesIssuedForTheSettlementOfDebt-total - 86
+TotalBiomMatrixScientificGroupInc.Equity - 86
+PercentageOfRecognizedEstimatedRecoveriesInRelationshipToConsolidatedTotalShareholdersEquity - 85
+TotalParentShareholdersEquity - 85
+TotalCommonShareholdersEquity - 85
+TotalShareholdersEquityDeficit - 84
+ShareholdersEquity - 84
+TotalAverageShareholdersEquity - 84
+TotalOfShareholdersEquityBeforeAdjustingTreasuryStock - 83
+
+total liabilities and shareholders equity:
+TotalLiabilitiesAndShareholdersEquity - 95
+TotalLiabilitiesAndShareholdersEquity1 - 94
+TotalLiabilitiesShareholdersEquity - 91
+Liabilities - 90
+Equity - 90
+TotalLiabilitiesAndShareholdersDeficit - 86
+RelatedAllowance-Total - 86
+TotalLiabilitiesAndShareholders - 86
+Shareholdersequity1 - 86
+TotalLiabilitiesAndStocholdersEquity - 86
+ScheduleICondensedFinancialInformationOfParentTotalLiabilitiesAndShareholdersEquity - 86
+TOTALLIABILITIES - 85
+TotalLiabilitiesAndStockholdersEquity - 85
+TotalLiabilities2 - 85
+TotalLiabilities3 - 85
+
+net income:
+NetIncome - 95
+Netincome - 95
+NetIncome2 - 90
+Netincome5 - 90
+NetIncome4 - 90
+Netincome1 - 90
+Income - 90
+NetIncome1 - 90
+Net - 90
+NetIncome5 - 90
+Netincome6 - 90
+Netincome4 - 90
+NetIncome3 - 90
+Netincome7 - 90
+IncomeTaxReconciliationU.S.TaxonNonU.S.Income - 86
+
+amortization:
+Amortization - 100
+Amortizations - 96
+Amortization1 - 96
+TrademarkPsoriaShieldAccumulatedAmortization - 90
+CostOfGoodsAndServicesSoldDepreciationAmortizationAndWarranty - 90
+FiniteLivedIntangibleAssetsAccumulatedAmortizationOtherAdjustments - 90
+GasGatheringTransportationMarketingAndProcessingDepreciationAmortizationAndImpairment - 90
+FiniteLivedIntangibleAssetsAmortizationExpenseAccumulatedAmortization - 90
+AmortizationExpenseZeroTwoFiveFiveZeroZeroBtFivevrZSByGKg - 90
+AmortizationExpenseZeroTwoZeroZeroTwoZeroKTwoJhlZKZeroTSevenTg - 90
+GoodwillAmortization - 90
+NetAmortizationOfInvestmentSecurities - 90
+AmortizationOfPurchaseAdjustmentOnLoans - 90
+ScheduleOfAmortizationOfDiscountAndInterestExpenseZeroTwoThreeThreeSixZerozKOneXyTFivelyTFourt - 90
+FiniteLivedIntangibleAssetsForecastedAmortizationMaximumYear4 - 90
+
+total cash from operating activities:
+Operating - 90
+Total - 90
+TotalCashFlowsFromOperatingActivities - 88
+RelatedAllowance-Total - 86
+OperatingActivities - 86
+NetCashFromOperatingActivities - 85
+TotalProceedsFromOperatingActivities - 83
+CashFlowFromOperatingActivities - 81
+TotalCash - 80
+CashFromOperations - 80
+TotalOtherOperatingActivities - 80
+OtherCashFlowsFromOperatingActivities - 79
+CashFlowsFromOperatingActivities - 79
+ProfitLossFromOperatingActivities - 78
+ProceedsFromOperatingActivities - 78
+
+capital expenditures:
+Capitalexpenditures - 97
+CapitalExpenditures - 97
+CapitalExpenditures2 - 95
+CapitalExpenditures1 - 95
+CapitalExpenditure - 95
+Capital - 90
+BpiCapitalExpenditures - 90
+NetCapitalExpenditures - 90
+CapitalExpendituresNet - 90
+BPICAPITALEXPENDITURES - 90
+EHCCAPITALEXPENDITURES - 90
+CapitalExpenditureNet - 88
+CapitalExpendituresPaid - 88
+AcquisitionVesselsAttachedTimeChartersRelatedCapitalExpenditures - 87
+NoncashIncreaseDecreaseinAccruedCapitalExpenditures - 87
+
+other investing cash flow items:
+Cash - 90
+Other - 90
+ComprehensiveIncomeLossNetOfTaxAttributableToNoncontrollingInterest-Other - 86
+OtherInvesting - 84
+InvestingCashFlows - 80
+CashFlows - 80
+Other2 - 78
+Other6 - 78
+Other1 - 78
+Other7 - 78
+Other5 - 78
+Other4 - 78
+Other3 - 78
+CashFlowsInvesting - 76
+Others - 75
+
+total cash from investing activities:
+Total - 90
+TotalCashFlowsFromInvestingActivities - 88
+RelatedAllowance-Total - 86
+InvestingActivities - 86
+TotalNonCashInvestingActivities - 84
+TotalNoncashInvestingActivities - 84
+CashFlowFromInvestingActivities - 81
+TotalCash - 80
+NetCashFlowsFromInvestingActivities - 79
+CashFromInvestor - 79
+OtherCashFlowsfromInvestingActivities - 79
+Non-CashInvestingActivities - 79
+CashFlowsFromInvestingActivities - 79
+ProceedsFromInvestingActivities - 78
+Total2 - 78
+
+cash dividends paid:
+CashDividendsPaid - 94
+CashDividendPaid - 91
+Cash - 90
+Dividen - 90
+Dividends - 90
+Dividend - 90
+CashDividendsRepaid - 89
+NoncashDividendsPaid - 87
+EffectiveincometaxratereconciliationnetU.S.taxonnonU.S.dividends - 86
+Cash-BasedPerformanceIncentivesUnvested - 86
+CommonStockIssuedForConsultingServicesNon-Cash - 86
+AggregateAmountOfCashDividendsPaid - 85
+NoncashDividendPaid - 84
+CashDividend - 83
+AggregateAmountOfCashDividendPaid - 82
+
+issuance retirement of stock, net:
+Stock - 90
+Issuance - 90
+DuetoAshfordInc.net - 86
+Compensation-interestexpenses-Stock-basedcompensatin - 86
+NumberOfIdentifiedAndRecordedOut-Of-PeriodTaxErrors - 86
+Stock-BasedCompensationAttributedtoDeferredFinancingCosts - 86
+SellingGeneralandAdministration-Stock-basedCompensatino - 86
+InterestExpense-Net - 86
+Issuances - 80
+RetirementOfStock - 79
+IssuanceRate - 75
+IssuanceFor - 74
+RepaymentOfStock - 73
+RetirementOfDebt - 73
+Issuances1 - 72
+
+issuance retirement of debt, net:
+Issuance - 90
+Debt - 90
+DuetoAshfordInc.net - 86
+PurchaseOfPeOpCo.Debt - 86
+NumberOfIdentifiedAndRecordedOut-Of-PeriodTaxErrors - 86
+LiabilitiesHeldForSaleDiscontinuedOperations-Debt - 86
+InterestExpense-Net - 86
+Issuances - 80
+RetirementOfDebt - 79
+IssuanceRate - 75
+LossOnRetirementOfDebtOne - 74
+IssuanceForSettlementOfDebtAmount - 74
+IssuanceFor - 74
+EarlyRetirementOfDebt - 73
+RepaymentOfDebt - 72
+
+total cash from financing activities:
+Total - 90
+TotalCashFlowsFromFinancingActivities - 88
+RelatedAllowance-Total - 86
+FinancingActivities - 86
+Totalnoncashfinancingactivities - 84
+TotalNonCashFinancingActivities - 84
+TotalNoncashfinancingactivities - 84
+TotalNoncashFinancingActivities - 84
+CashFlowFromFinancingActivities - 81
+TotalCash - 80
+CashFinancings - 80
+NetCashFlowsFromFinancingActivities - 79
+CashFlowsFromFinancingActivities - 79
+CashFromOtherFinancingActivities - 79
+Total2 - 78
+
+net change in cash:
+NetChangeInCash - 91
+NETCHANGEINCASH - 91
+Cash - 90
+Net - 90
+Cash-BasedPerformanceIncentivesUnvested - 86
+AdditionalTaxBenefitReflectedInAdditionalPaid-In-CapitalDueToFutureUtilizationOfNetOperatingLosses - 86
+ContributionsfromtheWilliamsCompaniesInc.net - 86
+CommonStockIssuedForConsultingServicesNon-Cash - 86
+TaxBenefitReflectedInAdditionalPaid-In-CapitalDueToCurrentYearUtilizationOfNetOperatingLosses - 86
+In-ProcessResearchAndDevelopment - 86
+Cash2 - 80
+Cash1 - 80
+NetChange - 80
+Cash5 - 80
+Cash3 - 80
