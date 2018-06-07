@@ -494,3 +494,30 @@ class XBRLDataSetProvider(object):
                         f = open(year_file_path, 'w')
                         df.to_csv(f)
                         f.close()
+
+    @staticmethod
+    def prepare_dataset_for_training():
+
+        all_ciks = []
+        tags_len = None
+        years_len = 0
+
+
+        for year_file in reversed(os.listdir(XBRLDataSetProvider.xbrl_dataset_dir)):
+            if year_file[0] == '.':
+                continue
+            with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_dir, year_file), 'r') as f:
+                print('YEAR', year_file[0:4])
+                df: pd.DataFrame = pd.read_csv(f, index_col=0)
+
+                all_ciks = list(set(all_ciks + list(df.index)))
+
+                if tags_len is None:
+                    tags_len = len(df.columns)
+                years_len += 1
+
+        print(len(all_ciks))
+        print(tags_len)
+        print(years_len)
+
+        data = np.empty(shape=(len(all_ciks), tags_len, years_len))
