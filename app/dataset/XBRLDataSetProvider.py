@@ -15,6 +15,8 @@ class XBRLDataSetProvider(object):
     most_popular_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'most_popular_tags.txt')
     common_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'common_tags.txt')
     company_list_dir = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'company_list')
+    cik_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'cik.pkl')
+    cik_map_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv')
 
     @staticmethod
     def extract_cik_numbers():
@@ -33,9 +35,7 @@ class XBRLDataSetProvider(object):
             for index, row in subs.iterrows():
                 cik_map[row['cik']] = row['name']
 
-        cik_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'cik.pkl')
-
-        with open(cik_file_path, 'wb') as f:
+        with open(XBRLDataSetProvider.cik_file_path, 'wb') as f:
             pickle.dump(cik_map, f)
 
     @staticmethod
@@ -411,7 +411,7 @@ class XBRLDataSetProvider(object):
         all_ciks = all_ciks.drop('Symbol', axis=1)
         # print(all_ciks.head(20))
         print('ciks with symbols', all_ciks.loc[~pd.isnull(all_ciks['symbol'])].shape)
-        with open(os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv'), 'w') as f:
+        with open(XBRLDataSetProvider.cik_map_file_path, 'w') as f:
             all_ciks.to_csv(f, index=False)
 
     @staticmethod
@@ -500,23 +500,10 @@ class XBRLDataSetProvider(object):
     @staticmethod
     def prepare_dataset_for_training():
 
-        all_ciks = []
-        tags_len = None
         years_len = 0
 
-#TODO check if all_ciks are not gathered by other method
-        for year_file in reversed(os.listdir(XBRLDataSetProvider.xbrl_dataset_dir)):
-            if year_file[0] == '.':
-                continue
-            with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_dir, year_file), 'r') as f:
-                print('YEAR', year_file[0:4])
-                df: pd.DataFrame = pd.read_csv(f, index_col=0)
-
-                all_ciks = list(set(all_ciks + list(df.index)))
-
-                if tags_len is None:
-                    tags_len = len(df.columns)
-                years_len += 1
+        with open(XBRLDataSetProvider.cik_map_file_path, 'r') as f:
+            all_ciks = set(pd.read_csv(f)['cik'])
 
         for year_file in os.listdir(XBRLDataSetProvider.xbrl_dataset_dir):
             if year_file[0] == '.':
@@ -525,11 +512,17 @@ class XBRLDataSetProvider(object):
                 print('YEAR', year_file[0:4])
                 df: pd.DataFrame = pd.read_csv(f, index_col=0)
 
-                for cik in XBRLDataSetProvider.__list_diff(all_ciks, list(df.index)):
-                    #FIXME append one dataframe with all empty rows
-                    empty_row = pd.Series([0]*tags_len, list(df.columns))
-                    empty_row.name = cik
-                    df = df.append(empty_row)
+                df = df[~df.index.duplicated(keep='last')]
+
+                # TODO 'combine' similar columns
+
+                years_len += 1
+
+                diff = XBRLDataSetProvider.__list_diff(all_ciks, list(df.index))
+                diff_df = pd.DataFrame(index=diff, columns=df.columns)
+                diff_df.fillna(0, inplace=True)
+
+                df = df.append(diff_df)
                 print(df.shape)
                 df = df.sort_index()
 
