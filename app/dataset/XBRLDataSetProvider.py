@@ -11,6 +11,7 @@ from app.live_update.quandl_price_fetcher import quandl_stocks
 class XBRLDataSetProvider(object):
     res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
     xbrl_dataset_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset')
+    xbrl_dataset_fixed_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset_fixed')
     most_popular_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'most_popular_tags.txt')
     common_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'common_tags.txt')
     company_list_dir = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'company_list')
@@ -104,7 +105,8 @@ class XBRLDataSetProvider(object):
     @staticmethod
     def prepare_data_set_with_most_popular_tags(dir_separator='\\'):
         all_tags = []
-        output_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_most_popular_tags')
+        # output_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_most_popular_tags')
+        output_dir = XBRLDataSetProvider.xbrl_dataset_dir
         # with open(XBRLDataSetProvider.most_popular_tags_file_path, 'r') as f:
         with open(XBRLDataSetProvider.common_tags_file_path, 'r') as f:
             for tag in f:
@@ -502,7 +504,7 @@ class XBRLDataSetProvider(object):
         tags_len = None
         years_len = 0
 
-
+#TODO check if all_ciks are not gathered by other method
         for year_file in reversed(os.listdir(XBRLDataSetProvider.xbrl_dataset_dir)):
             if year_file[0] == '.':
                 continue
@@ -516,8 +518,26 @@ class XBRLDataSetProvider(object):
                     tags_len = len(df.columns)
                 years_len += 1
 
-        print(len(all_ciks))
-        print(tags_len)
-        print(years_len)
+        for year_file in os.listdir(XBRLDataSetProvider.xbrl_dataset_dir):
+            if year_file[0] == '.':
+                continue
+            with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_dir, year_file), 'r') as f:
+                print('YEAR', year_file[0:4])
+                df: pd.DataFrame = pd.read_csv(f, index_col=0)
 
-        data = np.empty(shape=(len(all_ciks), tags_len, years_len))
+                for cik in XBRLDataSetProvider.__list_diff(all_ciks, list(df.index)):
+                    #FIXME append one dataframe with all empty rows
+                    empty_row = pd.Series([0]*tags_len, list(df.columns))
+                    empty_row.name = cik
+                    df = df.append(empty_row)
+                print(df.shape)
+                df = df.sort_index()
+
+            target_file_path = os.path.join(XBRLDataSetProvider.xbrl_dataset_fixed_dir, year_file)
+            with open(target_file_path, 'w') as f:
+                df.to_csv(f)
+
+    @staticmethod
+    def __list_diff(first, second):
+        second = set(second)
+        return [item for item in first if item not in second]
