@@ -7,3 +7,8 @@
 ## Conda environment
 save: `conda list --explicit > spec-file.txt`
 install: `conda install --name nn --file spec-file.txt`
+
+## Links
+
+### Stock symbols/names
+* http://eoddata.com/symbols.aspx

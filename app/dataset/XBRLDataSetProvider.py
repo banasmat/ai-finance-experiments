@@ -439,7 +439,7 @@ class XBRLDataSetProvider(object):
     @staticmethod
     def append_prices_to_dataset():
 
-        ciks_map = pd.read_csv(os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv'))
+        ciks_map = pd.read_csv(XBRLDataSetProvider.cik_map_file_path)
         ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
 
         pd.options.mode.chained_assignment = None
