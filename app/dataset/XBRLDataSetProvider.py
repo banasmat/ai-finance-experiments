@@ -543,7 +543,7 @@ class XBRLDataSetProvider(object):
         dataset = None
         i = 0
 
-        for year_file in year_files:
+        for year_file in sorted(year_files):
             if year_file[0] == '.':
                 continue
             with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_fixed_dir, year_file), 'r') as f:
@@ -553,7 +553,7 @@ class XBRLDataSetProvider(object):
                 if dataset is None:
                     dataset = np.zeros((len(year_files)-1, df.shape[0], df.shape[1]))
 
-                dataset[i] = df.as_matrix()
+                dataset[i] = df.values
 
                 i+=1
         with open(XBRLDataSetProvider.numpy_dataset_file_path, 'wb') as f:
