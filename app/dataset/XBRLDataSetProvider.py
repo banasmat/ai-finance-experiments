@@ -12,6 +12,7 @@ class XBRLDataSetProvider(object):
     res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
     xbrl_dataset_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset')
     xbrl_dataset_fixed_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset_fixed')
+    numpy_dataset_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset_fixed.pkl')
     most_popular_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'most_popular_tags.txt')
     common_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'common_tags.txt')
     company_list_dir = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'company_list')
@@ -529,6 +530,37 @@ class XBRLDataSetProvider(object):
             target_file_path = os.path.join(XBRLDataSetProvider.xbrl_dataset_fixed_dir, year_file)
             with open(target_file_path, 'w') as f:
                 df.to_csv(f)
+
+    @staticmethod
+    def get_dataset_for_training():
+
+        if os.path.isfile(XBRLDataSetProvider.numpy_dataset_file_path):
+            with open(XBRLDataSetProvider.numpy_dataset_file_path, 'rb') as f:
+                return pickle.load(f)
+
+        year_files = os.listdir(XBRLDataSetProvider.xbrl_dataset_fixed_dir)
+
+        dataset = None
+        i = 0
+
+        for year_file in year_files:
+            if year_file[0] == '.':
+                continue
+            with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_fixed_dir, year_file), 'r') as f:
+                print('YEAR', year_file[0:4])
+                df: pd.DataFrame = pd.read_csv(f, index_col=0)
+
+                if dataset is None:
+                    dataset = np.zeros((len(year_files)-1, df.shape[0], df.shape[1]))
+
+                dataset[i] = df.as_matrix()
+
+                i+=1
+        with open(XBRLDataSetProvider.numpy_dataset_file_path, 'wb') as f:
+            pickle.dump(dataset, f)
+
+        return dataset
+
 
     @staticmethod
     def __list_diff(first, second):

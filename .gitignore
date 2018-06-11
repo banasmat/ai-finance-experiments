@@ -8,4 +8,5 @@ database/*.db
 
 output/news*
 output/price-fetcher-errors.txt
+output/xbrl_dataset_fixed.pkl
 config.yml
