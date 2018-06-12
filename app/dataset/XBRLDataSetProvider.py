@@ -397,19 +397,20 @@ class XBRLDataSetProvider(object):
         all_companies['name_copy'] = all_companies['Name']
 
         def __clean_name(name):
-            return name.lower().replace(',', '').replace('.', '').replace('\'', '')
+            return name.lower().replace(',', '').replace('.', '').replace('\'', '').replace('"', '')
 
         all_ciks['name_copy'] = all_ciks['name_copy'].apply(lambda name: __clean_name(name))
         all_companies['name_copy'] = all_companies['name_copy'].apply(lambda name: __clean_name(name))
 
         print('all ciks', all_ciks.shape)
-        print('all companies', all_companies.shape)
 
         all_ciks = all_ciks.merge(all_companies, on='name_copy', how='left')
         all_ciks = all_ciks.drop('Name', axis=1)
         all_ciks = all_ciks.drop('name_copy', axis=1)
         all_ciks['symbol'] = all_ciks['Symbol']
         all_ciks = all_ciks.drop('Symbol', axis=1)
+
+        all_ciks.drop_duplicates('symbol', inplace=True)
         # print(all_ciks.head(20))
         print('ciks with symbols', all_ciks.loc[~pd.isnull(all_ciks['symbol'])].shape)
         with open(XBRLDataSetProvider.cik_map_file_path, 'w') as f:
