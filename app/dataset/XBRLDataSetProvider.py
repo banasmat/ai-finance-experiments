@@ -18,6 +18,7 @@ class XBRLDataSetProvider(object):
     company_list_dir = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'company_list')
     cik_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'cik.pkl')
     cik_map_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv')
+    stock_historical_prices_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'stock_historical_prices.csv')
 
     @staticmethod
     def extract_cik_numbers():
@@ -476,9 +477,9 @@ class XBRLDataSetProvider(object):
                     date_to = (int(year), 12, 31)
                     try:
                         price_data = quandl_stocks(row['symbol'], date_from, date_to, gran='monthly')
-                    except ValueError:
+                    except ValueError as e:
                         #FIXME why ValueError is thrown
-                        print('ValueError occured', row['cik'], '-', row['name'])
+                        print('ValueError occured', row['cik'], '-', row['name'], str(e))
                         continue
 
                     close_col_name = None
@@ -490,12 +491,14 @@ class XBRLDataSetProvider(object):
                     if close_col_name is None:
                         raise LookupError("No Close column returned for symbol: " + row['symbol'])
                     else:
+                        print(price_data[close_col_name])
+                        quit()
                         yearly_price = price_data[close_col_name].mean()
                         df.loc[row['cik'], 'Stock_Price'] = yearly_price
                         print(row['cik'], '-', row['name'], ':', yearly_price)
                         # Saving every request result to file
                         f.close()
-                        f = open(year_file_path, 'w')
+                        f = open(XBRLDataSetProvider.stock_historical_prices_file_path, 'w')
                         df.to_csv(f)
                         f.close()
 
