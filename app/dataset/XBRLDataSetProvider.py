@@ -6,6 +6,8 @@ import pickle
 import csv
 import app.dataset.xbrl_titles as xbrl_titles
 from app.live_update.quandl_price_fetcher import quandl_stocks
+import calendar
+from datetime import datetime
 
 
 class XBRLDataSetProvider(object):
@@ -441,37 +443,46 @@ class XBRLDataSetProvider(object):
     @staticmethod
     def append_prices_to_dataset():
 
-        ciks_map = pd.read_csv(XBRLDataSetProvider.cik_map_file_path)
+        ciks_map = pd.read_csv(XBRLDataSetProvider.cik_map_file_path, usecols=['cik', 'symbol'])
         ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
+
+        date_format = "%Y-%m-%d"
 
         pd.options.mode.chained_assignment = None
 
-        for year_file in reversed(os.listdir(XBRLDataSetProvider.xbrl_dataset_dir)):
+        for year_file in os.listdir(XBRLDataSetProvider.xbrl_dataset_dir):
             if year_file[0] == '.':
                 continue
 
-            year_file_path = os.path.join(XBRLDataSetProvider.xbrl_dataset_dir, year_file)
-            f = open(year_file_path, 'r')
-
             year = year_file[0:4]
             print('YEAR', year)
-            df: pd.DataFrame = pd.read_csv(f, index_col=0)
 
-            # print('duplicates', df.index.duplicated().shape)
+            if os.path.isfile(XBRLDataSetProvider.stock_historical_prices_file_path):
+                f = open(XBRLDataSetProvider.stock_historical_prices_file_path, 'r')
 
-            # df = df[~df.index.duplicated()]
+                df: pd.DataFrame = pd.read_csv(f, index_col='cik')
+            else:
+                df = pd.DataFrame(index=ciks_map['cik'])
+                df = df.merge(ciks_map, how='left', on='cik')
+                df.index = df.pop('cik')
 
-            if 'Stock_Price' not in df.columns:
-                df['Stock_Price'] = pd.Series()
+            dates = []
 
-            df_filtered = df.loc[df.index.isin(ciks_map['cik'])]
+            for month in range(1,13):
+                last_day = calendar.monthrange(int(year), month)[1]
+                month = str(month)
+                if len(month) == 1:
+                    month = '0' + month
+                date_str = '-'.join([year, month, str(last_day)])
+                df[date_str] = pd.Series()
+                dates.append(date_str)
 
-            df_filtered['cik'] = df_filtered.index
-            df_filtered = df_filtered.merge(ciks_map, how='left', on='cik')
-
-            for i, row in df_filtered.iterrows():
-
-                if pd.isnull(row['Stock_Price']):
+            for cik, row in df.iterrows():
+                print(row)
+                print(dates[11])
+                print(cik, row[dates[0]])
+                quit()
+                if pd.isnull(datetime.strptime(row[dates[11]], date_format)):
                     time.sleep(1)
                     date_from = (int(year), 1, 1)
                     date_to = (int(year), 12, 31)
@@ -479,7 +490,7 @@ class XBRLDataSetProvider(object):
                         price_data = quandl_stocks(row['symbol'], date_from, date_to, gran='monthly')
                     except ValueError as e:
                         #FIXME why ValueError is thrown
-                        print('ValueError occured', row['cik'], '-', row['name'], str(e))
+                        print('ValueError occured', cik, '-', row['symbol'], str(e))
                         continue
 
                     close_col_name = None
@@ -491,14 +502,19 @@ class XBRLDataSetProvider(object):
                     if close_col_name is None:
                         raise LookupError("No Close column returned for symbol: " + row['symbol'])
                     else:
-                        print(price_data[close_col_name])
-                        quit()
-                        yearly_price = price_data[close_col_name].mean()
-                        df.loc[row['cik'], 'Stock_Price'] = yearly_price
-                        print(row['cik'], '-', row['name'], ':', yearly_price)
+                        print(type(price_data[close_col_name]))
+                        for price_date, price_val in price_data[close_col_name].iteritems():
+                            price_date = price_date.strftime(date_format)
+                            df.loc[cik, price_date] = price_val
+                            print(cik, '-', price_date, ':', price_val)
                         # Saving every request result to file
-                        f.close()
+
+                        try:
+                            f.close()
+                        except NameError:
+                            pass
                         f = open(XBRLDataSetProvider.stock_historical_prices_file_path, 'w')
+
                         df.to_csv(f)
                         f.close()
 
