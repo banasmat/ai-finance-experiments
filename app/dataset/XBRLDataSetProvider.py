@@ -450,7 +450,7 @@ class XBRLDataSetProvider(object):
 
         pd.options.mode.chained_assignment = None
 
-        for year_file in os.listdir(XBRLDataSetProvider.xbrl_dataset_dir):
+        for year_file in sorted(os.listdir(XBRLDataSetProvider.xbrl_dataset_dir)):
             if year_file[0] == '.':
                 continue
 
@@ -459,12 +459,9 @@ class XBRLDataSetProvider(object):
 
             if os.path.isfile(XBRLDataSetProvider.stock_historical_prices_file_path):
                 f = open(XBRLDataSetProvider.stock_historical_prices_file_path, 'r')
-
-                df: pd.DataFrame = pd.read_csv(f, index_col='cik')
+                df: pd.DataFrame = pd.read_csv(f, index_col='symbol')
             else:
-                df = pd.DataFrame(index=ciks_map['cik'])
-                df = df.merge(ciks_map, how='left', on='cik')
-                df.index = df.pop('cik')
+                df = pd.DataFrame(index=ciks_map['symbol'])
 
             dates = []
 
@@ -474,23 +471,22 @@ class XBRLDataSetProvider(object):
                 if len(month) == 1:
                     month = '0' + month
                 date_str = '-'.join([year, month, str(last_day)])
-                df[date_str] = pd.Series()
+                if date_str not in df.columns:
+                    df[date_str] = pd.Series()
                 dates.append(date_str)
 
-            for cik, row in df.iterrows():
-                print(row)
-                print(dates[11])
-                print(cik, row[dates[0]])
-                quit()
-                if pd.isnull(datetime.strptime(row[dates[11]], date_format)):
+            for symbol, row in df.iterrows():
+
+                if pd.isnull(row[dates[11]]):
                     time.sleep(1)
                     date_from = (int(year), 1, 1)
                     date_to = (int(year), 12, 31)
                     try:
-                        price_data = quandl_stocks(row['symbol'], date_from, date_to, gran='monthly')
+                        print(symbol)
+                        price_data = quandl_stocks(symbol, date_from, date_to, gran='monthly')
                     except ValueError as e:
                         #FIXME why ValueError is thrown
-                        print('ValueError occured', cik, '-', row['symbol'], str(e))
+                        print('ValueError occured', symbol, str(e))
                         continue
 
                     close_col_name = None
@@ -505,14 +501,14 @@ class XBRLDataSetProvider(object):
                         print(type(price_data[close_col_name]))
                         for price_date, price_val in price_data[close_col_name].iteritems():
                             price_date = price_date.strftime(date_format)
-                            df.loc[cik, price_date] = price_val
-                            print(cik, '-', price_date, ':', price_val)
+                            df.loc[symbol, price_date] = price_val
+                            print(symbol, '-', price_date, ':', price_val)
                         # Saving every request result to file
 
                         try:
                             f.close()
                         except NameError:
-                            pass
+                            'file doesn\'t yet exist'
                         f = open(XBRLDataSetProvider.stock_historical_prices_file_path, 'w')
 
                         df.to_csv(f)
