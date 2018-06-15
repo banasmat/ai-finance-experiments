@@ -463,17 +463,11 @@ class XBRLDataSetProvider(object):
             else:
                 df = pd.DataFrame(index=ciks_map['symbol'])
 
-            dates = []
+            dates = XBRLDataSetProvider.__get_last_month_day_dates(year)
 
-            for month in range(1,13):
-                last_day = calendar.monthrange(int(year), month)[1]
-                month = str(month)
-                if len(month) == 1:
-                    month = '0' + month
-                date_str = '-'.join([year, month, str(last_day)])
+            for date_str in dates:
                 if date_str not in df.columns:
                     df[date_str] = pd.Series()
-                dates.append(date_str)
 
             for symbol, row in df.iterrows():
 
@@ -516,6 +510,20 @@ class XBRLDataSetProvider(object):
 
                     df.to_csv(f)
                     f.close()
+    @staticmethod
+    def __get_last_month_day_dates(year):
+
+        dates = []
+
+        for month in range(1, 13):
+            last_day = calendar.monthrange(int(year), month)[1]
+            month = str(month)
+            if len(month) == 1:
+                month = '0' + month
+            date_str = '-'.join([year, month, str(last_day)])
+            dates.append(date_str)
+
+        return dates
 
     @staticmethod
     def prepare_dataset_for_training():
@@ -552,33 +560,68 @@ class XBRLDataSetProvider(object):
 
     @staticmethod
     def get_dataset_for_training():
+        # if os.path.isfile(XBRLDataSetProvider.numpy_dataset_file_path):
+        #     with open(XBRLDataSetProvider.numpy_dataset_file_path, 'rb') as f:
+        #         return pickle.load(f)
 
-        if os.path.isfile(XBRLDataSetProvider.numpy_dataset_file_path):
-            with open(XBRLDataSetProvider.numpy_dataset_file_path, 'rb') as f:
-                return pickle.load(f)
+        ciks_map = pd.read_csv(XBRLDataSetProvider.cik_map_file_path, usecols=['cik', 'symbol'])
+        ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
+
+        with open(XBRLDataSetProvider.stock_historical_prices_file_path, 'r') as f:
+            price_df = pd.read_csv(f)
 
         year_files = os.listdir(XBRLDataSetProvider.xbrl_dataset_fixed_dir)
 
-        dataset = None
+        dataset_x = None
+        dataset_y = None
         i = 0
 
         for year_file in sorted(year_files):
             if year_file[0] == '.':
                 continue
             with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_fixed_dir, year_file), 'r') as f:
-                print('YEAR', year_file[0:4])
-                df: pd.DataFrame = pd.read_csv(f, index_col=0)
+                year = year_file[0:4]
+                print('YEAR', year)
+                df_x: pd.DataFrame = pd.read_csv(f, index_col=0)
+                df_x['cik'] = df_x.index
+                df_x = df_x.merge(ciks_map, on='cik', how='right')
+                df_x.index = df_x.pop('cik')
+                df_x.drop(['symbol'], axis=1, inplace=True)
 
-                if dataset is None:
-                    dataset = np.zeros((len(year_files)-1, df.shape[0], df.shape[1]))
+                df_y = pd.DataFrame(df_x.index, columns=['cik'])
+                print(df_y.shape)
+                print(ciks_map.shape)
+                df_y = df_y.merge(ciks_map, on='cik', how='right')
+                print(df_y.shape)
+                print(ciks_map.shape)
+                quit()
 
-                dataset[i] = df.values
+                df_y = df_y.merge(price_df, on='symbol', how='left')
+                df_y.index = df_y.pop('cik')
+                # print(df_x.index)
+                # print(df_y.index)
+                this_year_last_month_day_dates = XBRLDataSetProvider.__get_last_month_day_dates(year)
+                df_y = df_y[this_year_last_month_day_dates]
 
-                i+=1
+                df_y.fillna(0, inplace=True)
+                print(df_x.shape)
+                print(df_y.shape)
+                if dataset_x is None:
+                    dataset_x = np.zeros((len(year_files)-1, df_x.shape[0], df_x.shape[1]))
+                    dataset_y = np.zeros((len(year_files)-1, df_x.shape[0], 1))
+
+                dataset_x[i] = df_x.values
+                dataset_y[i] = df_y.mean(axis=1)
+
+                print(dataset_y)
+                quit()
+
+                i += 1
+
         with open(XBRLDataSetProvider.numpy_dataset_file_path, 'wb') as f:
-            pickle.dump(dataset, f)
+            pickle.dump(dataset_x, f)
 
-        return dataset
+        return dataset_x
 
 
     @staticmethod
