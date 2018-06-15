@@ -441,7 +441,7 @@ class XBRLDataSetProvider(object):
                 print('non zeros above 90 [%]', non_zero_perc.loc[non_zero_perc >= 70])
 
     @staticmethod
-    def append_prices_to_dataset():
+    def gather_stock_prices():
 
         ciks_map = pd.read_csv(XBRLDataSetProvider.cik_map_file_path, usecols=['cik', 'symbol'])
         ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
@@ -484,35 +484,37 @@ class XBRLDataSetProvider(object):
                     try:
                         print(symbol)
                         price_data = quandl_stocks(symbol, date_from, date_to, gran='monthly')
+
+                        close_col_name = None
+
+                        for col in price_data.columns:
+                            if col[-5:] == 'Close':
+                                close_col_name = col
+                                break
+                        if close_col_name is None:
+                            raise LookupError("No Close column returned for symbol: " + row['symbol'])
+                        else:
+                            print(type(price_data[close_col_name]))
+                            for price_date, price_val in price_data[close_col_name].iteritems():
+                                price_date = price_date.strftime(date_format)
+                                df.loc[symbol, price_date] = price_val
+                                print(symbol, '-', price_date, ':', price_val)
+                            # Saving every request result to file
+
                     except ValueError as e:
                         #FIXME why ValueError is thrown
                         print('ValueError occured', symbol, str(e))
-                        continue
+                        for price_date in dates:
+                            df.loc[symbol, price_date] = 0
 
-                    close_col_name = None
-
-                    for col in price_data.columns:
-                        if col[-5:] == 'Close':
-                            close_col_name = col
-                            break
-                    if close_col_name is None:
-                        raise LookupError("No Close column returned for symbol: " + row['symbol'])
-                    else:
-                        print(type(price_data[close_col_name]))
-                        for price_date, price_val in price_data[close_col_name].iteritems():
-                            price_date = price_date.strftime(date_format)
-                            df.loc[symbol, price_date] = price_val
-                            print(symbol, '-', price_date, ':', price_val)
-                        # Saving every request result to file
-
-                        try:
-                            f.close()
-                        except NameError:
-                            'file doesn\'t yet exist'
-                        f = open(XBRLDataSetProvider.stock_historical_prices_file_path, 'w')
-
-                        df.to_csv(f)
+                    try:
                         f.close()
+                    except NameError:
+                        'file doesn\'t yet exist'
+                    f = open(XBRLDataSetProvider.stock_historical_prices_file_path, 'w')
+
+                    df.to_csv(f)
+                    f.close()
 
     @staticmethod
     def prepare_dataset_for_training():
