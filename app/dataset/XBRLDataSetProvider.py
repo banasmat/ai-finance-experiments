@@ -494,7 +494,8 @@ class XBRLDataSetProvider(object):
                         if close_col_name is None:
                             raise LookupError("No Close column returned for symbol: " + row['symbol'])
                         else:
-                            print(type(price_data[close_col_name]))
+                            # First fill row with default zeros
+                            df.loc[symbol, dates] = 0
                             for price_date, price_val in price_data[close_col_name].iteritems():
                                 price_date = price_date.strftime(date_format)
                                 df.loc[symbol, price_date] = price_val
