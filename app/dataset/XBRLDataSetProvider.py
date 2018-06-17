@@ -20,7 +20,7 @@ class XBRLDataSetProvider(object):
     company_list_dir = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'company_list')
     cik_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'cik.pkl')
     cik_map_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv')
-    stock_historical_prices_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'stock_historical_prices.csv')
+    stock_historical_prices_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'stock_historical_prices')
 
     @staticmethod
     def extract_cik_numbers():
@@ -457,8 +457,10 @@ class XBRLDataSetProvider(object):
             year = year_file[0:4]
             print('YEAR', year)
 
-            if os.path.isfile(XBRLDataSetProvider.stock_historical_prices_file_path):
-                f = open(XBRLDataSetProvider.stock_historical_prices_file_path, 'r')
+            target_file = os.path.join(XBRLDataSetProvider.stock_historical_prices_dir, year + '.csv')
+
+            if os.path.isfile(target_file):
+                f = open(target_file, 'r')
                 df: pd.DataFrame = pd.read_csv(f, index_col='symbol')
             else:
                 df = pd.DataFrame(index=ciks_map['symbol'])
@@ -506,7 +508,7 @@ class XBRLDataSetProvider(object):
                         f.close()
                     except NameError:
                         'file doesn\'t yet exist'
-                    f = open(XBRLDataSetProvider.stock_historical_prices_file_path, 'w')
+                    f = open(target_file, 'w')
 
                     df.to_csv(f)
                     f.close()
@@ -567,6 +569,7 @@ class XBRLDataSetProvider(object):
         ciks_map = pd.read_csv(XBRLDataSetProvider.cik_map_file_path, usecols=['cik', 'symbol'])
         ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
 
+        #FIXME use stock_historical_prices_dir
         with open(XBRLDataSetProvider.stock_historical_prices_file_path, 'r') as f:
             price_df = pd.read_csv(f)
 
