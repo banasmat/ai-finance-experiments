@@ -1,7 +1,7 @@
 import quandl, datetime
 
-quandl.ApiConfig.api_key = 'cRdqvQB3sUYztU_SxFsX'
-# quandl.ApiConfig.api_key = 'a5w2rRgAWxwj-kHKNofH'
+#quandl.ApiConfig.api_key = 'cRdqvQB3sUYztU_SxFsX'
+quandl.ApiConfig.api_key = 'a5w2rRgAWxwj-kHKNofH'
 
 def quandl_stocks(symbol, start_date=(2000, 1, 1), end_date=None, gran='daily'):
 
