@@ -568,10 +568,9 @@ class XBRLDataSetProvider(object):
 
         ciks_map = pd.read_csv(XBRLDataSetProvider.cik_map_file_path, usecols=['cik', 'symbol'])
         ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
+        ciks_map = ciks_map.sort_values('symbol')
+        ciks_map = ciks_map.drop_duplicates('cik', 'first')
 
-        #FIXME use stock_historical_prices_dir
-        with open(XBRLDataSetProvider.stock_historical_prices_file_path, 'r') as f:
-            price_df = pd.read_csv(f)
 
         year_files = os.listdir(XBRLDataSetProvider.xbrl_dataset_fixed_dir)
 
@@ -582,9 +581,15 @@ class XBRLDataSetProvider(object):
         for year_file in sorted(year_files):
             if year_file[0] == '.':
                 continue
+
+            year = year_file[0:4]
+            print('YEAR', year)
+
+            with open(os.path.join(XBRLDataSetProvider.stock_historical_prices_dir, year + '.csv'), 'r') as f:
+                price_df = pd.read_csv(f)
+
             with open(os.path.join(XBRLDataSetProvider.xbrl_dataset_fixed_dir, year_file), 'r') as f:
-                year = year_file[0:4]
-                print('YEAR', year)
+
                 df_x: pd.DataFrame = pd.read_csv(f, index_col=0)
                 df_x['cik'] = df_x.index
                 df_x = df_x.merge(ciks_map, on='cik', how='right')
@@ -592,19 +597,15 @@ class XBRLDataSetProvider(object):
                 df_x.drop(['symbol'], axis=1, inplace=True)
 
                 df_y = pd.DataFrame(df_x.index, columns=['cik'])
-                print(df_y.shape)
-                print(ciks_map.shape)
                 df_y = df_y.merge(ciks_map, on='cik', how='right')
-                print(df_y.shape)
-                print(ciks_map.shape)
-                quit()
+                # print(df_y.groupby(df_y.columns.tolist(),as_index=False).size())
 
                 df_y = df_y.merge(price_df, on='symbol', how='left')
                 df_y.index = df_y.pop('cik')
                 # print(df_x.index)
                 # print(df_y.index)
-                this_year_last_month_day_dates = XBRLDataSetProvider.__get_last_month_day_dates(year)
-                df_y = df_y[this_year_last_month_day_dates]
+                # this_year_last_month_day_dates = XBRLDataSetProvider.__get_last_month_day_dates(year)
+                # df_y = df_y[this_year_last_month_day_dates]
 
                 df_y.fillna(0, inplace=True)
                 print(df_x.shape)
