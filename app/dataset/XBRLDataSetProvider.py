@@ -612,7 +612,9 @@ class XBRLDataSetProvider(object):
                 print(df_y.shape)
                 if dataset_x is None:
                     dataset_x = np.zeros((len(year_files)-1, df_x.shape[0], df_x.shape[1]))
-                    dataset_y = np.zeros((len(year_files)-1, df_x.shape[0], 1))
+                    dataset_y = np.zeros((len(year_files)-1, df_x.shape[0])) # TODO verify if we don't need np.zeros((len(year_files)-1, df_x.shape[0], 1)) instead
+
+                print(df_y.mean(axis=1))
 
                 dataset_x[i] = df_x.values
                 dataset_y[i] = df_y.mean(axis=1)
