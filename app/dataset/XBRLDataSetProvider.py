@@ -653,7 +653,7 @@ class XBRLDataSetProvider(object):
         with open(XBRLDataSetProvider.numpy_dataset_file_path, 'wb') as f:
             pickle.dump(dataset_x, f)
 
-        return dataset_x
+        return dataset_x, dataset_y
 
 
     @staticmethod
