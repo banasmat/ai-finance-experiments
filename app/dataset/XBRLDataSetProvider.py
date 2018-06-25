@@ -562,9 +562,9 @@ class XBRLDataSetProvider(object):
 
     @staticmethod
     def get_dataset_for_training():
-        # if os.path.isfile(XBRLDataSetProvider.numpy_dataset_file_path):
-        #     with open(XBRLDataSetProvider.numpy_dataset_file_path, 'rb') as f:
-        #         return pickle.load(f)
+        if os.path.isfile(XBRLDataSetProvider.numpy_dataset_file_path):
+            with open(XBRLDataSetProvider.numpy_dataset_file_path, 'rb') as f:
+                return pickle.load(f)
 
         ciks_map = pd.read_csv(XBRLDataSetProvider.cik_map_file_path, usecols=['cik', 'symbol'])
         ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
@@ -576,6 +576,29 @@ class XBRLDataSetProvider(object):
         dataset_x = None
         dataset_y = None
         i = 0
+
+        all_prices_df = None
+
+        # First locate and remove ciks with not even single historical price
+        for year_file in sorted(year_files):
+            if year_file[0] == '.':
+                continue
+            year = year_file[0:4]
+            with open(os.path.join(XBRLDataSetProvider.stock_historical_prices_dir, year + '.csv'), 'r') as f:
+                price_df = pd.read_csv(f)
+                # price_df.index = price_df.pop('symbol')
+
+                if all_prices_df is None:
+                    all_prices_df = price_df.copy()
+                else:
+                    all_prices_df = all_prices_df.merge(price_df, on='symbol', how='left')
+
+        all_prices_df.index = all_prices_df.pop('symbol')
+        all_prices_df = all_prices_df.mean(axis=1)
+
+        empty_price_symbols = list(all_prices_df[all_prices_df == 0].index)
+
+        ciks_map = ciks_map.loc[~ciks_map['symbol'].isin(empty_price_symbols)]
 
         for year_file in sorted(year_files):
             if year_file[0] == '.':
