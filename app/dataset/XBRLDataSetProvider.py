@@ -571,7 +571,6 @@ class XBRLDataSetProvider(object):
         ciks_map = ciks_map.sort_values('symbol')
         ciks_map = ciks_map.drop_duplicates('cik', 'first')
 
-
         year_files = os.listdir(XBRLDataSetProvider.xbrl_dataset_fixed_dir)
 
         dataset_x = None
@@ -600,8 +599,12 @@ class XBRLDataSetProvider(object):
                 df_y = df_y.merge(ciks_map, on='cik', how='right')
                 # print(df_y.groupby(df_y.columns.tolist(),as_index=False).size())
 
-                df_y = df_y.merge(price_df, on='symbol', how='left')
+                df_y: pd.DataFrame = df_y.merge(price_df, on='symbol', how='left')
+                df_y = df_y.drop_duplicates('cik', 'first')
+
                 df_y.index = df_y.pop('cik')
+                df_y.drop(['symbol'], axis=1, inplace=True)
+
                 # print(df_x.index)
                 # print(df_y.index)
                 # this_year_last_month_day_dates = XBRLDataSetProvider.__get_last_month_day_dates(year)
@@ -614,13 +617,13 @@ class XBRLDataSetProvider(object):
                     dataset_x = np.zeros((len(year_files)-1, df_x.shape[0], df_x.shape[1]))
                     dataset_y = np.zeros((len(year_files)-1, df_x.shape[0])) # TODO verify if we don't need np.zeros((len(year_files)-1, df_x.shape[0], 1)) instead
 
-                print(df_y.mean(axis=1))
+                # print(df_y.mean(axis=1))
 
                 dataset_x[i] = df_x.values
                 dataset_y[i] = df_y.mean(axis=1)
 
-                print(dataset_y)
-                quit()
+                # print(dataset_y)
+                # quit()
 
                 i += 1
 
