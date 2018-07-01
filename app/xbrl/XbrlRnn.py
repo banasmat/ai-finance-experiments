@@ -9,6 +9,7 @@ class XbrlRnn(object):
 
 #TODO
 # nie puszczać cików razem tylk osobno
+# https://datascience.stackexchange.com/questions/27563/multi-dimentional-and-multivariate-time-series-forecast-rnn-lstm-keras
 
     def predict(self, x_test: np.array, gran='H1'):
 
@@ -19,13 +20,12 @@ class XbrlRnn(object):
 
     def train(self, x_train, y_train, gran='H1'):
         regressor = self.create_model(x_train)
-        regressor.fit(x_train, y_train, epochs=1, batch_size=32)
+        regressor.fit(x_train, y_train, epochs=10, batch_size=32)
         regressor.save(self.__get_model_path(gran))
 
     def create_model(self, x_data):
         regressor = Sequential()
-        print(x_data.shape)
-        quit()
+
         regressor.add(LSTM(units=100, return_sequences=True, input_shape=(x_data.shape[1], x_data.shape[2])))
         regressor.add(Dropout(0.2))
 
@@ -45,5 +45,5 @@ class XbrlRnn(object):
 
         return regressor
 
-    def __get_model_path(self, gran='H1'):
-        return os.path.join(os.path.abspath(os.getcwd()), 'app', 'keras', 'xbrl_rnn_model.h5')
+    def __get_model_path(self):
+        return os.path.join(os.path.abspath(os.getcwd()), 'app', 'xbrl', 'xbrl_rnn_model.h5')
