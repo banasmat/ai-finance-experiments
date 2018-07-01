@@ -9,6 +9,8 @@ database/*.db
 output/news*
 output/price-fetcher-errors.txt
 output/xbrl_dataset_fixed.pkl
+output/xbrl_data_x.pkl
+output/xbrl_data_y.pkl
 config.yml
 
 scrapy/spider/*.pyc

@@ -14,7 +14,8 @@ class XBRLDataSetProvider(object):
     res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
     xbrl_dataset_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset')
     xbrl_dataset_fixed_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset_fixed')
-    numpy_dataset_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset_fixed.pkl')
+    xbrl_data_x_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_data_x.pkl')
+    xbrl_data_y_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_data_y.pkl')
     most_popular_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'most_popular_tags.txt')
     common_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'common_tags.txt')
     company_list_dir = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'company_list')
@@ -562,9 +563,12 @@ class XBRLDataSetProvider(object):
 
     @staticmethod
     def get_dataset_for_training():
-        if os.path.isfile(XBRLDataSetProvider.numpy_dataset_file_path):
-            with open(XBRLDataSetProvider.numpy_dataset_file_path, 'rb') as f:
-                return pickle.load(f)
+        if os.path.isfile(XBRLDataSetProvider.xbrl_data_x_file_path) and os.path.isfile(XBRLDataSetProvider.xbrl_data_y_file_path):
+            with open(XBRLDataSetProvider.xbrl_data_x_file_path, 'rb') as f:
+                x = pickle.load(f)
+            with open(XBRLDataSetProvider.xbrl_data_y_file_path, 'rb') as f:
+                y = pickle.load(f)
+            return x, y
 
         ciks_map = pd.read_csv(XBRLDataSetProvider.cik_map_file_path, usecols=['cik', 'symbol'])
         ciks_map = ciks_map.loc[~pd.isnull(ciks_map['symbol'])]
@@ -650,8 +654,10 @@ class XBRLDataSetProvider(object):
 
                 i += 1
 
-        with open(XBRLDataSetProvider.numpy_dataset_file_path, 'wb') as f:
+        with open(XBRLDataSetProvider.xbrl_data_x_file_path, 'wb') as f:
             pickle.dump(dataset_x, f)
+        with open(XBRLDataSetProvider.xbrl_data_y_file_path, 'wb') as f:
+            pickle.dump(dataset_y, f)
 
         return dataset_x, dataset_y
 

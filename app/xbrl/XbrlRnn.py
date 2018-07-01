@@ -7,6 +7,9 @@ import os
 
 class XbrlRnn(object):
 
+#TODO
+# nie puszczać cików razem tylk osobno
+
     def predict(self, x_test: np.array, gran='H1'):
 
         regressor = self.create_model(x_test)
@@ -21,7 +24,8 @@ class XbrlRnn(object):
 
     def create_model(self, x_data):
         regressor = Sequential()
-
+        print(x_data.shape)
+        quit()
         regressor.add(LSTM(units=100, return_sequences=True, input_shape=(x_data.shape[1], x_data.shape[2])))
         regressor.add(Dropout(0.2))
 
