@@ -575,7 +575,7 @@ class XBRLDataSetProvider(object):
         ciks_map = ciks_map.sort_values('symbol')
         ciks_map = ciks_map.drop_duplicates('cik', 'first')
 
-        year_files = os.listdir(XBRLDataSetProvider.xbrl_dataset_fixed_dir)
+        year_files = os.listdir(XBRLDataSetProvider.xbrl_dataset_fixed_dir)[:2]
 
         dataset_x = None
         dataset_y = None
@@ -642,7 +642,7 @@ class XBRLDataSetProvider(object):
                 print(df_y.shape)
                 if dataset_x is None:
                     dataset_x = np.zeros((len(year_files)-1, df_x.shape[0], df_x.shape[1]))
-                    dataset_y = np.zeros((len(year_files)-1, df_x.shape[0])) # TODO verify if we don't need np.zeros((len(year_files)-1, df_x.shape[0], 1)) instead
+                    dataset_y = np.zeros((len(year_files)-1, df_x.shape[0],)) # TODO verify if we don't need np.zeros((len(year_files)-1, df_x.shape[0], 1)) instead
 
                 # print(df_y.mean(axis=1))
 
@@ -654,10 +654,10 @@ class XBRLDataSetProvider(object):
 
                 i += 1
 
-        with open(XBRLDataSetProvider.xbrl_data_x_file_path, 'wb') as f:
-            pickle.dump(dataset_x, f)
-        with open(XBRLDataSetProvider.xbrl_data_y_file_path, 'wb') as f:
-            pickle.dump(dataset_y, f)
+        # with open(XBRLDataSetProvider.xbrl_data_x_file_path, 'wb') as f:
+        #     pickle.dump(dataset_x, f)
+        # with open(XBRLDataSetProvider.xbrl_data_y_file_path, 'wb') as f:
+        #     pickle.dump(dataset_y, f)
 
         return dataset_x, dataset_y
 

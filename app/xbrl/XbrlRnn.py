@@ -11,17 +11,17 @@ class XbrlRnn(object):
 # nie puszczać cików razem tylk osobno
 # https://datascience.stackexchange.com/questions/27563/multi-dimentional-and-multivariate-time-series-forecast-rnn-lstm-keras
 
-    def predict(self, x_test: np.array, gran='H1'):
+    def predict(self, x_test: np.array):
 
         regressor = self.create_model(x_test)
-        regressor.load_weights(self.__get_model_path(gran))
+        regressor.load_weights(self.__get_model_path())
 
         return regressor.predict(x_test)
 
-    def train(self, x_train, y_train, gran='H1'):
+    def train(self, x_train, y_train):
         regressor = self.create_model(x_train)
-        regressor.fit(x_train, y_train, epochs=10, batch_size=32)
-        regressor.save(self.__get_model_path(gran))
+        regressor.fit(x_train, y_train, epochs=3, batch_size=32)
+        regressor.save(self.__get_model_path())
 
     def create_model(self, x_data):
         regressor = Sequential()

@@ -6,3 +6,4 @@ x, y = XBRLDataSetProvider.get_dataset_for_training()
 rnn = XbrlRnn()
 
 rnn.train(x, y)
+rnn.predict(x)
