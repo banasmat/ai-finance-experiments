@@ -41,7 +41,7 @@ class XbrlRnn(object):
         regressor.add(Dense(units=x_data.shape[1]))
 
         # RMSprop optimizer is usually used for rnn
-        regressor.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
+        regressor.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
 
         return regressor
 

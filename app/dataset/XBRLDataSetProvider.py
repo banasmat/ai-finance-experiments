@@ -575,7 +575,7 @@ class XBRLDataSetProvider(object):
         ciks_map = ciks_map.sort_values('symbol')
         ciks_map = ciks_map.drop_duplicates('cik', 'first')
 
-        year_files = os.listdir(XBRLDataSetProvider.xbrl_dataset_fixed_dir)[:2]
+        year_files = os.listdir(XBRLDataSetProvider.xbrl_dataset_fixed_dir)[:3]
 
         dataset_x = None
         dataset_y = None
@@ -603,6 +603,8 @@ class XBRLDataSetProvider(object):
         empty_price_symbols = list(all_prices_df[all_prices_df == 0].index)
 
         ciks_map = ciks_map.loc[~ciks_map['symbol'].isin(empty_price_symbols)]
+
+        prev_df_y = None
 
         for year_file in sorted(year_files):
             if year_file[0] == '.':
@@ -638,6 +640,9 @@ class XBRLDataSetProvider(object):
                 # df_y = df_y[this_year_last_month_day_dates]
 
                 df_y.fillna(0, inplace=True)
+                if prev_df_y is None:
+                    prev_df_y = pd.DataFrame(index=df_y.index, columns=df_y.columns)
+                    prev_df_y.fillna(0, inplace=True)
                 print(df_x.shape)
                 print(df_y.shape)
                 if dataset_x is None:
@@ -647,12 +652,14 @@ class XBRLDataSetProvider(object):
                 # print(df_y.mean(axis=1))
 
                 dataset_x[i] = df_x.values
-                dataset_y[i] = df_y.mean(axis=1)
+                dataset_y[i] = XBRLDataSetProvider.__get_xbrl_label(df_y, prev_df_y)
 
                 # print(dataset_y)
                 # quit()
 
                 i += 1
+
+                prev_df_y = df_y
 
         # with open(XBRLDataSetProvider.xbrl_data_x_file_path, 'wb') as f:
         #     pickle.dump(dataset_x, f)
@@ -661,6 +668,15 @@ class XBRLDataSetProvider(object):
 
         return dataset_x, dataset_y
 
+    @staticmethod
+    def __get_xbrl_label(df_y, prev_df_y):
+        df_y_mean = df_y.mean(axis=1)
+        prev_df_y_mean = prev_df_y.mean(axis=1)
+
+        diff_percent_df = (df_y_mean - prev_df_y_mean) / ((prev_df_y_mean + df_y_mean) / 2)
+        diff_percent_df = diff_percent_df.apply(lambda x: 1 if x > 0.2 else 0)
+
+        return diff_percent_df.values
 
     @staticmethod
     def __list_diff(first, second):
