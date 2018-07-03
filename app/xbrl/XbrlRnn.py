@@ -16,7 +16,7 @@ class XbrlRnn(object):
 
     def train(self, x_train, y_train):
         regressor = self.create_model(x_train)
-        regressor.fit(x_train, y_train, epochs=10, batch_size=32)
+        regressor.fit(x_train, y_train, epochs=100, batch_size=32)
 
         #FIXME one model is ok, save it to file
         # regressor.save(self.__get_model_path())
@@ -40,7 +40,7 @@ class XbrlRnn(object):
         regressor.add(Dense(units=x_data.shape[1]))
 
         # RMSprop optimizer is usually used for rnn
-        regressor.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
+        regressor.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
         return regressor
 

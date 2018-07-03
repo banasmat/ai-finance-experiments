@@ -12,10 +12,17 @@ rnn.train(x, y)
 
 #TODO
 # nie puszczać cików razem tylko osobno (?) - tracimy continuum, ale lepsze to niż nic
-#
 # LUB
 # https://datascience.stackexchange.com/questions/27563/multi-dimentional-and-multivariate-time-series-forecast-rnn-lstm-keras
 #
 # trzeba jakoś odczytać predictions
+# wypluć tabelkę wyników: Symbol/cik : wynik
+#
+# Model:
+# relu ?
+# więcej neuronów
+#
+# Dane:
+# jeśli zero jest pomiędzy innymi wartościami, brać poprzednią
 
 # rnn.predict(x)
