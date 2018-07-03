@@ -670,6 +670,24 @@ class XBRLDataSetProvider(object):
         return dataset_x, dataset_y
 
     @staticmethod
+    def scale_by_cik_tag(x, y):
+        # cik, tag, year
+        x = x.transpose((1, 2, 0))
+        # cik, year
+        y = y.transpose()
+
+        for cik_index in range(0, x.shape[0]):
+            x[cik_index] = XBRLDataSetProvider.scale_dataset(x[cik_index])
+            x[cik_index] = np.nan_to_num(x[cik_index])
+
+        # year, cik, tag
+        x = x.transpose((2, 0, 1))
+        # year, cik
+        y = y.transpose()
+
+        return x, y
+
+    @staticmethod
     def scale_dataset(data: np.array):
         for i in range(0, data.shape[0]):
 

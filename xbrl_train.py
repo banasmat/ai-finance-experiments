@@ -1,21 +1,21 @@
 from app.dataset.XBRLDataSetProvider import XBRLDataSetProvider
-import numpy as np
 from app.xbrl.XbrlRnn import XbrlRnn
 
 x, y = XBRLDataSetProvider.get_dataset_for_training()
+x, y = XBRLDataSetProvider.scale_by_cik_tag(x, y)
+
 rnn = XbrlRnn()
-
-# cik, tag, year
-x = x.transpose((1, 2, 0))
-# cik, year
-y = y.transpose()
-
-for cik_index in range(0, x.shape[0]):
-    x[cik_index] = XBRLDataSetProvider.scale_dataset(x[cik_index])
-    x[cik_index] = np.nan_to_num(x[cik_index])
-
-# rnn.train(cik_data, y[cik_index])
+rnn.train(x, y)
 
 
+
+
+#TODO
+# nie puszczać cików razem tylko osobno (?) - tracimy continuum, ale lepsze to niż nic
+#
+# LUB
+# https://datascience.stackexchange.com/questions/27563/multi-dimentional-and-multivariate-time-series-forecast-rnn-lstm-keras
+#
+# trzeba jakoś odczytać predictions
 
 # rnn.predict(x)
