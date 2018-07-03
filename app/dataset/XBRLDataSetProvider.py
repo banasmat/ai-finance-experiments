@@ -7,6 +7,7 @@ import csv
 import app.dataset.xbrl_titles as xbrl_titles
 from app.live_update.quandl_price_fetcher import quandl_stocks
 import calendar
+from sklearn.preprocessing import MinMaxScaler
 from datetime import datetime
 
 
@@ -575,7 +576,7 @@ class XBRLDataSetProvider(object):
         ciks_map = ciks_map.sort_values('symbol')
         ciks_map = ciks_map.drop_duplicates('cik', 'first')
 
-        year_files = os.listdir(XBRLDataSetProvider.xbrl_dataset_fixed_dir)[:3]
+        year_files = os.listdir(XBRLDataSetProvider.xbrl_dataset_fixed_dir) #[:3]
 
         dataset_x = None
         dataset_y = None
@@ -661,12 +662,29 @@ class XBRLDataSetProvider(object):
 
                 prev_df_y = df_y
 
-        # with open(XBRLDataSetProvider.xbrl_data_x_file_path, 'wb') as f:
-        #     pickle.dump(dataset_x, f)
-        # with open(XBRLDataSetProvider.xbrl_data_y_file_path, 'wb') as f:
-        #     pickle.dump(dataset_y, f)
+        with open(XBRLDataSetProvider.xbrl_data_x_file_path, 'wb') as f:
+            pickle.dump(dataset_x, f)
+        with open(XBRLDataSetProvider.xbrl_data_y_file_path, 'wb') as f:
+            pickle.dump(dataset_y, f)
 
         return dataset_x, dataset_y
+
+    @staticmethod
+    def scale_dataset(data: np.array):
+        for i in range(0, data.shape[0]):
+
+            _max = data[i].max()
+            _min = data[i].min()
+
+            if _max == 0 and _min == 0:
+                data[i] = np.zeros(data[i].shape)
+            elif _max - _min == 0:
+                data[i] = np.full(data[i].shape, 1)
+            else:
+                for j in range(0, data[i].shape[0]):
+                    data[i][j] = (data[i][j] - _min) / (_max - _min)
+        return data
+
 
     @staticmethod
     def __get_xbrl_label(df_y, prev_df_y):
