@@ -5,9 +5,15 @@ x, y = XBRLDataSetProvider.get_dataset_for_training()
 x, y = XBRLDataSetProvider.scale_by_cik_tag(x, y)
 
 rnn = XbrlRnn()
-rnn.train(x, y)
+rnn.train(x[:-1], y[:-1])
 
 
+
+predictions = rnn.predict(x[-1:])
+print(predictions[0])
+print(y[-1:][0])
+accuracy = len(set(predictions[0].tolist()) & set(y[-1:][0].tolist())) / len(predictions[0])
+print('accuracy',accuracy)
 
 
 #TODO
@@ -25,4 +31,3 @@ rnn.train(x, y)
 # Dane:
 # jeśli zero jest pomiędzy innymi wartościami, brać poprzednią
 
-# rnn.predict(x)

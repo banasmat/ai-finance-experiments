@@ -16,25 +16,23 @@ class XbrlRnn(object):
 
     def train(self, x_train, y_train):
         regressor = self.create_model(x_train)
-        regressor.fit(x_train, y_train, epochs=100, batch_size=32)
+        regressor.fit(x_train, y_train, epochs=10, batch_size=32)
 
-        #FIXME one model is ok, save it to file
-        # regressor.save(self.__get_model_path())
+        regressor.save(self.__get_model_path())
 
     def create_model(self, x_data):
         regressor = Sequential()
-        print(x_data.shape)
 
         regressor.add(LSTM(units=200, return_sequences=True, input_shape=(x_data.shape[1], x_data.shape[2])))
         regressor.add(Dropout(0.2))
 
-        regressor.add(LSTM(units=200, return_sequences=True))
+        regressor.add(LSTM(units=200, return_sequences=True, activation='relu'))
         regressor.add(Dropout(0.2))
 
-        regressor.add(LSTM(units=200, return_sequences=True))
+        regressor.add(LSTM(units=200, return_sequences=True, activation='relu'))
         regressor.add(Dropout(0.2))
 
-        regressor.add(LSTM(units=100))
+        regressor.add(LSTM(units=100, activation='sigmoid'))
         regressor.add(Dropout(0.2))
 
         regressor.add(Dense(units=x_data.shape[1]))
