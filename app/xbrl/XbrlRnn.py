@@ -1,6 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Dropout
-from sklearn.preprocessing import MinMaxScaler
+from keras.regularizers import L1L2
 import numpy as np
 import os
 
@@ -16,14 +16,15 @@ class XbrlRnn(object):
 
     def train(self, x_train, y_train):
         regressor = self.create_model(x_train)
-        regressor.fit(x_train, y_train, epochs=10, batch_size=32)
+        regressor.fit(x_train, y_train, epochs=100, batch_size=32)
 
         regressor.save(self.__get_model_path())
 
     def create_model(self, x_data):
         regressor = Sequential()
 
-        regressor.add(LSTM(units=200, return_sequences=True, input_shape=(x_data.shape[1], x_data.shape[2])))
+        regressor.add(LSTM(units=200, return_sequences=True, input_shape=(x_data.shape[1], x_data.shape[2]), kernel_regularizer=L1L2(0.01),
+                activity_regularizer=L1L2(0.01)))
         regressor.add(Dropout(0.2))
 
         regressor.add(LSTM(units=200, return_sequences=True, activation='relu'))
