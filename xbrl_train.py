@@ -35,13 +35,17 @@ print('accuracy',correct_predictions/len(predictions))
 # trzeba jakoś odczytać predictions
 # wypluć tabelkę wyników: Symbol/cik : wynik
 #
-# Model:
-# relu ?
-# więcej neuronów
-#
 # Dane:
 # jeśli zero jest pomiędzy innymi wartościami, brać poprzednią
 #
 # UWAGA: sprawdzić czy nie trzeba przesunąć danych w Y o 1 (czy chcemy brać wynik z tego roku czy z nastepnego)
+#
+# Korekcja datasetu:
+# porównać kolumny z datasetami z quandla / intrinio
+#
+# CIK MAP:
+# ticker symbol https://www.sec.gov/divisions/corpfin/organization/cfia.shtml (jest też SIC CODE - czyli branża)
+# https://gist.github.com/dougvk/8499335
+# http://rankandfiled.com/#/data/tickers !!!
 
 
