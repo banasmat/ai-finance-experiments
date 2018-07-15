@@ -42,6 +42,10 @@ print('accuracy',correct_predictions/len(predictions))
 #
 # Korekcja datasetu:
 # porównać kolumny z datasetami z quandla / intrinio
+# https://www.quora.com/What-is-the-best-source-for-free-historical-fundamental-stock-data
+# https://intrinio.com/tutorial/file_download
+# https://www.quandl.com/search?query=fundamental
+# https://public.opendatasoft.com/explore/dataset/us-stock-fundamentals/?disjunctive.indicator - FREE, ale tylko quarters (?)
 #
 # CIK MAP:
 # ticker symbol https://www.sec.gov/divisions/corpfin/organization/cfia.shtml (jest też SIC CODE - czyli branża)
