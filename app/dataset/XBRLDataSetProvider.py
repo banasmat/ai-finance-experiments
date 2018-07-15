@@ -21,7 +21,8 @@ class XBRLDataSetProvider(object):
     common_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'common_tags.txt')
     company_list_dir = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'company_list')
     cik_file_path = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'cik.pkl')
-    cik_map_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv')
+    # cik_map_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map.csv')
+    cik_map_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'cik_map_precise.csv')
     stock_historical_prices_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'stock_historical_prices')
 
     @staticmethod
@@ -373,6 +374,7 @@ class XBRLDataSetProvider(object):
         # tensor = all_data.values.reshape((len(all_quarters), len(all_ciks), all_data.shape[1]))
         # np.save(os.path.join(output_dir, 'xbrl_data'), tensor)
 
+
     @staticmethod
     def get_all_ciks_map():
         all_ciks = pd.DataFrame()
@@ -466,6 +468,10 @@ class XBRLDataSetProvider(object):
                 df: pd.DataFrame = pd.read_csv(f, index_col='symbol')
             else:
                 df = pd.DataFrame(index=ciks_map['symbol'])
+
+            updated_df = pd.DataFrame(index=ciks_map['symbol'])
+            updated_df = updated_df.merge(df, left_index=True, right_index=True, how='left')
+            df = updated_df
 
             dates = XBRLDataSetProvider.__get_last_month_day_dates(year)
 
