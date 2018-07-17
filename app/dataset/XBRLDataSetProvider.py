@@ -152,7 +152,7 @@ class XBRLDataSetProvider(object):
             sub_file = os.path.join(quarter_dir, 'sub.txt')
             tag_file = os.path.join(quarter_dir, 'tag.txt')
 
-            numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'tag', 'value', 'qtrs', 'ddate'])
+            numbers = pd.read_csv(num_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'tag', 'value', 'qtrs', 'ddate', 'coreg'])
             subs = pd.read_csv(sub_file, sep='\t', encoding='ISO-8859-1', usecols=['adsh', 'cik', 'fp'])
             tags = pd.read_csv(tag_file, sep='\t', encoding='ISO-8859-1', usecols=['tag', 'iord', 'custom', 'version', 'tlabel', 'abstract'])
 
@@ -162,6 +162,7 @@ class XBRLDataSetProvider(object):
             print('num shape before prefiltering', numbers.shape)
             numbers: pd.DataFrame = numbers.loc[numbers['tag'].isin(all_tags)]
             numbers: pd.DataFrame = numbers.loc[numbers['fp'].isin(['FY'])]
+            numbers: pd.DataFrame = numbers.loc[numbers['coreg'].isnull()]
             numbers: pd.DataFrame = numbers.loc[(numbers['qtrs'].isin([0,4]))]
             numbers: pd.DataFrame = numbers.loc[(numbers['ddate'].astype(str).str.startswith(current_year)) | numbers['ddate'].astype(str).str.startswith(str(int(current_year)-1))]
             print('num shape after prefiltering', numbers.shape)
@@ -374,7 +375,6 @@ class XBRLDataSetProvider(object):
         # tensor = all_data.values.reshape((len(all_quarters), len(all_ciks), all_data.shape[1]))
         # np.save(os.path.join(output_dir, 'xbrl_data'), tensor)
 
-
     @staticmethod
     def get_all_ciks_map():
         all_ciks = pd.DataFrame()
@@ -454,7 +454,7 @@ class XBRLDataSetProvider(object):
 
         pd.options.mode.chained_assignment = None
 
-        for year_file in sorted(os.listdir(XBRLDataSetProvider.xbrl_dataset_dir)):
+        for year_file in reversed(sorted(os.listdir(XBRLDataSetProvider.xbrl_dataset_dir))):
             if year_file[0] == '.':
                 continue
 
