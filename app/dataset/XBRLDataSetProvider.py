@@ -472,6 +472,7 @@ class XBRLDataSetProvider(object):
             updated_df = pd.DataFrame(index=ciks_map['symbol'])
             updated_df = updated_df.merge(df, left_index=True, right_index=True, how='left')
             df = updated_df
+            df = df[~df.index.duplicated(keep='first')]
 
             dates = XBRLDataSetProvider.__get_last_month_day_dates(year)
 
