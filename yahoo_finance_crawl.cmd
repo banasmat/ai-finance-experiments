@@ -1,0 +1,1 @@
+D: && cd D:\PythonProjects\forex-analyzer-python\scrapy && activate nn && scrapy crawl yahoo_finance

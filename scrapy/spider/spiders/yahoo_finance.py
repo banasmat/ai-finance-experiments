@@ -26,14 +26,16 @@ class YahooFinanceSpider(scrapy.Spider):
         symbols = df.symbol.tolist()[counter:counter+1]
 
         for symbol in symbols:
+            print(symbol)
             if os.path.isfile(os.path.join(YahooFinanceSpider.target_dir, symbol + '.csv')):
+                counter += 1
                 continue
             self.start_urls.append(self.url_base + symbol + '/financials?p=' + symbol)
             self.start_urls.append(self.url_base + symbol + '/balance-sheet?p=' + symbol)
             self.start_urls.append(self.url_base + symbol + '/cash-flow?p=' + symbol)
+            counter += 1
 
         with open(os.path.join(os.path.abspath(os.getcwd()), '..', 'yahoo_counter.txt'), "w") as f:
-            counter += 1
             f.write(str(counter))
 
     def parse(self, response: scrapy.http.response.Response):
