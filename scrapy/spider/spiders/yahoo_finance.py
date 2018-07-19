@@ -21,7 +21,7 @@ class YahooFinanceSpider(scrapy.Spider):
         df = pd.read_csv(self.cik_map_file_path, usecols=['symbol'])
         all_symbols = df.symbol.tolist()
 
-        for symbol in all_symbols[:1]:
+        for symbol in all_symbols[int(self.start):int(self.end)]:
             self.start_urls.append(self.url_base + symbol + '/financials?p=' + symbol)
             self.start_urls.append(self.url_base + symbol + '/balance-sheet?p=' + symbol)
             self.start_urls.append(self.url_base + symbol + '/cash-flow?p=' + symbol)
@@ -66,8 +66,9 @@ class YahooFinanceSpider(scrapy.Spider):
             mode = 'a'
             header = False
 
-        with open(target_file, mode) as f:
-            df.to_csv(f, header=header)
+        if df.shape[0] != 0 and df.shape[1] != 0:
+            with open(target_file, mode) as f:
+                df.to_csv(f, header=header)
 
     # Bypassing 'privacy policy/accept cookies' page
     def make_requests_from_url(self, url):
