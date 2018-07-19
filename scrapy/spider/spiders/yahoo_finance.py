@@ -18,13 +18,23 @@ class YahooFinanceSpider(scrapy.Spider):
 
         super().__init__(name, **kwargs)
 
-        df = pd.read_csv(self.cik_map_file_path, usecols=['symbol'])
-        all_symbols = df.symbol.tolist()
+        with open(os.path.join(os.path.abspath(os.getcwd()), '..', 'yahoo_counter.txt'), "r") as f:
+            counter = f.read()
+        counter = int(counter)
 
-        for symbol in all_symbols[int(self.start):int(self.end)]:
+        df = pd.read_csv(self.cik_map_file_path, usecols=['symbol'])
+        symbols = df.symbol.tolist()[counter:counter+1]
+
+        for symbol in symbols:
+            if os.path.isfile(os.path.join(YahooFinanceSpider.target_dir, symbol + '.csv')):
+                continue
             self.start_urls.append(self.url_base + symbol + '/financials?p=' + symbol)
             self.start_urls.append(self.url_base + symbol + '/balance-sheet?p=' + symbol)
             self.start_urls.append(self.url_base + symbol + '/cash-flow?p=' + symbol)
+
+        with open(os.path.join(os.path.abspath(os.getcwd()), '..', 'yahoo_counter.txt'), "w") as f:
+            counter += 1
+            f.write(str(counter))
 
     def parse(self, response: scrapy.http.response.Response):
 
