@@ -12,6 +12,7 @@ class YahooFinanceSpider(scrapy.Spider):
     start_urls = []
 
     cik_map_file_path = os.path.join(os.path.abspath(os.getcwd()), '..', 'output', 'cik_map_precise.csv')
+    target_dir = os.path.join(os.path.abspath(os.getcwd()), '..', 'output', 'yahoo_fundamentals')
 
     def __init__(self, name=None, **kwargs):
 
@@ -30,25 +31,45 @@ class YahooFinanceSpider(scrapy.Spider):
         base_css = "[data-test=qsp-financial] tbody "
 
         datetimes = response.css(base_css + 'tr:first-child td:not(:first-child) span::text').extract()
+        labels = response.css(base_css + 'tr:not(:first-child) td:first-child:not([colspan]) span::text').extract()
+        values = response.css(base_css + 'tr:not(:first-child) td:not(:first-child) ::text').extract()
 
+        datetimes = list(map(lambda x: x.replace('/', '-'), datetimes))
 
-        labels = response.css(base_css + 'tr:not(:first-child) td:first-child span::text').extract()
-        data = response.css(base_css + 'tr:not(:first-child) td:not(:first-child) span::text').extract()
+        symbol = response.request.url.split('=')[1]
+        target_file = os.path.join(YahooFinanceSpider.target_dir, symbol + '.csv')
 
-        print(datetimes)
-        print(response.request.url)
-        # quit()
+        current_label_index = -1
+        current_datetime_index = -1
+        datetimes_len = len(datetimes)
 
-        if '/financials?' in response.request.url:
-            pass
+        df = pd.DataFrame(index=labels, columns=datetimes)
+        pd.options.mode.chained_assignment = None
 
-        if '/balance-sheet?' in response.request.url:
-            pass
+        for i in range(0, len(values)):
 
-        if '/cash-flow?' in response.request.url:
-            pass
+            current_datetime_index += 1
+            if i % datetimes_len == 0:
+                current_label_index += 1
+                current_datetime_index = 0
 
+            val = str(values[i]).replace('-', '')
+            val = str(val).replace(',', '')
+            if str(val) != '':
+                val = int(float(val) * 1000) #TODO check if all numbers are in thousands
 
+            df.loc[labels[current_label_index]][datetimes[current_datetime_index]] = val
+
+        mode = 'w'
+        header = True
+        if os.path.isfile(target_file):
+            mode = 'a'
+            header = False
+
+        with open(target_file, mode) as f:
+            df.to_csv(f, header=header)
+
+    # Bypassing 'privacy policy/accept cookies' page
     def make_requests_from_url(self, url):
         request = super(YahooFinanceSpider, self).make_requests_from_url(url)
         request.cookies['BX'] = 'dd1vpm1dkv6ve&b=3&s=i2'
