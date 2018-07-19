@@ -23,7 +23,7 @@ class YahooFinanceSpider(scrapy.Spider):
         counter = int(counter)
 
         df = pd.read_csv(self.cik_map_file_path, usecols=['symbol'])
-        symbols = df.symbol.tolist()[counter:counter+1]
+        symbols = df.symbol.tolist()[counter:counter+5]
 
         for symbol in symbols:
             print(symbol)
@@ -33,7 +33,7 @@ class YahooFinanceSpider(scrapy.Spider):
             self.start_urls.append(self.url_base + symbol + '/financials?p=' + symbol)
             self.start_urls.append(self.url_base + symbol + '/balance-sheet?p=' + symbol)
             self.start_urls.append(self.url_base + symbol + '/cash-flow?p=' + symbol)
-            counter += 1
+            counter += 5
 
         with open(os.path.join(os.path.abspath(os.getcwd()), '..', 'yahoo_counter.txt'), "w") as f:
             f.write(str(counter))
