@@ -483,7 +483,7 @@ class XBRLDataSetProvider(object):
             for symbol, row in df.iterrows():
 
                 if pd.isnull(row[dates[11]]):
-                    time.sleep(1)
+                    time.sleep(30)
                     date_from = (int(year), 1, 1)
                     date_to = (int(year), 12, 31)
                     try:

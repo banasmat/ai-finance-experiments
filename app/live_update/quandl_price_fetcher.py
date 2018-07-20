@@ -37,10 +37,14 @@ def quandl_stocks(symbol, start_date=(2000, 1, 1), end_date=None, gran='daily'):
 
         quandl.ApiConfig.api_key = config_keys[config_key_index]
 
-        return quandl.get(query_list,
-                          returns='pandas',
-                          start_date=start_date,
-                          end_date=end_date,
-                          collapse=gran,
-                          order='asc'
-                          )
+        try:
+
+            return quandl.get(query_list,
+                              returns='pandas',
+                              start_date=start_date,
+                              end_date=end_date,
+                              collapse=gran,
+                              order='asc'
+                              )
+        except quandl.errors.quandl_error.LimitExceededError as e:
+            print(e)
