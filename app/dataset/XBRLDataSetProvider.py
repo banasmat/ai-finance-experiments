@@ -13,6 +13,7 @@ from datetime import datetime
 
 class XBRLDataSetProvider(object):
     res_dir = os.path.join(os.path.abspath(os.getcwd()), 'scrapy', 'xbrl_output')
+    yahoo_fundamentals_dataset_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'yahoo_fundamentals')
     xbrl_dataset_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset')
     xbrl_dataset_fixed_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset_fixed')
     xbrl_data_x_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_data_x.pkl')
@@ -535,6 +536,35 @@ class XBRLDataSetProvider(object):
             dates.append(date_str)
 
         return dates
+
+    @staticmethod
+    def prepare_dataset_from_yahoo_fundamentals():
+
+        symbol_files = os.listdir(XBRLDataSetProvider.yahoo_fundamentals_dataset_dir)
+
+        dataset = None
+        years_len = None
+
+        for i, symbol_file in enumerate(symbol_files):
+            with open(os.path.join(XBRLDataSetProvider.yahoo_fundamentals_dataset_dir, symbol_file), 'r') as f:
+                df: pd.DataFrame = pd.read_csv(f, index_col=0)
+
+                # Assuming that first file has got the right no of years
+                if years_len is None:
+                    years_len =  df.shape[1]
+                current_year = datetime.today().year
+                if df.columns[0][-4:] != str(current_year-1):
+                    continue
+
+                if dataset is None:
+                    dataset = np.zeros((len(symbol_files), df.shape[0], df.shape[1]))
+
+                print(symbol_file)
+                dataset[i] = df.as_matrix()
+                i += 1
+        print(dataset)
+        quit()
+
 
     @staticmethod
     def prepare_dataset_for_training():
