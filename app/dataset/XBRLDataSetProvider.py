@@ -18,6 +18,8 @@ class XBRLDataSetProvider(object):
     xbrl_dataset_fixed_dir = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_dataset_fixed')
     xbrl_data_x_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_data_x.pkl')
     xbrl_data_y_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'xbrl_data_y.pkl')
+    yahoo_fundamentals_data_x_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'yahoo_fundamentals_data_x.pkl')
+    yahoo_fundamentals_data_y_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'yahoo_fundamentals_data_y.pkl')
     most_popular_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'most_popular_tags.txt')
     common_tags_file_path = os.path.join(os.path.abspath(os.getcwd()), 'output', 'common_tags.txt')
     company_list_dir = os.path.join(os.path.abspath(os.getcwd()), 'resources', 'company_list')
@@ -544,6 +546,7 @@ class XBRLDataSetProvider(object):
 
         dataset = None
         years_len = None
+        tags_len = None
 
         for i, symbol_file in enumerate(symbol_files):
             with open(os.path.join(XBRLDataSetProvider.yahoo_fundamentals_dataset_dir, symbol_file), 'r') as f:
@@ -551,19 +554,35 @@ class XBRLDataSetProvider(object):
 
                 # Assuming that first file has got the right no of years
                 if years_len is None:
-                    years_len =  df.shape[1]
+                    years_len = df.shape[1]
+                    tags_len = df.shape[0]
+
+                # Some files have duplicated whole lists. TODO clean them up
+                df = df.head(tags_len)
+
                 current_year = datetime.today().year
+
+                if len(df.columns) == 0:
+                    continue
+
                 if df.columns[0][-4:] != str(current_year-1):
                     continue
 
+                if df.shape[0] < tags_len:
+                    continue
+
+                while df.shape[1] < years_len:
+                    df = df.assign(e=pd.Series(data=0, index=df.index))
+
                 if dataset is None:
-                    dataset = np.zeros((len(symbol_files), df.shape[0], df.shape[1]))
+                    dataset = np.zeros((len(symbol_files), tags_len, years_len))
 
                 print(symbol_file)
                 dataset[i] = df.as_matrix()
                 i += 1
-        print(dataset)
-        quit()
+        print(dataset.shape)
+        with open(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path, 'wb') as f:
+            pickle.dump(dataset, f)
 
 
     @staticmethod
