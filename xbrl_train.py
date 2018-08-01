@@ -2,7 +2,7 @@ from app.dataset.XBRLDataSetProvider import XBRLDataSetProvider
 from app.xbrl.XbrlRnn import XbrlRnn
 
 x, y = XBRLDataSetProvider.get_dataset_for_training()
-x, y = XBRLDataSetProvider.scale_by_cik_tag(x, y)
+x, y = XBRLDataSetProvider.__transpose_and_scale_by_cik_tag(x, y)
 
 rnn = XbrlRnn()
 rnn.train(x[:-1], y[:-1])

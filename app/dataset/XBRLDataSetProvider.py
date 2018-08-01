@@ -543,7 +543,6 @@ class XBRLDataSetProvider(object):
     def prepare_dataset_from_yahoo_fundamentals():
 
         symbol_files = os.listdir(XBRLDataSetProvider.yahoo_fundamentals_dataset_dir)
-        price_files = os.listdir(XBRLDataSetProvider.stock_historical_prices_dir)
 
         dataset_x = None
         dataset_y = None
@@ -552,15 +551,8 @@ class XBRLDataSetProvider(object):
         tags_len = None
         i = 0
 
-        #TODO
-        # - read columns, get years
-        # - open relevant year files, merge prices to one value
-        # - merge prices for every year to df (?)
-
         all_prices_df = XBRLDataSetProvider.__get_all_prices_df()
         empty_price_symbols = XBRLDataSetProvider.__get_empty_price_symbols(all_prices_df)
-        year_files = {}
-
         for symbol_file in symbol_files:
 
             symbol = symbol_file[:-4]
@@ -579,12 +571,20 @@ class XBRLDataSetProvider(object):
                         years.append(col[-4:])
                     years = sorted(years)
 
-                    for year in years:
-                        year_files[year] = open(
-                            os.path.join(XBRLDataSetProvider.stock_historical_prices_dir, year + '.csv'), 'r')
-
                 # Some files have duplicated whole lists. TODO clean them up
                 df = df.head(tags_len)
+
+
+
+                # years = ['2015','2016','2017']
+                # years_len = 3
+                # for col in df.columns:
+                #
+                #     if col[-4:] == '2014':
+                #         df.drop(col, inplace=True, axis=1)
+                #         print(df.columns)
+
+
 
                 current_year = datetime.today().year
 
@@ -620,38 +620,38 @@ class XBRLDataSetProvider(object):
 
                 for index, year in enumerate(years):
 
-                    price_df = pd.read_csv(year_files[year])
-                    price_df = price_df.loc[price_df['symbol'] == symbol]
-                    price_df.drop('symbol', inplace=True, axis=1)
-                    price = price_df.mean(axis=1).values[0]
+                    with open(os.path.join(XBRLDataSetProvider.stock_historical_prices_dir, year + '.csv'), 'r') as yf:
+                        price_df = pd.read_csv(yf)
+                        price_df = price_df.loc[price_df['symbol'] == symbol]
+                        price_df.drop('symbol', inplace=True, axis=1)
+                        price = price_df.mean(axis=1).values[0]
 
-                    year_prices.append(price)
+                        year_prices.append(price)
 
-                    if index == 0:
-                        prev_price = prev_year_price
-                    else:
-                        prev_price = year_prices[index-1]
+                        if index == 0:
+                            prev_price = prev_year_price
+                        else:
+                            prev_price = year_prices[index-1]
 
-                    if prev_price == 0:
-                        delta = 0
-                    else:
-                        percentage_diff = (price - prev_price) / ((price + prev_price) / 2)
-                        delta = 1 if percentage_diff > 0.2 else 0
+                        if prev_price == 0:
+                            delta = 0
+                        else:
+                            percentage_diff = (price - prev_price) / ((price + prev_price) / 2)
+                            delta = 1 if percentage_diff > 0.2 else 0
 
-                    year_price_deltas.append(delta)
+                        year_price_deltas.append(delta)
 
-                dataset_y = np.insert(dataset_y, i, year_price_deltas)
+                dataset_y = np.insert(dataset_y, i, year_price_deltas, axis=0)
                 dataset_x = np.insert(dataset_x, i, df.as_matrix(), axis=0)
 
                 i += 1
 
-        for key, file in year_files:
-            file.close()
+        dataset_x, dataset_y = XBRLDataSetProvider.scale_by_cik_tag(dataset_x, dataset_y)
 
-        print(dataset_x.shape)
-        print(dataset_y.shape)
         with open(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path, 'wb') as f:
             pickle.dump(dataset_x, f)
+        with open(XBRLDataSetProvider.yahoo_fundamentals_data_y_file_path, 'wb') as f:
+            pickle.dump(dataset_y, f)
 
         return dataset_x, dataset_y
 
@@ -809,21 +809,27 @@ class XBRLDataSetProvider(object):
         return dataset_x, dataset_y
 
     @staticmethod
-    def scale_by_cik_tag(x, y):
+    def __transpose_and_scale_by_cik_tag(x, y):
+
         # cik, tag, year
         x = x.transpose((1, 2, 0))
         # cik, year
         y = y.transpose()
 
-        for cik_index in range(0, x.shape[0]):
-            x[cik_index] = XBRLDataSetProvider.scale_dataset(x[cik_index])
-            x[cik_index] = np.nan_to_num(x[cik_index])
+        x, y = XBRLDataSetProvider.scale_by_cik_tag(x, y)
 
         # year, cik, tag
         x = x.transpose((2, 0, 1))
         # year, cik
         y = y.transpose()
 
+        return x, y
+
+    @staticmethod
+    def scale_by_cik_tag(x, y):
+        for cik_index in range(0, x.shape[0]):
+            x[cik_index] = XBRLDataSetProvider.scale_dataset(x[cik_index])
+            x[cik_index] = np.nan_to_num(x[cik_index])
         return x, y
 
     @staticmethod
