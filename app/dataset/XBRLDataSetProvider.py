@@ -547,8 +547,8 @@ class XBRLDataSetProvider(object):
         dataset = None
         years_len = None
         tags_len = None
-
-        for i, symbol_file in enumerate(symbol_files):
+        i = 0
+        for symbol_file in symbol_files:
             with open(os.path.join(XBRLDataSetProvider.yahoo_fundamentals_dataset_dir, symbol_file), 'r') as f:
                 df: pd.DataFrame = pd.read_csv(f, index_col=0)
 
@@ -571,14 +571,16 @@ class XBRLDataSetProvider(object):
                 if df.shape[0] < tags_len:
                     continue
 
+                j = 0
                 while df.shape[1] < years_len:
-                    df = df.assign(e=pd.Series(data=0, index=df.index))
+                    df[str(j)] = np.nan
+                    j += 1
 
                 if dataset is None:
-                    dataset = np.zeros((len(symbol_files), tags_len, years_len))
+                    dataset = np.zeros((0, tags_len, years_len))
 
                 print(symbol_file)
-                dataset[i] = df.as_matrix()
+                dataset = np.insert(dataset, i, df.as_matrix(), axis=0)
                 i += 1
         print(dataset.shape)
         with open(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path, 'wb') as f:
