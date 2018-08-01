@@ -543,19 +543,38 @@ class XBRLDataSetProvider(object):
     def prepare_dataset_from_yahoo_fundamentals():
 
         symbol_files = os.listdir(XBRLDataSetProvider.yahoo_fundamentals_dataset_dir)
+        price_files = os.listdir(XBRLDataSetProvider.stock_historical_prices_dir)
 
-        dataset = None
+        dataset_x = None
+        dataset_y = None
+        years = []
         years_len = None
         tags_len = None
         i = 0
+
+        #TODO
+        # - read columns, get years
+        # - open relevant year files, merge prices to one value
+        # - merge prices for every year to df (?)
+
+        all_prices_df = XBRLDataSetProvider.__get_all_prices_df()
+        empty_price_symbols = XBRLDataSetProvider.__get_empty_price_symbols(all_prices_df)
+
         for symbol_file in symbol_files:
+
+            symbol = symbol_file[:-4]
+            if symbol in empty_price_symbols:
+                continue
+
             with open(os.path.join(XBRLDataSetProvider.yahoo_fundamentals_dataset_dir, symbol_file), 'r') as f:
                 df: pd.DataFrame = pd.read_csv(f, index_col=0)
 
-                # Assuming that first file has got the right no of years
+                # Assuming that first file has got the right number of years/tags
                 if years_len is None:
                     years_len = df.shape[1]
                     tags_len = df.shape[0]
+                    for col in df.columns:
+                        years.append(col[-4:])
 
                 # Some files have duplicated whole lists. TODO clean them up
                 df = df.head(tags_len)
@@ -576,15 +595,20 @@ class XBRLDataSetProvider(object):
                     df[str(j)] = np.nan
                     j += 1
 
-                if dataset is None:
-                    dataset = np.zeros((0, tags_len, years_len))
+                if dataset_x is None:
+                    dataset_x = np.zeros((0, tags_len, years_len))
+                    dataset_y = np.zeros((0, years_len))
 
-                print(symbol_file)
-                dataset = np.insert(dataset, i, df.as_matrix(), axis=0)
+                for year in years:
+                    with open(os.path.join(XBRLDataSetProvider.stock_historical_prices_dir, year + '.csv'), 'r') as yf:
+                        price_df = pd.read_csv(yf)
+
+                print(symbol)
+                dataset_x = np.insert(dataset_x, i, df.as_matrix(), axis=0)
                 i += 1
-        print(dataset.shape)
+        print(dataset_x.shape)
         with open(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path, 'wb') as f:
-            pickle.dump(dataset, f)
+            pickle.dump(dataset_x, f)
 
 
     @staticmethod
@@ -621,6 +645,36 @@ class XBRLDataSetProvider(object):
                 df.to_csv(f)
 
     @staticmethod
+    def __get_empty_price_symbols(all_prices_df: pd.DataFrame):
+        all_prices_df.index = all_prices_df.pop('symbol')
+        all_prices_df = all_prices_df.mean(axis=1)
+
+        return list(all_prices_df[all_prices_df == 0].index)
+
+    @staticmethod
+    def __get_all_prices_df():
+
+        year_files = os.listdir(XBRLDataSetProvider.xbrl_dataset_fixed_dir)  # [:3]
+
+        all_prices_df = None
+
+        # First locate and remove ciks with not even single historical price
+        for year_file in sorted(year_files):
+            if year_file[0] == '.':
+                continue
+            year = year_file[0:4]
+            with open(os.path.join(XBRLDataSetProvider.stock_historical_prices_dir, year + '.csv'), 'r') as f:
+                price_df = pd.read_csv(f)
+                # price_df.index = price_df.pop('symbol')
+
+                if all_prices_df is None:
+                    all_prices_df = price_df.copy()
+                else:
+                    all_prices_df = all_prices_df.merge(price_df, on='symbol', how='left')
+
+        return all_prices_df
+
+    @staticmethod
     def get_dataset_for_training():
         if os.path.isfile(XBRLDataSetProvider.xbrl_data_x_file_path) and os.path.isfile(XBRLDataSetProvider.xbrl_data_y_file_path):
             with open(XBRLDataSetProvider.xbrl_data_x_file_path, 'rb') as f:
@@ -640,26 +694,8 @@ class XBRLDataSetProvider(object):
         dataset_y = None
         i = 0
 
-        all_prices_df = None
-
-        # First locate and remove ciks with not even single historical price
-        for year_file in sorted(year_files):
-            if year_file[0] == '.':
-                continue
-            year = year_file[0:4]
-            with open(os.path.join(XBRLDataSetProvider.stock_historical_prices_dir, year + '.csv'), 'r') as f:
-                price_df = pd.read_csv(f)
-                # price_df.index = price_df.pop('symbol')
-
-                if all_prices_df is None:
-                    all_prices_df = price_df.copy()
-                else:
-                    all_prices_df = all_prices_df.merge(price_df, on='symbol', how='left')
-
-        all_prices_df.index = all_prices_df.pop('symbol')
-        all_prices_df = all_prices_df.mean(axis=1)
-
-        empty_price_symbols = list(all_prices_df[all_prices_df == 0].index)
+        all_prices_df = XBRLDataSetProvider.__get_all_prices_df()
+        empty_price_symbols = XBRLDataSetProvider.__get_empty_price_symbols(all_prices_df)
 
         ciks_map = ciks_map.loc[~ciks_map['symbol'].isin(empty_price_symbols)]
 
