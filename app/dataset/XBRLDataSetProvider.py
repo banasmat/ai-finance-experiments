@@ -559,12 +559,14 @@ class XBRLDataSetProvider(object):
 
         all_prices_df = XBRLDataSetProvider.__get_all_prices_df()
         empty_price_symbols = XBRLDataSetProvider.__get_empty_price_symbols(all_prices_df)
+        year_files = {}
 
         for symbol_file in symbol_files:
 
             symbol = symbol_file[:-4]
             if symbol in empty_price_symbols:
                 continue
+            print(symbol)
 
             with open(os.path.join(XBRLDataSetProvider.yahoo_fundamentals_dataset_dir, symbol_file), 'r') as f:
                 df: pd.DataFrame = pd.read_csv(f, index_col=0)
@@ -575,6 +577,11 @@ class XBRLDataSetProvider(object):
                     tags_len = df.shape[0]
                     for col in df.columns:
                         years.append(col[-4:])
+                    years = sorted(years)
+
+                    for year in years:
+                        year_files[year] = open(
+                            os.path.join(XBRLDataSetProvider.stock_historical_prices_dir, year + '.csv'), 'r')
 
                 # Some files have duplicated whole lists. TODO clean them up
                 df = df.head(tags_len)
@@ -599,16 +606,54 @@ class XBRLDataSetProvider(object):
                     dataset_x = np.zeros((0, tags_len, years_len))
                     dataset_y = np.zeros((0, years_len))
 
-                for year in years:
-                    with open(os.path.join(XBRLDataSetProvider.stock_historical_prices_dir, year + '.csv'), 'r') as yf:
-                        price_df = pd.read_csv(yf)
+                with open(os.path.join(XBRLDataSetProvider.stock_historical_prices_dir, str(int(years[0])-1) + '.csv'), 'r') as pyf:
+                    prev_price_df = pd.read_csv(pyf)
+                    prev_price_df = prev_price_df.loc[prev_price_df['symbol'] == symbol]
+                    prev_price_df.drop('symbol', inplace=True, axis=1)
+                    if prev_price_df.shape[0] == 0:
+                        prev_year_price = 0
+                    else:
+                        prev_year_price = prev_price_df.mean(axis=1).values[0]
 
-                print(symbol)
+                year_price_deltas = []
+                year_prices = []
+
+                for index, year in enumerate(years):
+
+                    price_df = pd.read_csv(year_files[year])
+                    price_df = price_df.loc[price_df['symbol'] == symbol]
+                    price_df.drop('symbol', inplace=True, axis=1)
+                    price = price_df.mean(axis=1).values[0]
+
+                    year_prices.append(price)
+
+                    if index == 0:
+                        prev_price = prev_year_price
+                    else:
+                        prev_price = year_prices[index-1]
+
+                    if prev_price == 0:
+                        delta = 0
+                    else:
+                        percentage_diff = (price - prev_price) / ((price + prev_price) / 2)
+                        delta = 1 if percentage_diff > 0.2 else 0
+
+                    year_price_deltas.append(delta)
+
+                dataset_y = np.insert(dataset_y, i, year_price_deltas)
                 dataset_x = np.insert(dataset_x, i, df.as_matrix(), axis=0)
+
                 i += 1
+
+        for key, file in year_files:
+            file.close()
+
         print(dataset_x.shape)
+        print(dataset_y.shape)
         with open(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path, 'wb') as f:
             pickle.dump(dataset_x, f)
+
+        return dataset_x, dataset_y
 
 
     @staticmethod
