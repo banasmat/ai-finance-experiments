@@ -16,7 +16,7 @@ class XbrlRnn(object):
 
     def train(self, x_train, y_train):
         regressor = self.create_model(x_train)
-        regressor.fit(x_train, y_train, epochs=200, batch_size=x_train.shape[0])
+        regressor.fit(x_train, y_train, epochs=5, batch_size=x_train.shape[0])
 
         regressor.save(self.__get_model_path())
 

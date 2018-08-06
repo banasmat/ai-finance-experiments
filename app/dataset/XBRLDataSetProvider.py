@@ -542,6 +542,13 @@ class XBRLDataSetProvider(object):
     @staticmethod
     def prepare_dataset_from_yahoo_fundamentals():
 
+        if os.path.isfile(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path) and os.path.isfile(XBRLDataSetProvider.yahoo_fundamentals_data_y_file_path):
+            with open(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path, 'rb') as f:
+                x = pickle.load(f)
+            with open(XBRLDataSetProvider.yahoo_fundamentals_data_y_file_path, 'rb') as f:
+                y = pickle.load(f)
+            return x, y
+
         symbol_files = os.listdir(XBRLDataSetProvider.yahoo_fundamentals_dataset_dir)
 
         dataset_x = None
@@ -809,7 +816,7 @@ class XBRLDataSetProvider(object):
         return dataset_x, dataset_y
 
     @staticmethod
-    def __transpose_and_scale_by_cik_tag(x, y):
+    def transpose_and_scale_by_cik_tag(x, y):
 
         # cik, tag, year
         x = x.transpose((1, 2, 0))

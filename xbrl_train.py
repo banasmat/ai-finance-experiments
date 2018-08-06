@@ -1,8 +1,21 @@
 from app.dataset.XBRLDataSetProvider import XBRLDataSetProvider
 from app.xbrl.XbrlRnn import XbrlRnn
+#
+# x, y = XBRLDataSetProvider.get_dataset_for_training()
+# x, y = XBRLDataSetProvider.transpose_and_scale_by_cik_tag(x, y)
+#
+#
+# print(x.shape)
+# print(y.shape)
 
-x, y = XBRLDataSetProvider.get_dataset_for_training()
-x, y = XBRLDataSetProvider.__transpose_and_scale_by_cik_tag(x, y)
+x, y = XBRLDataSetProvider.prepare_dataset_from_yahoo_fundamentals()
+
+# year, cik, tag
+x = x.transpose((2, 0, 1))
+y = y.transpose()
+
+print(x.shape)
+print(y.shape)
 
 rnn = XbrlRnn()
 rnn.train(x[:-1], y[:-1])
@@ -12,19 +25,19 @@ rnn.train(x[:-1], y[:-1])
 predictions = rnn.predict(x[-1:])
 # print(predictions[0])
 # print(y[-1:][0])
-predictions = list(map(lambda x: 0 if x < 0.5 else 1, predictions[0].tolist()))
+# predictions = list(map(lambda x: 0 if x < 0.5 else 1, predictions[0].tolist()))
 print(predictions)
-
-test_vals = y[-1:][0].tolist()
-print(test_vals)
-correct_predictions = 0
-for i in range (0, len(predictions)):
-    if predictions[i] == test_vals[i]:
-        correct_predictions += 1
+#
+# test_vals = y[-1:][0].tolist()
+# print(test_vals)
+# correct_predictions = 0
+# for i in range (0, len(predictions)):
+#     if predictions[i] == test_vals[i]:
+#         correct_predictions += 1
 
 
 # accuracy = len(set(predictions) & set(y[-1:][0].tolist())) / len(predictions)
-print('accuracy',correct_predictions/len(predictions))
+# print('accuracy',correct_predictions/len(predictions))
 
 
 #TODO
