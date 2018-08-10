@@ -16,24 +16,24 @@ class XbrlRnn(object):
 
     def train(self, x_train, y_train):
         regressor = self.create_model(x_train)
-        regressor.fit(x_train, y_train, epochs=5, batch_size=x_train.shape[0])
+        regressor.fit(x_train, y_train, epochs=50, batch_size=x_train.shape[0])
 
         regressor.save(self.__get_model_path())
 
     def create_model(self, x_data):
         regressor = Sequential()
 
-        regressor.add(SimpleRNN(units=200, return_sequences=True, input_shape=(x_data.shape[1], x_data.shape[2])))
+        regressor.add(SimpleRNN(units=400, return_sequences=True, input_shape=(x_data.shape[1], x_data.shape[2])))
                 # , kernel_regularizer=L1L2(0.01), activity_regularizer=L1L2(0.01), recurrent_regularizer=L1L2(0.01)))
         regressor.add(Dropout(0.2))
 
-        regressor.add(SimpleRNN(units=200, return_sequences=True, activation='relu'))
+        regressor.add(SimpleRNN(units=400, return_sequences=True, activation='relu'))
         regressor.add(Dropout(0.2))
 
-        regressor.add(SimpleRNN(units=200, return_sequences=True, activation='relu'))
+        regressor.add(SimpleRNN(units=400, return_sequences=True, activation='relu'))
         regressor.add(Dropout(0.2))
 
-        regressor.add(SimpleRNN(units=100, activation='sigmoid'))
+        regressor.add(SimpleRNN(units=200, activation='softmax'))
         regressor.add(Dropout(0.2))
 
         regressor.add(Dense(units=x_data.shape[1]))

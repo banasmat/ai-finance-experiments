@@ -25,19 +25,19 @@ rnn.train(x[:-1], y[:-1])
 predictions = rnn.predict(x[-1:])
 # print(predictions[0])
 # print(y[-1:][0])
-# predictions = list(map(lambda x: 0 if x < 0.5 else 1, predictions[0].tolist()))
+predictions = list(map(lambda x: 0 if x < 0 else 1, predictions[0].tolist()))
 print(predictions)
-#
-# test_vals = y[-1:][0].tolist()
-# print(test_vals)
-# correct_predictions = 0
-# for i in range (0, len(predictions)):
-#     if predictions[i] == test_vals[i]:
-#         correct_predictions += 1
+
+test_vals = y[-1:][0].tolist()
+print(test_vals)
+correct_predictions = 0
+for i in range (0, len(predictions)):
+    if predictions[i] == test_vals[i]:
+        correct_predictions += 1
 
 
-# accuracy = len(set(predictions) & set(y[-1:][0].tolist())) / len(predictions)
-# print('accuracy',correct_predictions/len(predictions))
+accuracy = len(set(predictions) & set(y[-1:][0].tolist())) / len(predictions)
+print('accuracy',correct_predictions/len(predictions))
 
 
 #TODO
