@@ -15,7 +15,13 @@ from sklearn.svm import SVC
 
 x, y = XBRLDataSetProvider.get_dataset_from_yahoo_fundamentals()
 
-x = np.nan_to_num(x)
+# replacing nans with mean
+col_mean = np.nanmean(x, axis=0)
+inds = np.where(np.isnan(x))
+x[inds] = np.take(col_mean, inds[1])
+
+
+#x = np.nan_to_num(x)
 
 # year, cik, tag
 x = x.transpose((2, 0, 1))
