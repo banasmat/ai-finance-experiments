@@ -8,3 +8,6 @@ database:
 oanda:
   api_key: abc
   account_id: abc
+
+quandl:
+  api_keys: ['abc', 'efg']

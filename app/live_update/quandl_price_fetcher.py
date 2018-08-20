@@ -1,9 +1,5 @@
 import quandl, datetime
-
-config_keys = [
-        'cRdqvQB3sUYztU_SxFsX',
-        'a5w2rRgAWxwj-kHKNofH'
-    ]
+from app.Config import Config
 
 def quandl_stocks(symbol, start_date=(2000, 1, 1), end_date=None, gran='daily'):
 
@@ -32,10 +28,10 @@ def quandl_stocks(symbol, start_date=(2000, 1, 1), end_date=None, gran='daily'):
 
         config_key_index += 1
 
-        if config_key_index >= len(config_keys):
+        if config_key_index >= len(Config['quandl']['api_keys']):
             config_key_index = 0
 
-        quandl.ApiConfig.api_key = config_keys[config_key_index]
+        quandl.ApiConfig.api_key = Config['quandl']['api_keys'][config_key_index]
 
         try:
 
