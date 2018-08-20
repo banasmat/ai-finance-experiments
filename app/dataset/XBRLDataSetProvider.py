@@ -540,7 +540,7 @@ class XBRLDataSetProvider(object):
         return dates
 
     @staticmethod
-    def prepare_dataset_from_yahoo_fundamentals():
+    def get_dataset_from_yahoo_fundamentals():
 
         if os.path.isfile(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path) and os.path.isfile(XBRLDataSetProvider.yahoo_fundamentals_data_y_file_path):
             with open(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path, 'rb') as f:
@@ -652,8 +652,6 @@ class XBRLDataSetProvider(object):
                 dataset_x = np.insert(dataset_x, i, df.as_matrix(), axis=0)
 
                 i += 1
-
-        dataset_x, dataset_y = XBRLDataSetProvider.scale_by_cik_tag(dataset_x, dataset_y)
 
         with open(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path, 'wb') as f:
             pickle.dump(dataset_x, f)

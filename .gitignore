@@ -15,3 +15,5 @@ config.yml
 
 scrapy/spider/*.pyc
 scrapy/spider/spiders/*.pyc
+
+app/xbrl/*.h5

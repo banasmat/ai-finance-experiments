@@ -8,7 +8,8 @@ from app.xbrl.XbrlRnn import XbrlRnn
 # print(x.shape)
 # print(y.shape)
 
-x, y = XBRLDataSetProvider.prepare_dataset_from_yahoo_fundamentals()
+x, y = XBRLDataSetProvider.get_dataset_from_yahoo_fundamentals()
+x, y = XBRLDataSetProvider.scale_by_cik_tag(x, y)
 
 # year, cik, tag
 x = x.transpose((2, 0, 1))
