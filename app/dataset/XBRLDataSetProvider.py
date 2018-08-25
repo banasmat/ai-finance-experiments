@@ -540,9 +540,9 @@ class XBRLDataSetProvider(object):
         return dates
 
     @staticmethod
-    def get_dataset_from_yahoo_fundamentals():
+    def get_dataset_from_yahoo_fundamentals(binary_labels=False, force_reset=False):
 
-        if os.path.isfile(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path) and os.path.isfile(XBRLDataSetProvider.yahoo_fundamentals_data_y_file_path):
+        if False is force_reset and os.path.isfile(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path) and os.path.isfile(XBRLDataSetProvider.yahoo_fundamentals_data_y_file_path):
             with open(XBRLDataSetProvider.yahoo_fundamentals_data_x_file_path, 'rb') as f:
                 x = pickle.load(f)
             with open(XBRLDataSetProvider.yahoo_fundamentals_data_y_file_path, 'rb') as f:
@@ -643,8 +643,11 @@ class XBRLDataSetProvider(object):
                         if prev_price == 0:
                             delta = 0
                         else:
-                            percentage_diff = (price - prev_price) / ((price + prev_price) / 2)
-                            delta = 1 if percentage_diff > 0.2 else 0
+                            delta = (price - prev_price) / prev_price
+                            if binary_labels:
+                                delta = 1 if delta > 0.2 else 0
+                            else:
+                                delta = delta
 
                         year_price_deltas.append(delta)
 

@@ -7,20 +7,20 @@ import os
 
 class XbrlRnn(object):
 
-    def predict(self, x_test: np.array):
+    def predict(self, x_test: np.array, binary_labels=False):
 
-        regressor = self.create_model(x_test)
+        regressor = self.create_model(x_test, binary_labels)
         regressor.load_weights(self.__get_model_path())
 
         return regressor.predict(x_test)
 
-    def train(self, x_train, y_train):
-        regressor = self.create_model(x_train)
+    def train(self, x_train, y_train, binary_labels=False):
+        regressor = self.create_model(x_train, binary_labels)
         regressor.fit(x_train, y_train, epochs=50, batch_size=x_train.shape[0])
 
         regressor.save(self.__get_model_path())
 
-    def create_model(self, x_data):
+    def create_model(self, x_data, binary_labels=False):
         regressor = Sequential()
 
         regressor.add(SimpleRNN(units=400, return_sequences=True, input_shape=(x_data.shape[1], x_data.shape[2])))
@@ -33,13 +33,16 @@ class XbrlRnn(object):
         regressor.add(SimpleRNN(units=400, return_sequences=True, activation='relu'))
         regressor.add(Dropout(0.2))
 
-        regressor.add(SimpleRNN(units=200, activation='softmax'))
+        regressor.add(SimpleRNN(units=200, activation='tanh'))
         regressor.add(Dropout(0.2))
 
         regressor.add(Dense(units=x_data.shape[1]))
 
         # RMSprop optimizer is usually used for rnn
-        regressor.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        if binary_labels:
+            regressor.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        else:
+            regressor.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
 
         return regressor
 

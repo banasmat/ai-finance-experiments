@@ -1,5 +1,9 @@
 from app.dataset.XBRLDataSetProvider import XBRLDataSetProvider
 from app.xbrl.XbrlRnn import XbrlRnn
+import matplotlib.pyplot as plt
+from scipy import stats
+from sklearn.preprocessing import MinMaxScaler
+import numpy as np
 #
 # x, y = XBRLDataSetProvider.get_dataset_for_training()
 # x, y = XBRLDataSetProvider.transpose_and_scale_by_cik_tag(x, y)
@@ -8,8 +12,15 @@ from app.xbrl.XbrlRnn import XbrlRnn
 # print(x.shape)
 # print(y.shape)
 
-x, y = XBRLDataSetProvider.get_dataset_from_yahoo_fundamentals()
+binary_labels=False
+force_reset=False
+
+x, y = XBRLDataSetProvider.get_dataset_from_yahoo_fundamentals(binary_labels=binary_labels, force_reset=force_reset)
 x, y = XBRLDataSetProvider.scale_by_cik_tag(x, y)
+
+# y = y/100
+
+print(stats.describe(y))
 
 # year, cik, tag
 x = x.transpose((2, 0, 1))
@@ -19,18 +30,18 @@ print(x.shape)
 print(y.shape)
 
 rnn = XbrlRnn()
-rnn.train(x[:-1], y[:-1])
+rnn.train(x[:-1], y[:-1], binary_labels=binary_labels)
 
 
 
-predictions = rnn.predict(x[-1:])
+predictions = rnn.predict(x[-1:], binary_labels=binary_labels)
 # print(predictions[0])
 # print(y[-1:][0])
-predictions = list(map(lambda x: 0 if x < 0 else 1, predictions[0].tolist()))
-print(predictions)
+# predictions = list(map(lambda x: 0 if x < 0 else 1, predictions[0].tolist()))
+print('predictions: ', predictions)
 
 test_vals = y[-1:][0].tolist()
-print(test_vals)
+print('test_vals: ', test_vals)
 correct_predictions = 0
 for i in range (0, len(predictions)):
     if predictions[i] == test_vals[i]:
