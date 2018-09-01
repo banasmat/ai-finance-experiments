@@ -11,6 +11,8 @@ output/price-fetcher-errors.txt
 output/xbrl_dataset_fixed.pkl
 output/*_data_x.pkl
 output/*_data_y.pkl
+output/*.npy
+output/notes.txt
 config.yml
 
 scrapy/spider/*.pyc
